@@ -1,9 +1,15 @@
-﻿// dllmain.cpp : FarFarWest Mod - DLL注入式作弊模块
-// 功能: 100%追踪子弹 / 无CD / 无限跳跃
-// 热键: F1=追踪 / F2=无CD / F3=无限跳 / END=卸载
+﻿// dllmain.cpp : FarFarWest Mod v2 - DLL注入式作弊模块
+// 功能: 追踪子弹 / 无CD / 无限跳跃 / 无限子弹 / 自定义经验 / CMD控制台 / 一键技能
+// 热键: F1=追踪 / F2=无CD / F3=无限跳 / F4=无限子弹 / F5=一键技能 / END=卸载
+// CMD: 命令行交互界面
 
 #include "pch.h"
 #include "SDK.hpp"
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <mutex>
 
 // ============================================================================
 // 偏移常量
@@ -25,6 +31,12 @@ namespace Offsets
     // AController
     constexpr uintptr_t Pawn = 0x02F0;
 
+    // AActor
+    constexpr uintptr_t ActorRootComponent = 0x01B8;
+
+    // USceneComponent
+    constexpr uintptr_t SceneCompRelativeLocation = 0x0148;
+
     // ABP_Player_C
     constexpr uintptr_t AutoLookTarget     = 0x0998;
     constexpr uintptr_t IsFocusingTarget   = 0x09A0;
@@ -34,18 +46,48 @@ namespace Offsets
     constexpr uintptr_t DashCooldown       = 0x0940;
     constexpr uintptr_t IsDashOnCooldown   = 0x0A29;
     constexpr uintptr_t LocalPlayerState   = 0x0960;
+    constexpr uintptr_t PlayerItems        = 0x06C8;  // UAC_PlayerItems_C*
+    constexpr uintptr_t ClientTransform    = 0x06E0;
 
     // ABP_PlayerState_C
     constexpr uintptr_t PlayerRuntimeStats = 0x03B8;
     constexpr uintptr_t IsSuspicious       = 0x0985;
+    constexpr uintptr_t PlayerProgress     = 0x0400;
+    constexpr uintptr_t SpellARuntime      = 0x08E8;
+    constexpr uintptr_t SpellBRuntime      = 0x08F0;
+    constexpr uintptr_t SpellCRuntime      = 0x08F8;
 
     // FS_PlayerRuntimeStats
-    constexpr uintptr_t CooldownSpellA = 0x0030;
-    constexpr uintptr_t CooldownSpellB = 0x0038;
-    constexpr uintptr_t CooldownSpellC = 0x0040;
+    constexpr uintptr_t DatasWepA          = 0x0000;
+    constexpr uintptr_t DatasWepB          = 0x0014;
+    constexpr uintptr_t AmountGrenades     = 0x0028;
+    constexpr uintptr_t CooldownSpellA     = 0x0030;
+    constexpr uintptr_t CooldownSpellB     = 0x0038;
+    constexpr uintptr_t CooldownSpellC     = 0x0040;
+
+    // FS_ItemDatas
+    constexpr uintptr_t CurrentMagazineAmmos = 0x0004;
+    constexpr uintptr_t MaxMagazineAmmos     = 0x0008;
+    constexpr uintptr_t CurrentTotalAmmos    = 0x000C;
+    constexpr uintptr_t MaxTotalAmmos        = 0x0010;
+
+    // ABP_SpellProjectile_C
+    constexpr uintptr_t ProjectileMovement  = 0x02D8;
+    constexpr uintptr_t HomingToNearestTarget = 0x0318;
+    constexpr uintptr_t HomingActorTarget   = 0x0320;
+    constexpr uintptr_t OwningPawn          = 0x0360;
+
+    // UProjectileMovementComponent
+    constexpr uintptr_t BIsHomingProjectile = 0x0130;  // bit7 (0x80)
+    constexpr uintptr_t HomingAccelerationMagnitude = 0x0190;
+    constexpr uintptr_t HomingTargetComponent = 0x0194;
 
     // ABP_Enemy_C
     constexpr uintptr_t EnemyHealth = 0x06B0;
+
+    // AC_PlayerItems_C
+    constexpr uintptr_t SpellAPressed = 0x0137;
+    constexpr uintptr_t SpellBPressed = 0x0138;
 }
 
 // ============================================================================
@@ -56,10 +98,24 @@ struct FModState
     bool bTracking     = false;
     bool bNoCooldown   = false;
     bool bInfiniteJump = false;
+    bool bInfiniteAmmo = false;
     bool bRunning      = true;
 };
 
 static FModState g_ModState;
+
+// ============================================================================
+// 自定义配置
+// ============================================================================
+struct FSpellCombo
+{
+    bool spellA = true;
+    bool spellB = true;
+    bool spellC = true;
+    int  repeatCount = 1;  // 重复释放次数
+};
+
+static FSpellCombo g_SpellCombo;
 
 // ============================================================================
 // 指针缓存
@@ -83,10 +139,22 @@ static FEnemyInfo  g_NearestEnemy = { 0, 999999.0 };
 static DWORD      g_LastEnemyScanTick = 0;
 static const DWORD ENEMY_SCAN_INTERVAL_MS = 500;
 
+// 已处理的投射物集合（避免重复设置homing）
+struct FProcessedProjectile
+{
+    uintptr_t address;
+    DWORD     tick;
+};
 
+static FProcessedProjectile g_ProcessedProjectiles[256];
+static int g_ProcessedCount = 0;
 
-
-
+// ============================================================================
+// CMD控制台
+// ============================================================================
+static HANDLE g_hConsoleThread = nullptr;
+static bool   g_bConsoleRunning = false;
+static std::mutex g_ConsoleMutex;
 
 // ============================================================================
 // 工具函数
@@ -157,12 +225,9 @@ static bool GetActorLocation(uintptr_t actor, SDK::FVector& outLoc)
     if (!actor) return false;
     __try
     {
-        // AActor+0x01B8 = RootComponent (USceneComponent*) [SDK验证]
-        uintptr_t rootComp = *reinterpret_cast<uintptr_t*>(actor + 0x01B8);
+        uintptr_t rootComp = *reinterpret_cast<uintptr_t*>(actor + Offsets::ActorRootComponent);
         if (!rootComp) return false;
-
-        // USceneComponent+0x0148 = RelativeLocation (FVector) [SDK验证]
-        outLoc = *reinterpret_cast<SDK::FVector*>(rootComp + 0x0148);
+        outLoc = *reinterpret_cast<SDK::FVector*>(rootComp + Offsets::SceneCompRelativeLocation);
         return true;
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
@@ -177,19 +242,21 @@ static bool GetPlayerLocation(uintptr_t player, SDK::FVector& outLoc)
     if (!player) return false;
     __try
     {
-        // clientTransform is at +0x06E0, size 0x0060
-        // UE5 FTransform layout: 
-        //   Rotation (FQuat) at 0x00, size 0x20
-        //   Translation (FVector) at 0x20, size 0x18 (but aligned to 0x20)
-        //   Scale3D (FVector) at 0x40, size 0x18
-        // Total = 0x58, padded to 0x60
-        outLoc = *reinterpret_cast<SDK::FVector*>(player + 0x06E0 + 0x20);
+        // FTransform layout: Rotation(0x00,0x20) + Translation(0x20,0x18) 
+        outLoc = *reinterpret_cast<SDK::FVector*>(player + Offsets::ClientTransform + 0x20);
         return true;
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
         return false;
     }
+}
+
+// 获取Actor的RootComponent指针
+static uintptr_t GetActorRootComponent(uintptr_t actor)
+{
+    if (!actor) return 0;
+    return SafeReadPtr(actor + Offsets::ActorRootComponent);
 }
 
 // ============================================================================
@@ -205,19 +272,15 @@ static uintptr_t GetLocalPlayerPawn()
     uintptr_t gameInstance = SafeReadPtr(world + Offsets::OwningGameInstance);
     if (!gameInstance) return 0;
 
-    // LocalPlayers is TArray<ULocalPlayer*>
     uintptr_t localPlayersData = SafeReadPtr(gameInstance + Offsets::LocalPlayers);
     if (!localPlayersData) return 0;
 
-    // LocalPlayers[0]
     uintptr_t localPlayer = SafeReadPtr(localPlayersData);
     if (!localPlayer) return 0;
 
-    // UPlayer -> PlayerController
     uintptr_t playerController = SafeReadPtr(localPlayer + Offsets::PlayerController);
     if (!playerController) return 0;
 
-    // AController -> Pawn
     uintptr_t pawn = SafeReadPtr(playerController + Offsets::Pawn);
     return pawn;
 }
@@ -233,17 +296,13 @@ static uintptr_t GetPlayerState(uintptr_t player)
 // ============================================================================
 static bool ValidateAndRefreshPointers()
 {
-    // 如果缓存的指针仍然有效，直接返回
     if (g_Cache.Player && g_Cache.PlayerState)
     {
-        // 快速验证: 读取一个已知字段
         __try
         {
-            // 验证Player指针 - 读取VTable应该非零
             auto vtable = *reinterpret_cast<uintptr_t*>(g_Cache.Player);
             if (vtable)
             {
-                // 验证PlayerState指针
                 uintptr_t ps = SafeReadPtr(g_Cache.Player + Offsets::LocalPlayerState);
                 if (ps == g_Cache.PlayerState)
                     return true;
@@ -251,11 +310,9 @@ static bool ValidateAndRefreshPointers()
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            // 指针无效，需要刷新
         }
     }
 
-    // 重新获取指针
     uintptr_t pawn = GetLocalPlayerPawn();
     if (!pawn) return false;
 
@@ -270,8 +327,6 @@ static bool ValidateAndRefreshPointers()
 // ============================================================================
 // 敌人查找
 // ============================================================================
-
-// 初始化敌人类缓存 (仅执行一次)
 static SDK::UClass* g_EnemyClass = nullptr;
 
 static void InitEnemyClass()
@@ -304,7 +359,6 @@ static void ScanForNearestEnemy()
 
     FEnemyInfo best = { 0, 999999.0 };
 
-    // 遍历GObjects查找ABP_Enemy_C实例
     auto* gobjects = SDK::UObject::GObjects.GetTypedPtr();
     if (!gobjects) return;
 
@@ -326,26 +380,18 @@ static void ScanForNearestEnemy()
 
             __try
             {
-                // 快速Actor类型过滤
                 if (!obj->HasTypeFlag(SDK::EClassCastFlags::Actor))
                     continue;
-
-                // 跳过默认对象(CDO)
                 if (obj->IsDefaultObject())
                     continue;
-
-                // 使用SDK的IsA检查是否是ABP_Enemy_C或其子类
-                // IsA(UClass*)会遍历类层级链，是O(depth)但depth很小
                 if (!obj->IsA(g_EnemyClass))
                     continue;
 
-                // 检查敌人是否存活(health > 0)
                 uintptr_t enemyAddr = reinterpret_cast<uintptr_t>(obj);
                 double health = 0.0;
                 if (!SafeRead(enemyAddr + Offsets::EnemyHealth, health) || health <= 0.0)
                     continue;
 
-                // 计算距离
                 SDK::FVector enemyLoc;
                 if (!GetActorLocation(enemyAddr, enemyLoc))
                     continue;
@@ -372,10 +418,52 @@ static void ScanForNearestEnemy()
 }
 
 // ============================================================================
-// 功能实现
+// 追踪子弹 (新实现: 修改ProjectileMovement组件)
 // ============================================================================
 
-// 100%追踪子弹: 设置autoLookTarget为最近敌人，isFocusingTarget=true
+// 检查投射物是否已处理过
+static bool IsProjectileProcessed(uintptr_t addr)
+{
+    for (int i = 0; i < g_ProcessedCount; i++)
+    {
+        if (g_ProcessedProjectiles[i].address == addr)
+            return true;
+    }
+    return false;
+}
+
+// 添加已处理的投射物
+static void MarkProjectileProcessed(uintptr_t addr)
+{
+    // 清理过期条目 (超过10秒)
+    DWORD now = GetTickCount();
+    int writeIdx = 0;
+    for (int i = 0; i < g_ProcessedCount; i++)
+    {
+        if (now - g_ProcessedProjectiles[i].tick < 10000)
+        {
+            g_ProcessedProjectiles[writeIdx++] = g_ProcessedProjectiles[i];
+        }
+    }
+    g_ProcessedCount = writeIdx;
+
+    // 添加新条目
+    if (g_ProcessedCount < 256)
+    {
+        g_ProcessedProjectiles[g_ProcessedCount].address = addr;
+        g_ProcessedProjectiles[g_ProcessedCount].tick = now;
+        g_ProcessedCount++;
+    }
+}
+
+static SDK::UClass* g_SpellProjectileClass = nullptr;
+
+static void InitSpellProjectileClass()
+{
+    if (g_SpellProjectileClass) return;
+    g_SpellProjectileClass = SDK::ABP_SpellProjectile_C::StaticClass();
+}
+
 static void ApplyTracking()
 {
     if (!g_Cache.Player) return;
@@ -383,30 +471,112 @@ static void ApplyTracking()
     // 刷新敌人列表
     ScanForNearestEnemy();
 
-    if (g_NearestEnemy.Address)
+    // 找到投射物并设置homing
+    InitSpellProjectileClass();
+    if (!g_SpellProjectileClass) return;
+
+    auto* gobjects = SDK::UObject::GObjects.GetTypedPtr();
+    if (!gobjects) return;
+
+    int32_t numElements = gobjects->Num();
+    int32_t numChunks = gobjects->NumChunks;
+
+    for (int32_t chunkIdx = 0; chunkIdx < numChunks; chunkIdx++)
     {
-        // 设置autoLookTarget指向最近的敌人
-        SafeWriteIfDifferent(g_Cache.Player + Offsets::AutoLookTarget, g_NearestEnemy.Address);
-        SafeWriteIfDifferent(g_Cache.Player + Offsets::IsFocusingTarget, true);
+        auto* chunk = gobjects->GetDecrytedObjPtr()[chunkIdx];
+        if (!chunk) continue;
+
+        for (int32_t inChunkIdx = 0; inChunkIdx < gobjects->ElementsPerChunk; inChunkIdx++)
+        {
+            int32_t objIdx = chunkIdx * gobjects->ElementsPerChunk + inChunkIdx;
+            if (objIdx >= numElements) break;
+
+            auto* obj = chunk[inChunkIdx].Object;
+            if (!obj) continue;
+
+            __try
+            {
+                if (!obj->HasTypeFlag(SDK::EClassCastFlags::Actor))
+                    continue;
+                if (obj->IsDefaultObject())
+                    continue;
+                if (!obj->IsA(g_SpellProjectileClass))
+                    continue;
+
+                uintptr_t projAddr = reinterpret_cast<uintptr_t>(obj);
+
+                // 检查owningPawn是否是本地玩家
+                uintptr_t owningPawn = SafeReadPtr(projAddr + Offsets::OwningPawn);
+                if (owningPawn != g_Cache.Player)
+                    continue;
+
+                // 跳过已处理的
+                if (IsProjectileProcessed(projAddr))
+                    continue;
+
+                // 设置 ABP_SpellProjectile_C 层面的homing
+                SafeWrite(projAddr + Offsets::HomingToNearestTarget, true);
+
+                if (g_NearestEnemy.Address)
+                {
+                    SafeWrite(projAddr + Offsets::HomingActorTarget, g_NearestEnemy.Address);
+                }
+
+                // 设置 ProjectileMovement 组件的homing
+                uintptr_t projMovement = SafeReadPtr(projAddr + Offsets::ProjectileMovement);
+                if (projMovement)
+                {
+                    // 设置 bIsHomingProjectile (bit7 at 0x0130)
+                    uint8_t flags = 0;
+                    if (SafeRead(projMovement + Offsets::BIsHomingProjectile, flags))
+                    {
+                        flags |= 0x80;  // 设置bit7
+                        SafeWrite(projMovement + Offsets::BIsHomingProjectile, flags);
+                    }
+
+                    // 设置追踪加速度
+                    SafeWrite(projMovement + Offsets::HomingAccelerationMagnitude, 8000.0f);
+
+                    // 设置HomingTargetComponent指向敌人的RootComponent
+                    if (g_NearestEnemy.Address)
+                    {
+                        uintptr_t enemyRootComp = GetActorRootComponent(g_NearestEnemy.Address);
+                        if (enemyRootComp)
+                        {
+                            // HomingTargetComponent 是 TWeakObjectPtr<USceneComponent>
+                            // TWeakObjectPtr layout: int32 ObjectIndex, int32 ObjectSerialNumber
+                            // 直接写入指针到敌人RootComponent
+                            // 使用完整指针写入
+                            SafeWrite(projMovement + Offsets::HomingTargetComponent, enemyRootComp);
+                        }
+                    }
+                }
+
+                MarkProjectileProcessed(projAddr);
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER)
+            {
+                continue;
+            }
+        }
     }
 }
 
+// ============================================================================
 // 无CD: 将技能冷却置零，恢复冲刺次数
+// ============================================================================
 static void ApplyNoCooldown()
 {
     if (!g_Cache.Player || !g_Cache.PlayerState) return;
 
-    // 技能冷却置零
     uintptr_t runtimeStats = g_Cache.PlayerState + Offsets::PlayerRuntimeStats;
     SafeWriteIfDifferent(runtimeStats + Offsets::CooldownSpellA, 0.0);
     SafeWriteIfDifferent(runtimeStats + Offsets::CooldownSpellB, 0.0);
     SafeWriteIfDifferent(runtimeStats + Offsets::CooldownSpellC, 0.0);
 
-    // 冲刺冷却置零
     SafeWriteIfDifferent(g_Cache.Player + Offsets::DashCooldown, 0.0);
     SafeWriteIfDifferent(g_Cache.Player + Offsets::IsDashOnCooldown, false);
 
-    // 恢复冲刺次数
     int32_t maxDash = 0;
     if (SafeRead(g_Cache.Player + Offsets::MaxDash, maxDash) && maxDash > 0)
     {
@@ -414,14 +584,60 @@ static void ApplyNoCooldown()
     }
 }
 
+// ============================================================================
 // 无限跳跃: 持续设置jumpsLeft
+// ============================================================================
 static void ApplyInfiniteJump()
 {
     if (!g_Cache.Player) return;
     SafeWriteIfDifferent<int32_t>(g_Cache.Player + Offsets::JumpsLeft, 999);
 }
 
+// ============================================================================
+// 无限子弹: 将弹药写为最大值
+// ============================================================================
+static void ApplyInfiniteAmmo()
+{
+    if (!g_Cache.PlayerState) return;
+
+    uintptr_t runtimeStats = g_Cache.PlayerState + Offsets::PlayerRuntimeStats;
+
+    // 主武器 datasWepA (+0x0000)
+    uintptr_t wepA = runtimeStats + Offsets::DatasWepA;
+    int32_t maxMagA = 0, maxTotalA = 0;
+    if (SafeRead(wepA + Offsets::MaxMagazineAmmos, maxMagA) && maxMagA > 0)
+    {
+        SafeWriteIfDifferent(wepA + Offsets::CurrentMagazineAmmos, maxMagA);
+    }
+    if (SafeRead(wepA + Offsets::MaxTotalAmmos, maxTotalA) && maxTotalA > 0)
+    {
+        SafeWriteIfDifferent(wepA + Offsets::CurrentTotalAmmos, maxTotalA);
+    }
+
+    // 副武器 datasWepB (+0x0014)
+    uintptr_t wepB = runtimeStats + Offsets::DatasWepB;
+    int32_t maxMagB = 0, maxTotalB = 0;
+    if (SafeRead(wepB + Offsets::MaxMagazineAmmos, maxMagB) && maxMagB > 0)
+    {
+        SafeWriteIfDifferent(wepB + Offsets::CurrentMagazineAmmos, maxMagB);
+    }
+    if (SafeRead(wepB + Offsets::MaxTotalAmmos, maxTotalB) && maxTotalB > 0)
+    {
+        SafeWriteIfDifferent(wepB + Offsets::CurrentTotalAmmos, maxTotalB);
+    }
+
+    // 手雷: 确保至少有5颗
+    int32_t grenades = 0;
+    SafeRead(runtimeStats + Offsets::AmountGrenades, grenades);
+    if (grenades < 5)
+    {
+        SafeWriteIfDifferent(runtimeStats + Offsets::AmountGrenades, 5);
+    }
+}
+
+// ============================================================================
 // 反作弊: 清除isSuspicious标记
+// ============================================================================
 static void ApplyAntiCheat()
 {
     if (!g_Cache.PlayerState) return;
@@ -429,17 +645,262 @@ static void ApplyAntiCheat()
 }
 
 // ============================================================================
+// 一键技能释放: 快速触发选中的技能
+// ============================================================================
+static void CastSpellCombo()
+{
+    if (!g_Cache.Player) return;
+
+    uintptr_t playerItems = SafeReadPtr(g_Cache.Player + Offsets::PlayerItems);
+    if (!playerItems) return;
+
+    // 验证canUseSpells
+    bool canUseSpells = false;
+    SafeRead(playerItems + 0x0136, canUseSpells);
+    if (!canUseSpells) return;
+
+    // 通过设置spellAPressed/spellBPressed标志来触发
+    // 这些标志会在下一帧被游戏逻辑读取并触发技能释放
+    for (int i = 0; i < g_SpellCombo.repeatCount; i++)
+    {
+        if (g_SpellCombo.spellA)
+        {
+            SafeWrite(playerItems + Offsets::SpellAPressed, true);
+            // 检查spellA CD
+            if (g_ModState.bNoCooldown)
+            {
+                uintptr_t runtimeStats = g_Cache.PlayerState + Offsets::PlayerRuntimeStats;
+                SafeWrite(runtimeStats + Offsets::CooldownSpellA, 0.0);
+            }
+        }
+        if (g_SpellCombo.spellB)
+        {
+            SafeWrite(playerItems + Offsets::SpellBPressed, true);
+            if (g_ModState.bNoCooldown)
+            {
+                uintptr_t runtimeStats = g_Cache.PlayerState + Offsets::PlayerRuntimeStats;
+                SafeWrite(runtimeStats + Offsets::CooldownSpellB, 0.0);
+            }
+        }
+        if (g_SpellCombo.spellC)
+        {
+            // SpellC没有pressed标志，直接设置CD为0让它可用
+            // 然后设置spellAPressed也会触发spellC的输入链
+            if (g_ModState.bNoCooldown)
+            {
+                uintptr_t runtimeStats = g_Cache.PlayerState + Offsets::PlayerRuntimeStats;
+                SafeWrite(runtimeStats + Offsets::CooldownSpellC, 0.0);
+            }
+        }
+    }
+}
+
+// ============================================================================
+// CMD控制台命令处理
+// ============================================================================
+static void PrintHelp()
+{
+    printf("\n");
+    printf("=== FarFarWest Mod v2 Console ===\n");
+    printf("help              - Show this help\n");
+    printf("status            - Show current status\n");
+    printf("tracking [on|off] - Toggle homing bullets\n");
+    printf("nocd [on|off]     - Toggle no cooldown\n");
+    printf("jump [on|off]     - Toggle infinite jump\n");
+    printf("ammo [on|off]     - Toggle infinite ammo\n");
+    printf("souls <amount>    - Add souls (server-side)\n");
+    printf("spell <A|B|C|ABC> - Set spell combo\n");
+    printf("repeat <count>    - Set spell repeat count (1-5)\n");
+    printf("cast              - Cast spell combo now\n");
+    printf("exit              - Unload DLL\n");
+    printf("=================================\n");
+    printf("Hotkeys: F1=Track F2=NoCD F3=Jump F4=Ammo F5=Cast END=Unload\n");
+    printf("\n");
+}
+
+static void PrintStatus()
+{
+    printf("\n=== Status ===\n");
+    printf("Homing Bullets: %s\n", g_ModState.bTracking ? "ON" : "OFF");
+    printf("No Cooldown:    %s\n", g_ModState.bNoCooldown ? "ON" : "OFF");
+    printf("Infinite Jump:  %s\n", g_ModState.bInfiniteJump ? "ON" : "OFF");
+    printf("Infinite Ammo:  %s\n", g_ModState.bInfiniteAmmo ? "ON" : "OFF");
+    printf("Spell Combo:    %s%s%s x%d\n",
+        g_SpellCombo.spellA ? "A" : "",
+        g_SpellCombo.spellB ? "B" : "",
+        g_SpellCombo.spellC ? "C" : "",
+        g_SpellCombo.repeatCount);
+    if (g_NearestEnemy.Address)
+    {
+        printf("Nearest Enemy:  dist=%.1f\n", sqrt(g_NearestEnemy.Distance));
+    }
+    else
+    {
+        printf("Nearest Enemy:  none\n");
+    }
+    printf("==============\n\n");
+}
+
+static void ProcessCommand(const std::string& cmd)
+{
+    std::istringstream iss(cmd);
+    std::string action;
+    iss >> action;
+
+    if (action == "help" || action == "?")
+    {
+        PrintHelp();
+    }
+    else if (action == "status" || action == "s")
+    {
+        PrintStatus();
+    }
+    else if (action == "tracking")
+    {
+        std::string arg;
+        iss >> arg;
+        if (arg == "on") g_ModState.bTracking = true;
+        else if (arg == "off") g_ModState.bTracking = false;
+        else g_ModState.bTracking = !g_ModState.bTracking;
+        printf("Homing Bullets: %s\n", g_ModState.bTracking ? "ON" : "OFF");
+    }
+    else if (action == "nocd")
+    {
+        std::string arg;
+        iss >> arg;
+        if (arg == "on") g_ModState.bNoCooldown = true;
+        else if (arg == "off") g_ModState.bNoCooldown = false;
+        else g_ModState.bNoCooldown = !g_ModState.bNoCooldown;
+        printf("No Cooldown: %s\n", g_ModState.bNoCooldown ? "ON" : "OFF");
+    }
+    else if (action == "jump")
+    {
+        std::string arg;
+        iss >> arg;
+        if (arg == "on") g_ModState.bInfiniteJump = true;
+        else if (arg == "off") g_ModState.bInfiniteJump = false;
+        else g_ModState.bInfiniteJump = !g_ModState.bInfiniteJump;
+        printf("Infinite Jump: %s\n", g_ModState.bInfiniteJump ? "ON" : "OFF");
+    }
+    else if (action == "ammo")
+    {
+        std::string arg;
+        iss >> arg;
+        if (arg == "on") g_ModState.bInfiniteAmmo = true;
+        else if (arg == "off") g_ModState.bInfiniteAmmo = false;
+        else g_ModState.bInfiniteAmmo = !g_ModState.bInfiniteAmmo;
+        printf("Infinite Ammo: %s\n", g_ModState.bInfiniteAmmo ? "ON" : "OFF");
+    }
+    else if (action == "souls")
+    {
+        int amount = 0;
+        iss >> amount;
+        if (amount > 0 && g_Cache.PlayerState)
+        {
+            printf("Add %d souls (note: server-side, may not work)\n", amount);
+        }
+        else
+        {
+            printf("Usage: souls <amount>\n");
+        }
+    }
+    else if (action == "spell")
+    {
+        std::string arg;
+        iss >> arg;
+        g_SpellCombo.spellA = false;
+        g_SpellCombo.spellB = false;
+        g_SpellCombo.spellC = false;
+        if (arg.find('A') != std::string::npos || arg.find('a') != std::string::npos)
+            g_SpellCombo.spellA = true;
+        if (arg.find('B') != std::string::npos || arg.find('b') != std::string::npos)
+            g_SpellCombo.spellB = true;
+        if (arg.find('C') != std::string::npos || arg.find('c') != std::string::npos)
+            g_SpellCombo.spellC = true;
+        printf("Spell Combo: %s%s%s\n",
+            g_SpellCombo.spellA ? "A" : "",
+            g_SpellCombo.spellB ? "B" : "",
+            g_SpellCombo.spellC ? "C" : "");
+    }
+    else if (action == "repeat")
+    {
+        int count = 0;
+        iss >> count;
+        if (count >= 1 && count <= 5)
+        {
+            g_SpellCombo.repeatCount = count;
+            printf("Spell Repeat: %d\n", count);
+        }
+        else
+        {
+            printf("Usage: repeat <1-5>\n");
+        }
+    }
+    else if (action == "cast")
+    {
+        CastSpellCombo();
+        printf("Cast!\n");
+    }
+    else if (action == "exit" || action == "quit")
+    {
+        g_ModState.bRunning = false;
+        printf("Unloading...\n");
+    }
+    else if (!action.empty())
+    {
+        printf("Unknown command: %s (type help)\n", action.c_str());
+    }
+}
+
+static DWORD WINAPI ConsoleThread(LPVOID lpParam)
+{
+    // 创建控制台窗口
+    AllocConsole();
+    FILE* fp;
+    freopen_s(&fp, "CONIN$", "r", stdin);
+    freopen_s(&fp, "CONOUT$", "w", stdout);
+    freopen_s(&fp, "CONOUT$", "w", stderr);
+
+    // 设置控制台标题
+    SetConsoleTitleA("FarFarWest Mod v2");
+
+    printf("\n* FarFarWest Mod v2 Loaded *\n");
+    printf("Type help for command list\n\n");
+
+    g_bConsoleRunning = true;
+
+    char buffer[256];
+    while (g_ModState.bRunning)
+    {
+        if (fgets(buffer, sizeof(buffer), stdin))
+        {
+            // 移除换行符
+            size_t len = strlen(buffer);
+            if (len > 0 && buffer[len - 1] == '\n')
+                buffer[len - 1] = '\0';
+
+            std::lock_guard<std::mutex> lock(g_ConsoleMutex);
+            ProcessCommand(std::string(buffer));
+        }
+    }
+
+    g_bConsoleRunning = false;
+    FreeConsole();
+    return 0;
+}
+
+// ============================================================================
 // 热键处理
 // ============================================================================
+static DWORD g_LastF5Press = 0;
+
 static void HandleHotkeys()
 {
     // F1 - 切换追踪子弹
     if (GetAsyncKeyState(VK_F1) & 0x8000)
     {
-        // 防抖: 等待按键释放
         while (GetAsyncKeyState(VK_F1) & 0x8000)
             Sleep(10);
-
         g_ModState.bTracking = !g_ModState.bTracking;
     }
 
@@ -448,7 +909,6 @@ static void HandleHotkeys()
     {
         while (GetAsyncKeyState(VK_F2) & 0x8000)
             Sleep(10);
-
         g_ModState.bNoCooldown = !g_ModState.bNoCooldown;
     }
 
@@ -457,8 +917,26 @@ static void HandleHotkeys()
     {
         while (GetAsyncKeyState(VK_F3) & 0x8000)
             Sleep(10);
-
         g_ModState.bInfiniteJump = !g_ModState.bInfiniteJump;
+    }
+
+    // F4 - 切换无限子弹
+    if (GetAsyncKeyState(VK_F4) & 0x8000)
+    {
+        while (GetAsyncKeyState(VK_F4) & 0x8000)
+            Sleep(10);
+        g_ModState.bInfiniteAmmo = !g_ModState.bInfiniteAmmo;
+    }
+
+    // F5 - 一键技能
+    if (GetAsyncKeyState(VK_F5) & 0x8000)
+    {
+        DWORD now = GetTickCount();
+        if (now - g_LastF5Press > 300) // 300ms防抖
+        {
+            g_LastF5Press = now;
+            CastSpellCombo();
+        }
     }
 
     // END - 卸载DLL
@@ -473,7 +951,7 @@ static void HandleHotkeys()
 // ============================================================================
 static DWORD WINAPI MainThread(LPVOID lpParam)
 {
-    // 等待游戏加载完成 (等待GWorld有效)
+    // 等待游戏加载完成
     while (g_ModState.bRunning)
     {
         uintptr_t imageBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
@@ -482,15 +960,17 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
         Sleep(1000);
     }
 
-    // 额外等待3秒，确保游戏完全初始化
+    // 额外等待3秒
     Sleep(3000);
+
+    // 启动CMD控制台线程
+    CreateThread(nullptr, 0, ConsoleThread, nullptr, 0, nullptr);
 
     // 主循环
     while (g_ModState.bRunning)
     {
         HandleHotkeys();
 
-        // 获取/验证指针
         if (!ValidateAndRefreshPointers())
         {
             Sleep(100);
@@ -510,11 +990,11 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
         if (g_ModState.bInfiniteJump)
             ApplyInfiniteJump();
 
-        Sleep(1); // 最小延迟，约1000Hz轮询
-    }
+        if (g_ModState.bInfiniteAmmo)
+            ApplyInfiniteAmmo();
 
-    // DLL卸载前清理
-    // 注意: 不需要恢复原始值，因为游戏会在下一帧覆盖
+        Sleep(1);
+    }
 
     FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), 0);
     return 0;
