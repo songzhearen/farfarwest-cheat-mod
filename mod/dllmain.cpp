@@ -77,10 +77,8 @@ namespace Offsets
     constexpr uintptr_t HomingActorTarget   = 0x0320;
     constexpr uintptr_t OwningPawn          = 0x0360;
 
-    // UProjectileMovementComponent
-    constexpr uintptr_t BIsHomingProjectile = 0x0130;  // bit7 (0x80)
-    constexpr uintptr_t HomingAccelerationMagnitude = 0x0190;
-    constexpr uintptr_t HomingTargetComponent = 0x0194;
+    // UMovementComponent (base of ProjectileMovement)
+    constexpr uintptr_t MovementVelocity = 0x00D8;    // FVector Velocity
 
     // ABP_Enemy_C
     constexpr uintptr_t EnemyHealth = 0x06B0;
@@ -139,6 +137,27 @@ static FEnemyInfo  g_NearestEnemy = { 0, 999999.0 };
 static DWORD      g_LastEnemyScanTick = 0;
 static const DWORD ENEMY_SCAN_INTERVAL_MS = 500;
 
+// 关卡切换检测
+static uintptr_t g_LastKnownWorld = 0;
+
+// UObject偏移
+namespace UEObjOffsets
+{
+    constexpr uintptr_t VTable  = 0x0000;
+    constexpr uintptr_t Flags   = 0x0008;  // EObjectFlags
+    constexpr uintptr_t Index   = 0x000C;
+    constexpr uintptr_t Class   = 0x0010;  // UClass*
+}
+
+// EObjectFlags: 销毁相关标志
+constexpr int32_t OBJ_FLAG_BeginDestroyed  = 0x00008000;
+constexpr int32_t OBJ_FLAG_FinishDestroyed = 0x00010000;
+
+// 前向声明的UClass缓存（在各自Init函数中初始化）
+static SDK::UClass* g_EnemyClass = nullptr;
+static SDK::UClass* g_SpellProjectileClass = nullptr;
+static SDK::UClass* g_PlayerBulletClass = nullptr;
+
 // 已处理的投射物集合（避免重复设置homing）
 struct FProcessedProjectile
 {
@@ -146,8 +165,10 @@ struct FProcessedProjectile
     DWORD     tick;
 };
 
-static FProcessedProjectile g_ProcessedProjectiles[256];
+static FProcessedProjectile g_ProcessedProjectiles[512];
 static int g_ProcessedCount = 0;
+
+// ABP_PlayerBullet_C 缓存 - 用于hitscan自动瞄准
 
 // ============================================================================
 // CMD控制台
@@ -294,30 +315,126 @@ static uintptr_t GetPlayerState(uintptr_t player)
 // ============================================================================
 // 指针验证和刷新
 // ============================================================================
+
+// 检查UE对象是否已被销毁或正在销毁
+static bool IsUObjectDestroyed(uintptr_t objAddr)
+{
+    if (!objAddr) return true;
+    __try
+    {
+        int32_t flags = *reinterpret_cast<int32_t*>(objAddr + UEObjOffsets::Flags);
+        if (flags & (OBJ_FLAG_BeginDestroyed | OBJ_FLAG_FinishDestroyed))
+            return true;
+        // Class指针为空说明对象无效
+        uintptr_t cls = *reinterpret_cast<uintptr_t*>(objAddr + UEObjOffsets::Class);
+        if (!cls) return true;
+        return false;
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        return true;
+    }
+}
+
+// 检查GWorld是否变化（关卡切换）
+static bool HasWorldChanged()
+{
+    uintptr_t imageBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+    uintptr_t currentWorld = SafeReadPtr(imageBase + Offsets::GWorld);
+
+    if (currentWorld != g_LastKnownWorld)
+    {
+        if (currentWorld == 0)
+        {
+            // World被销毁但新World还没创建，这是关卡切换的中间状态
+            // 不更新g_LastKnownWorld，保持指向旧的World地址
+            // 这样当下次World变为新值时，我们还能检测到变化
+            return true;  // 仍然报告变化，触发缓存清理
+        }
+
+        if (g_LastKnownWorld != 0)
+        {
+            printf("[Mod] Level transition detected (World: 0x%p -> 0x%p)\n",
+                reinterpret_cast<void*>(g_LastKnownWorld), reinterpret_cast<void*>(currentWorld));
+        }
+        g_LastKnownWorld = currentWorld;
+        return true;
+    }
+    return false;
+}
+
+// 清理所有关卡切换相关的缓存
+static void OnLevelTransition()
+{
+    // 清空投射物处理缓存
+    g_ProcessedCount = 0;
+
+    // 清空敌人缓存
+    g_NearestEnemy = { 0, 999999.0 };
+
+    // 强制下次重新扫描敌人
+    g_LastEnemyScanTick = 0;
+
+    // 重置缓存的UClass指针（关卡切换后StaticClass()仍然有效，但安全起见重新获取）
+    g_EnemyClass = nullptr;
+    g_SpellProjectileClass = nullptr;
+    g_PlayerBulletClass = nullptr;
+
+    printf("[Mod] Caches cleared for new level\n");
+}
+
 static bool ValidateAndRefreshPointers()
 {
+    // 检测关卡切换
+    bool worldChanged = HasWorldChanged();
+    if (worldChanged)
+    {
+        // 关卡切换：强制清除所有缓存
+        g_Cache.Player = 0;
+        g_Cache.PlayerState = 0;
+        OnLevelTransition();
+    }
+
+    // 检查当前缓存的Player是否仍然有效
     if (g_Cache.Player && g_Cache.PlayerState)
     {
-        __try
+        // 严格验证: 检查对象是否已被销毁
+        if (IsUObjectDestroyed(g_Cache.Player) || IsUObjectDestroyed(g_Cache.PlayerState))
         {
-            auto vtable = *reinterpret_cast<uintptr_t*>(g_Cache.Player);
-            if (vtable)
-            {
-                uintptr_t ps = SafeReadPtr(g_Cache.Player + Offsets::LocalPlayerState);
-                if (ps == g_Cache.PlayerState)
-                    return true;
-            }
+            printf("[Mod] Cached pointers invalidated (object destroyed)\n");
+            g_Cache.Player = 0;
+            g_Cache.PlayerState = 0;
         }
-        __except (EXCEPTION_EXECUTE_HANDLER)
+        else
         {
+            // 额外验证: PlayerState偏移是否仍然指向缓存值
+            uintptr_t ps = SafeReadPtr(g_Cache.Player + Offsets::LocalPlayerState);
+            if (ps == g_Cache.PlayerState)
+                return true;  // 缓存仍然有效
+
+            // PlayerState变了，更新
+            if (ps)
+            {
+                g_Cache.PlayerState = ps;
+                return true;
+            }
+            // PlayerState变成0，说明对象正在销毁
+            g_Cache.Player = 0;
+            g_Cache.PlayerState = 0;
         }
     }
 
+    // 重新获取指针
     uintptr_t pawn = GetLocalPlayerPawn();
     if (!pawn) return false;
 
+    // 验证新获取的pawn是否有效
+    if (IsUObjectDestroyed(pawn)) return false;
+
     uintptr_t playerState = GetPlayerState(pawn);
     if (!playerState) return false;
+
+    if (IsUObjectDestroyed(playerState)) return false;
 
     g_Cache.Player = pawn;
     g_Cache.PlayerState = playerState;
@@ -327,7 +444,6 @@ static bool ValidateAndRefreshPointers()
 // ============================================================================
 // 敌人查找
 // ============================================================================
-static SDK::UClass* g_EnemyClass = nullptr;
 
 static void InitEnemyClass()
 {
@@ -418,7 +534,7 @@ static void ScanForNearestEnemy()
 }
 
 // ============================================================================
-// 追踪子弹 (新实现: 修改ProjectileMovement组件)
+// 追踪子弹 (新实现v2: 使用游戏自身的homing机制 + 手动velocity steering)
 // ============================================================================
 
 // 检查投射物是否已处理过
@@ -448,7 +564,7 @@ static void MarkProjectileProcessed(uintptr_t addr)
     g_ProcessedCount = writeIdx;
 
     // 添加新条目
-    if (g_ProcessedCount < 256)
+    if (g_ProcessedCount < 512)
     {
         g_ProcessedProjectiles[g_ProcessedCount].address = addr;
         g_ProcessedProjectiles[g_ProcessedCount].tick = now;
@@ -456,12 +572,75 @@ static void MarkProjectileProcessed(uintptr_t addr)
     }
 }
 
-static SDK::UClass* g_SpellProjectileClass = nullptr;
 
 static void InitSpellProjectileClass()
 {
     if (g_SpellProjectileClass) return;
     g_SpellProjectileClass = SDK::ABP_SpellProjectile_C::StaticClass();
+}
+
+static void InitPlayerBulletClass()
+{
+    if (g_PlayerBulletClass) return;
+    g_PlayerBulletClass = SDK::ABP_PlayerBullet_C::StaticClass();
+}
+
+// 手动velocity steering: 旋转投射物速度向量朝向敌人
+static void SteerProjectileTowardEnemy(uintptr_t projMovement, uintptr_t projAddr)
+{
+    if (!projMovement || !g_NearestEnemy.Address) return;
+
+    // 读取当前速度
+    SDK::FVector velocity;
+    if (!SafeRead(projMovement + Offsets::MovementVelocity, velocity)) return;
+
+    double speed = sqrt(velocity.X * velocity.X + velocity.Y * velocity.Y + velocity.Z * velocity.Z);
+    if (speed < 1.0) return;
+
+    // 获取投射物位置
+    SDK::FVector projLoc;
+    if (!GetActorLocation(projAddr, projLoc)) return;
+
+    // 获取敌人位置
+    SDK::FVector enemyLoc;
+    if (!GetActorLocation(g_NearestEnemy.Address, enemyLoc)) return;
+
+    // 计算方向到敌人
+    SDK::FVector toEnemy;
+    toEnemy.X = enemyLoc.X - projLoc.X;
+    toEnemy.Y = enemyLoc.Y - projLoc.Y;
+    toEnemy.Z = enemyLoc.Z - projLoc.Z;
+    double dist = sqrt(toEnemy.X * toEnemy.X + toEnemy.Y * toEnemy.Y + toEnemy.Z * toEnemy.Z);
+    if (dist < 1.0) return;
+
+    toEnemy.X /= dist;
+    toEnemy.Y /= dist;
+    toEnemy.Z /= dist;
+
+    // 当前方向
+    double curDirX = velocity.X / speed;
+    double curDirY = velocity.Y / speed;
+    double curDirZ = velocity.Z / speed;
+
+    // 插值转向敌人 (alpha=0.2 = 20%每帧转向，值越大转向越快)
+    double alpha = 0.2;
+    double newDirX = curDirX + (toEnemy.X - curDirX) * alpha;
+    double newDirY = curDirY + (toEnemy.Y - curDirY) * alpha;
+    double newDirZ = curDirZ + (toEnemy.Z - curDirZ) * alpha;
+
+    // 归一化
+    double newDirLen = sqrt(newDirX * newDirX + newDirY * newDirY + newDirZ * newDirZ);
+    if (newDirLen < 0.001) return;
+    newDirX /= newDirLen;
+    newDirY /= newDirLen;
+    newDirZ /= newDirLen;
+
+    // 保持原速度大小，只改方向
+    velocity.X = newDirX * speed;
+    velocity.Y = newDirY * speed;
+    velocity.Z = newDirZ * speed;
+
+    SafeWrite(projMovement + Offsets::MovementVelocity, velocity);
 }
 
 static void ApplyTracking()
@@ -471,92 +650,140 @@ static void ApplyTracking()
     // 刷新敌人列表
     ScanForNearestEnemy();
 
-    // 找到投射物并设置homing
+    if (!g_NearestEnemy.Address) return;
+
+    // ========================================================================
+    // Phase 1: 处理 SpellProjectile (法术投射物 - 有ProjectileMovement)
+    // ========================================================================
     InitSpellProjectileClass();
-    if (!g_SpellProjectileClass) return;
-
-    auto* gobjects = SDK::UObject::GObjects.GetTypedPtr();
-    if (!gobjects) return;
-
-    int32_t numElements = gobjects->Num();
-    int32_t numChunks = gobjects->NumChunks;
-
-    for (int32_t chunkIdx = 0; chunkIdx < numChunks; chunkIdx++)
+    if (g_SpellProjectileClass)
     {
-        auto* chunk = gobjects->GetDecrytedObjPtr()[chunkIdx];
-        if (!chunk) continue;
-
-        for (int32_t inChunkIdx = 0; inChunkIdx < gobjects->ElementsPerChunk; inChunkIdx++)
+        auto* gobjects = SDK::UObject::GObjects.GetTypedPtr();
+        if (gobjects)
         {
-            int32_t objIdx = chunkIdx * gobjects->ElementsPerChunk + inChunkIdx;
-            if (objIdx >= numElements) break;
+            int32_t numElements = gobjects->Num();
+            int32_t numChunks = gobjects->NumChunks;
 
-            auto* obj = chunk[inChunkIdx].Object;
-            if (!obj) continue;
-
-            __try
+            for (int32_t chunkIdx = 0; chunkIdx < numChunks; chunkIdx++)
             {
-                if (!obj->HasTypeFlag(SDK::EClassCastFlags::Actor))
-                    continue;
-                if (obj->IsDefaultObject())
-                    continue;
-                if (!obj->IsA(g_SpellProjectileClass))
-                    continue;
+                auto* chunk = gobjects->GetDecrytedObjPtr()[chunkIdx];
+                if (!chunk) continue;
 
-                uintptr_t projAddr = reinterpret_cast<uintptr_t>(obj);
-
-                // 检查owningPawn是否是本地玩家
-                uintptr_t owningPawn = SafeReadPtr(projAddr + Offsets::OwningPawn);
-                if (owningPawn != g_Cache.Player)
-                    continue;
-
-                // 跳过已处理的
-                if (IsProjectileProcessed(projAddr))
-                    continue;
-
-                // 设置 ABP_SpellProjectile_C 层面的homing
-                SafeWrite(projAddr + Offsets::HomingToNearestTarget, true);
-
-                if (g_NearestEnemy.Address)
+                for (int32_t inChunkIdx = 0; inChunkIdx < gobjects->ElementsPerChunk; inChunkIdx++)
                 {
-                    SafeWrite(projAddr + Offsets::HomingActorTarget, g_NearestEnemy.Address);
-                }
+                    int32_t objIdx = chunkIdx * gobjects->ElementsPerChunk + inChunkIdx;
+                    if (objIdx >= numElements) break;
 
-                // 设置 ProjectileMovement 组件的homing
-                uintptr_t projMovement = SafeReadPtr(projAddr + Offsets::ProjectileMovement);
-                if (projMovement)
-                {
-                    // 设置 bIsHomingProjectile (bit7 at 0x0130)
-                    uint8_t flags = 0;
-                    if (SafeRead(projMovement + Offsets::BIsHomingProjectile, flags))
+                    auto* obj = chunk[inChunkIdx].Object;
+                    if (!obj) continue;
+
+                    __try
                     {
-                        flags |= 0x80;  // 设置bit7
-                        SafeWrite(projMovement + Offsets::BIsHomingProjectile, flags);
-                    }
+                        if (!obj->HasTypeFlag(SDK::EClassCastFlags::Actor))
+                            continue;
+                        if (obj->IsDefaultObject())
+                            continue;
+                        if (!obj->IsA(g_SpellProjectileClass))
+                            continue;
 
-                    // 设置追踪加速度
-                    SafeWrite(projMovement + Offsets::HomingAccelerationMagnitude, 8000.0f);
+                        uintptr_t projAddr = reinterpret_cast<uintptr_t>(obj);
 
-                    // 设置HomingTargetComponent指向敌人的RootComponent
-                    if (g_NearestEnemy.Address)
-                    {
-                        uintptr_t enemyRootComp = GetActorRootComponent(g_NearestEnemy.Address);
-                        if (enemyRootComp)
+                        // 检查owningPawn是否是本地玩家
+                        uintptr_t owningPawn = SafeReadPtr(projAddr + Offsets::OwningPawn);
+                        if (owningPawn != g_Cache.Player)
+                            continue;
+
+                        // --- 方案A: 使用游戏自身的homing机制 ---
+                        // 设置 homingToNearestTarget = true (游戏ReceiveTick会调用F_TargetHoming)
+                        SafeWrite(projAddr + Offsets::HomingToNearestTarget, true);
+
+                        // 设置 homingActorTarget = 敌人AActor指针 (这是原始AActor*, 不是TWeakObjectPtr)
+                        if (g_NearestEnemy.Address)
                         {
-                            // HomingTargetComponent 是 TWeakObjectPtr<USceneComponent>
-                            // TWeakObjectPtr layout: int32 ObjectIndex, int32 ObjectSerialNumber
-                            // 直接写入指针到敌人RootComponent
-                            // 使用完整指针写入
-                            SafeWrite(projMovement + Offsets::HomingTargetComponent, enemyRootComp);
+                            SafeWrite(projAddr + Offsets::HomingActorTarget, g_NearestEnemy.Address);
                         }
+
+                        // --- 方案B: 手动velocity steering (每帧持续执行，更直接的追踪) ---
+                        uintptr_t projMovement = SafeReadPtr(projAddr + Offsets::ProjectileMovement);
+                        if (projMovement)
+                        {
+                            SteerProjectileTowardEnemy(projMovement, projAddr);
+                        }
+
+                        // 标记已处理
+                        MarkProjectileProcessed(projAddr);
+                    }
+                    __except (EXCEPTION_EXECUTE_HANDLER)
+                    {
+                        continue;
                     }
                 }
-
-                MarkProjectileProcessed(projAddr);
             }
-            __except (EXCEPTION_EXECUTE_HANDLER)
+        }
+    }
+
+    // ========================================================================
+    // Phase 2: 处理 PlayerBullet (普通枪弹 - hitscan即时命中)
+    // 对于hitscan子弹，我们修改其方向使其朝向敌人
+    // ABP_PlayerBullet_C.OwningPlayer at +0x03A0
+    // ABP_PlayerBullet_C.HitLocation at +0x03B8
+    // ========================================================================
+    InitPlayerBulletClass();
+    if (g_PlayerBulletClass)
+    {
+        auto* gobjects = SDK::UObject::GObjects.GetTypedPtr();
+        if (gobjects)
+        {
+            int32_t numElements = gobjects->Num();
+            int32_t numChunks = gobjects->NumChunks;
+
+            for (int32_t chunkIdx = 0; chunkIdx < numChunks; chunkIdx++)
             {
-                continue;
+                auto* chunk = gobjects->GetDecrytedObjPtr()[chunkIdx];
+                if (!chunk) continue;
+
+                for (int32_t inChunkIdx = 0; inChunkIdx < gobjects->ElementsPerChunk; inChunkIdx++)
+                {
+                    int32_t objIdx = chunkIdx * gobjects->ElementsPerChunk + inChunkIdx;
+                    if (objIdx >= numElements) break;
+
+                    auto* obj = chunk[inChunkIdx].Object;
+                    if (!obj) continue;
+
+                    __try
+                    {
+                        if (!obj->HasTypeFlag(SDK::EClassCastFlags::Actor))
+                            continue;
+                        if (obj->IsDefaultObject())
+                            continue;
+                        if (!obj->IsA(g_PlayerBulletClass))
+                            continue;
+
+                        uintptr_t bulletAddr = reinterpret_cast<uintptr_t>(obj);
+
+                        // 检查OwningPlayer是否是本地玩家
+                        uintptr_t owningPlayer = SafeReadPtr(bulletAddr + 0x03A0);
+                        if (owningPlayer != g_Cache.Player)
+                            continue;
+
+                        // 跳过已处理的
+                        if (IsProjectileProcessed(bulletAddr))
+                            continue;
+
+                        // 获取敌人位置并设置HitLocation
+                        SDK::FVector enemyLoc;
+                        if (GetActorLocation(g_NearestEnemy.Address, enemyLoc))
+                        {
+                            SafeWrite(bulletAddr + 0x03B8, enemyLoc);  // HitLocation
+                        }
+
+                        MarkProjectileProcessed(bulletAddr);
+                    }
+                    __except (EXCEPTION_EXECUTE_HANDLER)
+                    {
+                        continue;
+                    }
+                }
             }
         }
     }
@@ -636,6 +863,75 @@ static void ApplyInfiniteAmmo()
 }
 
 // ============================================================================
+// 自动瞄准: 将玩家瞄准方向转向最近敌人 (用于hitscan子弹的追踪)
+// ============================================================================
+static void ApplyAutoAim()
+{
+    if (!g_Cache.Player || !g_NearestEnemy.Address) return;
+
+    // 检查玩家是否在射击 (鼠标左键按下)
+    if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) return;
+
+    // 获取玩家和敌人位置
+    SDK::FVector playerLoc, enemyLoc;
+    if (!GetPlayerLocation(g_Cache.Player, playerLoc)) return;
+    if (!GetActorLocation(g_NearestEnemy.Address, enemyLoc)) return;
+
+    // 计算朝向敌人的方向向量
+    SDK::FVector toEnemy;
+    toEnemy.X = enemyLoc.X - playerLoc.X;
+    toEnemy.Y = enemyLoc.Y - playerLoc.Y;
+    toEnemy.Z = enemyLoc.Z - playerLoc.Z;
+
+    // 计算Yaw (水平旋转)
+    float yaw = atan2(toEnemy.Y, toEnemy.X) * (180.0f / 3.14159265f);
+
+    // 计算Pitch (垂直旋转)
+    double horizontalDist = sqrt(toEnemy.X * toEnemy.X + toEnemy.Y * toEnemy.Y);
+    float pitch = -atan2(toEnemy.Z, horizontalDist) * (180.0f / 3.14159265f);
+
+    // 通过PlayerController设置ControlRotation
+    uintptr_t imageBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+    uintptr_t world = SafeReadPtr(imageBase + Offsets::GWorld);
+    if (!world) return;
+
+    uintptr_t gameInstance = SafeReadPtr(world + Offsets::OwningGameInstance);
+    if (!gameInstance) return;
+
+    uintptr_t localPlayersData = SafeReadPtr(gameInstance + Offsets::LocalPlayers);
+    if (!localPlayersData) return;
+
+    uintptr_t localPlayer = SafeReadPtr(localPlayersData);
+    if (!localPlayer) return;
+
+    uintptr_t playerController = SafeReadPtr(localPlayer + Offsets::PlayerController);
+    if (!playerController) return;
+
+    // AController::ControlRotation is at offset 0x0328 in UE5
+    // FRotator layout: Pitch(0x00,4) + Yaw(0x04,4) + Roll(0x08,4)
+    uintptr_t controlRotationAddr = playerController + 0x0328;
+
+    // 读取当前ControlRotation
+    float curPitch = 0, curYaw = 0;
+    SafeRead(controlRotationAddr + 0x00, curPitch);
+    SafeRead(controlRotationAddr + 0x04, curYaw);
+
+    // 平滑插值 (30%每帧，避免突兀的视角跳转)
+    float alpha = 0.3f;
+    float newYaw = curYaw + (yaw - curYaw) * alpha;
+    float newPitch = curPitch + (pitch - curPitch) * alpha;
+
+    // 规范化Yaw到[-180, 180]
+    while (newYaw > 180.0f) newYaw -= 360.0f;
+    while (newYaw < -180.0f) newYaw += 360.0f;
+
+    SafeWrite(controlRotationAddr + 0x00, newPitch);
+    SafeWrite(controlRotationAddr + 0x04, newYaw);
+    // Roll保持0
+    SafeWrite(controlRotationAddr + 0x08, 0.0f);
+}
+
+// ============================================================================
 // 反作弊: 清除isSuspicious标记
 // ============================================================================
 static void ApplyAntiCheat()
@@ -704,7 +1000,7 @@ static void PrintHelp()
     printf("=== FarFarWest Mod v2 Console ===\n");
     printf("help              - Show this help\n");
     printf("status            - Show current status\n");
-    printf("tracking [on|off] - Toggle homing bullets\n");
+    printf("tracking [on|off] - Toggle homing bullets + auto-aim\n");
     printf("nocd [on|off]     - Toggle no cooldown\n");
     printf("jump [on|off]     - Toggle infinite jump\n");
     printf("ammo [on|off]     - Toggle infinite ammo\n");
@@ -712,8 +1008,10 @@ static void PrintHelp()
     printf("spell <A|B|C|ABC> - Set spell combo\n");
     printf("repeat <count>    - Set spell repeat count (1-5)\n");
     printf("cast              - Cast spell combo now\n");
+    printf("debug             - Show debug pointer info\n");
     printf("exit              - Unload DLL\n");
     printf("=================================\n");
+    printf("Tracking: Spells=Homing+Steer, Bullets=AutoAim(LMB)\n");
     printf("Hotkeys: F1=Track F2=NoCD F3=Jump F4=Ammo F5=Cast END=Unload\n");
     printf("\n");
 }
@@ -841,6 +1139,32 @@ static void ProcessCommand(const std::string& cmd)
         CastSpellCombo();
         printf("Cast!\n");
     }
+    else if (action == "debug")
+    {
+        uintptr_t imageBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+        uintptr_t world = SafeReadPtr(imageBase + Offsets::GWorld);
+        printf("\n=== Debug Info ===\n");
+        printf("GWorld:          0x%p\n", reinterpret_cast<void*>(world));
+        printf("LastKnownWorld:  0x%p\n", reinterpret_cast<void*>(g_LastKnownWorld));
+        printf("Player:          0x%p\n", reinterpret_cast<void*>(g_Cache.Player));
+        printf("PlayerState:     0x%p\n", reinterpret_cast<void*>(g_Cache.PlayerState));
+        if (g_Cache.Player)
+        {
+            int32_t flags = 0;
+            SafeRead(g_Cache.Player + UEObjOffsets::Flags, flags);
+            uintptr_t cls = SafeReadPtr(g_Cache.Player + UEObjOffsets::Class);
+            uintptr_t ps = SafeReadPtr(g_Cache.Player + Offsets::LocalPlayerState);
+            printf("Player Flags:    0x%08X (destroyed=%s)\n", flags,
+                (flags & (OBJ_FLAG_BeginDestroyed | OBJ_FLAG_FinishDestroyed)) ? "YES" : "NO");
+            printf("Player Class:    0x%p\n", reinterpret_cast<void*>(cls));
+            printf("PlayerState@+0x960: 0x%p\n", reinterpret_cast<void*>(ps));
+        }
+        printf("NearestEnemy:    0x%p (dist=%.1f)\n",
+            reinterpret_cast<void*>(g_NearestEnemy.Address),
+            g_NearestEnemy.Address ? sqrt(g_NearestEnemy.Distance) : 0.0);
+        printf("ProcessedProj:   %d\n", g_ProcessedCount);
+        printf("=================\n\n");
+    }
     else if (action == "exit" || action == "quit")
     {
         g_ModState.bRunning = false;
@@ -960,21 +1284,39 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
         Sleep(1000);
     }
 
-    // 额外等待3秒
+    // 额外等待3秒让游戏完全初始化
     Sleep(3000);
+
+    // 初始化GWorld追踪
+    {
+        uintptr_t imageBase = reinterpret_cast<uintptr_t>(GetModuleHandle(nullptr));
+        g_LastKnownWorld = SafeReadPtr(imageBase + Offsets::GWorld);
+    }
 
     // 启动CMD控制台线程
     CreateThread(nullptr, 0, ConsoleThread, nullptr, 0, nullptr);
 
     // 主循环
+    int consecutiveFailures = 0;
     while (g_ModState.bRunning)
     {
         HandleHotkeys();
 
         if (!ValidateAndRefreshPointers())
         {
-            Sleep(100);
+            consecutiveFailures++;
+            // 指针获取失败时，逐渐增加等待时间（最多2秒）
+            // 避免关卡切换期间疯狂重试浪费CPU
+            DWORD waitMs = (consecutiveFailures < 10) ? 100 :
+                           (consecutiveFailures < 30) ? 500 : 2000;
+            Sleep(waitMs);
             continue;
+        }
+
+        if (consecutiveFailures > 0)
+        {
+            printf("[Mod] Pointers recovered after %d attempts\n", consecutiveFailures);
+            consecutiveFailures = 0;
         }
 
         // 始终执行反作弊
@@ -982,7 +1324,10 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
 
         // 按开关执行功能
         if (g_ModState.bTracking)
+        {
             ApplyTracking();
+            ApplyAutoAim();
+        }
 
         if (g_ModState.bNoCooldown)
             ApplyNoCooldown();
