@@ -207,9 +207,25 @@ bool UStruct::IsSubclassOf(const UStruct* Base) const
 {
     if (!Base)
         return false;
-    const int32 NumParentStructBasesInChainMinusOne = Base->BaseChain.NumStructBasesInChainMinusOne;
-    return NumParentStructBasesInChainMinusOne <= BaseChain.NumStructBasesInChainMinusOne
-        && BaseChain.StructBaseChainArray[NumParentStructBasesInChainMinusOne] == &Base->BaseChain;
+
+    // First, try the Dumper-7 FStructBaseChain optimization (null-safe).
+    // This is fast but only works when the engine populates the chain arrays.
+    if (BaseChain.StructBaseChainArray && Base->BaseChain.StructBaseChainArray)
+    {
+        const int32 NumParentStructBasesInChainMinusOne = Base->BaseChain.NumStructBasesInChainMinusOne;
+        if (NumParentStructBasesInChainMinusOne <= BaseChain.NumStructBasesInChainMinusOne
+            && BaseChain.StructBaseChainArray[NumParentStructBasesInChainMinusOne] == &Base->BaseChain)
+            return true;
+    }
+
+    // Fallback: walk the SuperStruct chain (works on ALL UE engine versions).
+    for (const UStruct* Super = this; Super; Super = Super->SuperStruct)
+    {
+        if (Super == Base)
+            return true;
+    }
+
+    return false;
 }
 
 bool UStruct::IsSubclassOf(const FName& BaseClassName) const
