@@ -1,3 +1,27 @@
+# Visual Studio
 .vs/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.db
+*.opendb
+*.ipch
+
+# Build output
 x64/
+Debug/
+Release/
+*.dll
+*.exe
+*.pdb
+*.obj
+*.lib
+*.exp
+*.ilk
+*.iobj
+*.ipdb
+
+# Other
 .codebuddy/
+$null
