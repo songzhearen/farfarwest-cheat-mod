@@ -5,11 +5,12 @@ static const char WEB_UI_HTML[] = R"rawliteral(<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FarFarWest Mod</title>
+<title>无限火力</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#1a1a2e;color:#e0e0e0;font-family:'Segoe UI',sans-serif;padding:16px;max-width:600px;margin:0 auto}
-h1{text-align:center;color:#00d4ff;margin-bottom:8px;font-size:1.5em}
+h1{text-align:center;color:#00d4ff;margin-bottom:4px;font-size:1.5em}
+.author{text-align:center;color:#e94560;font-size:.8em;margin-bottom:6px}
 .subtitle{text-align:center;color:#666;font-size:.85em;margin-bottom:20px}
 .card{background:#16213e;border-radius:10px;padding:16px;margin-bottom:12px;border:1px solid #0f3460}
 .card-title{font-size:1em;color:#00d4ff;margin-bottom:12px;font-weight:600}
@@ -22,16 +23,19 @@ h1{text-align:center;color:#00d4ff;margin-bottom:8px;font-size:1.5em}
 .slider:before{content:'';position:absolute;width:20px;height:20px;left:3px;bottom:3px;background:#888;border-radius:50%;transition:.3s}
 .toggle input:checked+.slider{background:#00d4ff}
 .toggle input:checked+.slider:before{transform:translateX(22px);background:#fff}
-.input-row{display:flex;align-items:center;gap:10px;padding:8px 0}
-.input-row label{flex:1;font-size:.95em}
-.input-row input[type=number]{width:100px;padding:6px 10px;border:1px solid #0f3460;border-radius:6px;background:#1a1a2e;color:#e0e0e0;font-size:.95em;text-align:center}
+.input-group{padding:10px 0;border-bottom:1px solid #0f3460}
+.input-group:last-child{border-bottom:none}
+.input-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.input-label .label{font-size:.95em}
+.real-val{color:#00d4ff;font-size:.85em}
+.input-row{display:flex;align-items:center;gap:10px}
+.input-row input[type=number]{flex:1;padding:8px 10px;border:1px solid #0f3460;border-radius:6px;background:#1a1a2e;color:#e0e0e0;font-size:.95em;text-align:center}
 .input-row input:focus{outline:none;border-color:#00d4ff}
-.btn{padding:6px 14px;border:none;border-radius:6px;cursor:pointer;font-size:.85em;font-weight:600;transition:.2s}
+.btn{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;font-size:.85em;font-weight:600;transition:.2s}
 .btn-primary{background:#00d4ff;color:#1a1a2e}
 .btn-primary:hover{background:#00b8d4}
-.btn-danger{background:#e94560;color:#fff}
-.btn-danger:hover{background:#c81e45}
-.btn-sm{padding:4px 10px;font-size:.8em}
+.btn-sm{padding:6px 12px;font-size:.8em}
+.hint{color:#666;font-size:.8em;margin-top:4px}
 .player-list{max-height:300px;overflow-y:auto}
 .player-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #0f3460}
 .player-item:last-child{border-bottom:none}
@@ -42,28 +46,24 @@ h1{text-align:center;color:#00d4ff;margin-bottom:8px;font-size:1.5em}
 .status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
 .dot-green{background:#0f0}
 .dot-red{background:#f00}
-.dot-yellow{background:#ff0}
 .no-data{text-align:center;color:#666;padding:20px;font-size:.9em}
+.footer{text-align:center;color:#444;font-size:.75em;margin-top:20px;padding-top:12px;border-top:1px solid #0f3460}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:#1a1a2e}
 ::-webkit-scrollbar-thumb{background:#0f3460;border-radius:3px}
 </style>
 </head>
 <body>
-<h1>FarFarWest Mod</h1>
+<h1>无限火力</h1>
+<div class="author">by songzhearen</div>
 <div class="subtitle">localhost:1145</div>
 
 <div class="status-bar">
-  <span><span class="status-dot dot-green" id="connDot"></span><span id="connStatus">连接中...</span></span>
-  <span><span class="status-dot dot-green" id="acDot"></span>反作弊</span>
+  <span><span class="status-dot" id="connDot"></span><span id="connStatus">连接中...</span></span>
 </div>
 
 <div class="card">
   <div class="card-title">功能开关</div>
-  <div class="row">
-    <span class="label">自动瞄准</span>
-    <label class="toggle"><input type="checkbox" id="aim" onchange="toggle('aim')"><span class="slider"></span></label>
-  </div>
   <div class="row">
     <span class="label">无冷却</span>
     <label class="toggle"><input type="checkbox" id="nocd" onchange="toggle('nocd')"><span class="slider"></span></label>
@@ -84,15 +84,27 @@ h1{text-align:center;color:#00d4ff;margin-bottom:8px;font-size:1.5em}
 
 <div class="card">
   <div class="card-title">参数调节</div>
-  <div class="input-row">
-    <label>移速倍率</label>
-    <input type="number" id="speedVal" value="1.0" min="0.5" max="10.0" step="0.1">
-    <button class="btn btn-primary btn-sm" onclick="setSpeed()">设置</button>
+  <div class="input-group">
+    <div class="input-label">
+      <span class="label">移动速度</span>
+      <span class="real-val" id="realSpeed">读取中...</span>
+    </div>
+    <div class="input-row">
+      <input type="number" id="speedVal" value="0" min="0" max="5000" step="50" placeholder="0=不修改">
+      <button class="btn btn-primary btn-sm" onclick="setSpeed()">设置</button>
+    </div>
+    <div class="hint">默认约600，设为0恢复原速</div>
   </div>
-  <div class="input-row">
-    <label>跳跃高度</label>
-    <input type="number" id="jumpHeight" value="0" min="0" max="5000" step="100" placeholder="0=默认">
-    <button class="btn btn-primary btn-sm" onclick="setJumpHeight()">设置</button>
+  <div class="input-group">
+    <div class="input-label">
+      <span class="label">跳跃高度</span>
+      <span class="real-val" id="realJump">读取中...</span>
+    </div>
+    <div class="input-row">
+      <input type="number" id="jumpHeight" value="0" min="0" max="5000" step="100" placeholder="0=不修改">
+      <button class="btn btn-primary btn-sm" onclick="setJumpHeight()">设置</button>
+    </div>
+    <div class="hint">默认约400-500，设为0恢复默认</div>
   </div>
 </div>
 
@@ -103,37 +115,43 @@ h1{text-align:center;color:#00d4ff;margin-bottom:8px;font-size:1.5em}
   </div>
 </div>
 
+<div class="footer">无限火力 Mod by songzhearen</div>
+
 <script>
-const API='http://127.0.0.1:1145';
-let prevStatus=null;
+const API='';
+let connected=false;
+let prevPlayerHash='';
 
-async function toggle(f){
-  try{await fetch(API+'/api/toggle/'+f,{method:'POST'})}catch(e){}
-  refresh();
-}
+function toggle(f){fetch(API+'/api/toggle/'+f,{method:'POST'}).catch(()=>{})}
 
-async function setSpeed(){
+function setSpeed(){
   const v=parseFloat(document.getElementById('speedVal').value);
-  if(isNaN(v)||v<0.5||v>10)return;
-  try{await fetch(API+'/api/speed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({multiplier:v})})}catch(e){}
+  if(isNaN(v)||v<0)return;
+  fetch(API+'/api/speed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({speed:v})}).catch(()=>{});
 }
 
-async function setJumpHeight(){
+function setJumpHeight(){
   const v=parseFloat(document.getElementById('jumpHeight').value);
   if(isNaN(v)||v<0)return;
-  try{await fetch(API+'/api/jumpheight',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({height:v})})}catch(e){}
+  fetch(API+'/api/jumpheight',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({height:v})}).catch(()=>{});
 }
 
-async function teleport(idx){
-  try{await fetch(API+'/api/teleport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:idx})})}catch(e){}
+function teleport(idx){
+  fetch(API+'/api/teleport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:idx})}).catch(()=>{});
 }
 
 function renderPlayers(players){
-  const el=document.getElementById('playerList');
   if(!players||players.length===0){
-    el.innerHTML='<div class="no-data">未发现其他玩家</div>';
+    if(prevPlayerHash!=='empty'){
+      document.getElementById('playerList').innerHTML='<div class="no-data">未发现其他玩家</div>';
+      prevPlayerHash='empty';
+    }
     return;
   }
+  let hash=players.map(p=>p.x.toFixed(0)+','+p.y.toFixed(0)).join('|');
+  if(hash===prevPlayerHash)return;
+  prevPlayerHash=hash;
+
   let html='';
   players.forEach((p,i)=>{
     html+='<div class="player-item"><div class="player-info">';
@@ -141,37 +159,48 @@ function renderPlayers(players){
     html+='<div class="player-pos">('+p.x.toFixed(0)+', '+p.y.toFixed(0)+', '+p.z.toFixed(0)+')</div>';
     html+='</div><button class="btn btn-primary btn-sm" onclick="teleport('+i+')">传送</button></div>';
   });
-  el.innerHTML=html;
+  document.getElementById('playerList').innerHTML=html;
 }
 
 async function refresh(){
   try{
     const r=await fetch(API+'/api/status');
+    if(!r.ok)return;
     const d=await r.json();
-    document.getElementById('connDot').className='status-dot dot-green';
-    document.getElementById('connStatus').text='已连接';
 
-    const ids=['aim','nocd','jump','ammo','speed'];
-    ids.forEach(id=>{
+    if(!connected){
+      connected=true;
+      document.getElementById('connDot').className='status-dot dot-green';
+      document.getElementById('connStatus').textContent='已连接';
+    }
+
+    ['nocd','jump','ammo','speed'].forEach(id=>{
       const el=document.getElementById(id);
-      if(el&&d[id]!==undefined)el.checked=d[id];
+      if(el&&d[id]!==undefined&&el!==document.activeElement)el.checked=d[id];
     });
-    if(d.speedMultiplier!==undefined){
-      document.getElementById('speedVal').value=d.speedMultiplier;
-    }
-    if(d.jumpHeight!==undefined&&d.jumpHeight>0){
-      document.getElementById('jumpHeight').value=d.jumpHeight;
-    }
+
+    const speedInput=document.getElementById('speedVal');
+    const jumpInput=document.getElementById('jumpHeight');
+    if(speedInput!==document.activeElement&&d.targetSpeed!==undefined&&d.targetSpeed>0)
+      speedInput.value=d.targetSpeed;
+    if(jumpInput!==document.activeElement&&d.targetJumpHeight!==undefined&&d.targetJumpHeight>0)
+      jumpInput.value=d.targetJumpHeight;
+
+    if(d.realSpeed!==undefined)
+      document.getElementById('realSpeed').textContent='当前: '+d.realSpeed.toFixed(1);
+    if(d.realJumpHeight!==undefined)
+      document.getElementById('realJump').textContent='当前: '+d.realJumpHeight.toFixed(1);
+
     renderPlayers(d.players);
-    prevStatus=d;
   }catch(e){
+    connected=false;
     document.getElementById('connDot').className='status-dot dot-red';
-    document.getElementById('connStatus').text='连接失败';
+    document.getElementById('connStatus').textContent='连接失败';
   }
 }
 
 refresh();
-setInterval(refresh,500);
+setInterval(refresh,1000);
 </script>
 </body>
 </html>)rawliteral";

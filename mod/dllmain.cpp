@@ -1,6 +1,7 @@
-// dllmain.cpp : FarFarWest Mod v3 - Web UI 控制界面
-// 功能: 无CD / 无限跳跃 / 无限子弹 / 移速修改 / 跳跃高度 / 自动瞄准 / 传送到玩家
+// dllmain.cpp : 无限火力 Mod v3 - Web UI 控制界面
+// 功能: 无CD / 无限跳跃 / 无限子弹 / 移速修改 / 跳跃高度 / 传送到玩家
 // 控制: localhost:1145 网页界面 + 热键
+// by songzhearen
 
 #include "pch.h"
 #include "SDK.hpp"
@@ -11,11 +12,10 @@
 #include <sstream>
 #include <atomic>
 #include <cmath>
+#include <mutex>
 
 #pragma comment(lib, "ws2_32.lib")
 
-// cpp-httplib: 关闭异常以兼容SEH
-#define CPPHTTPLIB_NO_EXCEPTIONS
 #include "httplib.h"
 #include "web_ui.h"
 
@@ -33,8 +33,6 @@ namespace Offsets
     constexpr uintptr_t SceneCompRelativeLocation = 0x0148;
 
     // ABP_Player_C
-    constexpr uintptr_t AutoLookTarget      = 0x0998;
-    constexpr uintptr_t IsFocusingTarget    = 0x09A0;
     constexpr uintptr_t JumpsLeft           = 0x0A4C;
     constexpr uintptr_t MaxDash             = 0x0840;
     constexpr uintptr_t CurrentDashLeft     = 0x0844;
@@ -46,6 +44,7 @@ namespace Offsets
     constexpr uintptr_t BuffMoveSpeed       = 0x09A8;
 
     // CharacterMovementComponent
+    constexpr uintptr_t GravityScale        = 0x01A8;
     constexpr uintptr_t JumpZVelocity       = 0x01B0;
     constexpr uintptr_t MaxWalkSpeed        = 0x0288;
     constexpr uintptr_t MaxWalkSpeedCrouched = 0x028C;
@@ -68,13 +67,10 @@ namespace Offsets
     constexpr uintptr_t MaxMagazineAmmos     = 0x0008;
     constexpr uintptr_t CurrentTotalAmmos    = 0x000C;
     constexpr uintptr_t MaxTotalAmmos        = 0x0010;
-
-    // ABP_Enemy_C
-    constexpr uintptr_t EnemyHealth = 0x06B0;
 }
 
 // ============================================================================
-// 功能开关 (atomic 保证Web服务器线程安全)
+// 功能开关
 // ============================================================================
 struct FModState
 {
@@ -82,13 +78,15 @@ struct FModState
     std::atomic<bool> bInfiniteJump{false};
     std::atomic<bool> bInfiniteAmmo{false};
     std::atomic<bool> bSpeedHack{false};
-    std::atomic<bool> bAutoAim{false};
     std::atomic<bool> bRunning{true};
 };
 
 static FModState g_ModState;
-static std::atomic<float> g_SpeedMultiplier{1.0f};
-static std::atomic<float> g_JumpHeight{0.0f};
+
+static std::atomic<float> g_TargetSpeed{0.0f};
+static std::atomic<float> g_TargetJumpHeight{0.0f};
+static std::atomic<float> g_RealSpeed{0.0f};
+static std::atomic<float> g_RealJumpHeight{0.0f};
 
 // ============================================================================
 // 指针缓存
@@ -100,34 +98,23 @@ struct FCachedPointers
 };
 
 static FCachedPointers g_Cache;
-
-struct FEnemyInfo
-{
-    uintptr_t Address;
-    double     Distance;
-};
-
-static FEnemyInfo  g_NearestEnemy = { 0, 999999.0 };
-static DWORD      g_LastEnemyScanTick = 0;
-static const DWORD ENEMY_SCAN_INTERVAL_MS = 500;
-
 static uintptr_t g_LastKnownWorld = 0;
 
 namespace UEObjOffsets
 {
     constexpr uintptr_t VTable  = 0x0000;
     constexpr uintptr_t Flags   = 0x0008;
-    constexpr uintptr_t Index   = 0x000C;
     constexpr uintptr_t Class   = 0x0010;
 }
 
 constexpr int32_t OBJ_FLAG_BeginDestroyed  = 0x00008000;
 constexpr int32_t OBJ_FLAG_FinishDestroyed = 0x00010000;
 
-static SDK::UClass* g_EnemyClass = nullptr;
+// ProcessEvent vtable 索引
+constexpr int PROCESS_EVENT_INDEX = 0x4C;
 
 // ============================================================================
-// 玩家列表 (用于传送)
+// 玩家列表 (带缓存，HTTP线程直接读取不阻塞)
 // ============================================================================
 struct FPlayerInfo
 {
@@ -139,6 +126,13 @@ static FPlayerInfo g_AllPlayers[32];
 static int g_AllPlayerCount = 0;
 static DWORD g_LastPlayerScanTick = 0;
 static const DWORD PLAYER_SCAN_INTERVAL_MS = 2000;
+static std::mutex g_PlayerMutex;
+
+// 传送请求 (从HTTP线程写入，主线程执行)
+static std::atomic<int> g_TeleportRequest{-1};
+
+// K2_SetActorLocation UFunction 缓存
+static SDK::UFunction* g_SetActorLocationFunc = nullptr;
 
 // ============================================================================
 // 工具函数
@@ -173,19 +167,6 @@ static inline bool SafeWriteIfDifferent(uintptr_t address, T value)
     if (SafeRead(address, current) && current != value)
         return SafeWrite(address, value);
     return false;
-}
-
-static bool GetActorLocation(uintptr_t actor, SDK::FVector& outLoc)
-{
-    if (!actor) return false;
-    __try
-    {
-        uintptr_t rootComp = *reinterpret_cast<uintptr_t*>(actor + Offsets::ActorRootComponent);
-        if (!rootComp) return false;
-        outLoc = *reinterpret_cast<SDK::FVector*>(rootComp + Offsets::SceneCompRelativeLocation);
-        return true;
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
 }
 
 static bool GetPlayerLocation(uintptr_t player, SDK::FVector& outLoc)
@@ -287,6 +268,63 @@ static SDK::FUObjectItem** SafeGetGObjectsChunks(SDK::TUObjectArray* gobjects)
     __except (EXCEPTION_EXECUTE_HANDLER) { return nullptr; }
 }
 
+// ProcessEvent 调用封装
+using ProcessEventFn = void(*)(SDK::UObject* obj, SDK::UFunction* func, void* params);
+static void SafeProcessEvent(SDK::UObject* obj, SDK::UFunction* func, void* params)
+{
+    if (!obj || !func) return;
+    uintptr_t objAddr = reinterpret_cast<uintptr_t>(obj);
+    uintptr_t vtable = SafeReadPtr(objAddr);
+    if (!vtable) return;
+    ProcessEventFn pe = reinterpret_cast<ProcessEventFn>(
+        SafeReadPtr(vtable + PROCESS_EVENT_INDEX * sizeof(uintptr_t)));
+    if (!pe) return;
+    __try { pe(obj, func, params); }
+    __except (EXCEPTION_EXECUTE_HANDLER) {}
+}
+
+// 查找 UFunction
+static SDK::UFunction* FindUFunctionByName(const char* targetName)
+{
+    auto* gobjects = SDK::UObject::GObjects.GetTypedPtr();
+    if (!gobjects) return nullptr;
+    int32_t num = 0;
+    SafeRead(reinterpret_cast<uintptr_t>(gobjects) + 0x14, num);
+    for (int32_t i = 0; i < num; i++)
+    {
+        auto* uobj = SDK::UObject::GObjects->GetByIndex(i);
+        if (!uobj) continue;
+        if (!uobj->HasTypeFlag(SDK::EClassCastFlags::Function)) continue;
+        if (uobj->GetFullName().find(targetName) != std::string::npos)
+            return static_cast<SDK::UFunction*>(uobj);
+    }
+    return nullptr;
+}
+
+// K2_SetActorLocation 参数结构 (匹配SDK布局)
+struct FHitResult_Simple
+{
+    int32_t FaceIndex;           // 0x00
+    float Time;                  // 0x04
+    float Distance;              // 0x08
+    SDK::FVector Location;       // 0x0C (3 floats)
+    SDK::FVector ImpactPoint;    // 0x18
+    SDK::FVector Normal;         // 0x24
+    SDK::FVector ImpactNormal;   // 0x30
+    uint8_t _pad0[0x78];         // PhysMat, HitActor, HitComponent, HitBoneName, etc.
+};
+
+struct FK2_SetActorLocationParams
+{
+    SDK::FVector NewLocation;         // 0x00 (Input)
+    bool bSweep;                      // 0x0C
+    uint8_t _pad0[3];
+    FHitResult_Simple SweepHitResult; // 0x10
+    bool bTeleport;                   // 0xA0
+    uint8_t _pad1[3];
+    bool ReturnValue;                 // 0xA4
+};
+
 // ============================================================================
 // 指针验证和刷新
 // ============================================================================
@@ -305,11 +343,12 @@ static bool HasWorldChanged()
 
 static void OnLevelTransition()
 {
-    g_NearestEnemy = { 0, 999999.0 };
-    g_AllPlayerCount = 0;
-    g_LastEnemyScanTick = 0;
+    {
+        std::lock_guard<std::mutex> lock(g_PlayerMutex);
+        g_AllPlayerCount = 0;
+    }
     g_LastPlayerScanTick = 0;
-    g_EnemyClass = nullptr;
+    g_SetActorLocationFunc = nullptr;
 }
 
 static bool ValidateAndRefreshPointers()
@@ -352,179 +391,40 @@ static bool ValidateAndRefreshPointers()
 }
 
 // ============================================================================
-// 敌人查找
+// 扫描所有玩家
 // ============================================================================
-static SDK::UClass* TryEnemyStaticClass()
+static SDK::UClass* TryPlayerStaticClass()
 {
-    __try { return SDK::ABP_Enemy_C::StaticClass(); }
+    __try { return SDK::ABP_Player_C::StaticClass(); }
     __except (EXCEPTION_EXECUTE_HANDLER) { return nullptr; }
 }
 
-static SDK::UClass* TryFindClass(const std::string& fullName)
+static int DoPlayerScan(FPlayerInfo* outPlayers, int maxCount)
 {
-    __try { return SDK::UObject::FindClass(fullName); }
-    __except (EXCEPTION_EXECUTE_HANDLER) { return nullptr; }
-}
+    if (!g_Cache.Player) return 0;
 
-static SDK::UClass* ScanForEnemyClassInGObjects()
-{
-    for (int32_t i = 0; i < SDK::UObject::GObjects->Num(); i++)
-    {
-        auto* obj = SDK::UObject::GObjects->GetByIndex(i);
-        if (!obj) continue;
-        uintptr_t objAddr = reinterpret_cast<uintptr_t>(obj);
-        uintptr_t clsAddr = SafeReadPtr(objAddr + UEObjOffsets::Class);
-        if (!clsAddr) continue;
-        SDK::EClassCastFlags castFlags;
-        if (!SafeRead(clsAddr + 0xD8, castFlags)) continue;
-        if (!(castFlags & SDK::EClassCastFlags::Class)) continue;
-        SDK::FName clsFName;
-        if (!SafeRead(clsAddr + 0x18, clsFName)) continue;
-        std::string name = clsFName.GetRawString();
-        if (name.find("BP_Enemy_C") != std::string::npos)
-            return static_cast<SDK::UClass*>(obj);
-    }
-    return nullptr;
-}
-
-static void InitEnemyClass()
-{
-    if (g_EnemyClass) return;
-    g_EnemyClass = TryEnemyStaticClass();
-    if (!g_EnemyClass)
-    {
-        std::string fullName = "BlueprintGeneratedClass BP_Enemy.BP_Enemy_C";
-        g_EnemyClass = TryFindClass(fullName);
-    }
-    if (!g_EnemyClass)
-        g_EnemyClass = ScanForEnemyClassInGObjects();
-}
-
-static void ScanForNearestEnemy()
-{
-    DWORD now = GetTickCount();
-    if (now - g_LastEnemyScanTick < ENEMY_SCAN_INTERVAL_MS) return;
-    g_LastEnemyScanTick = now;
-
-    InitEnemyClass();
-    if (!g_Cache.Player || !g_EnemyClass)
-    {
-        g_NearestEnemy = { 0, 999999.0 };
-        return;
-    }
-
-    SDK::FVector playerLoc;
-    if (!GetPlayerLocation(g_Cache.Player, playerLoc))
-    {
-        g_NearestEnemy = { 0, 999999.0 };
-        return;
-    }
-
-    FEnemyInfo best = { 0, 999999.0 };
     auto* gobjects = SDK::UObject::GObjects.GetTypedPtr();
-    if (!gobjects) return;
+    if (!gobjects) return 0;
 
     int32_t numElements = 0, numChunks = 0;
     SafeRead(reinterpret_cast<uintptr_t>(gobjects) + 0x14, numElements);
     SafeRead(reinterpret_cast<uintptr_t>(gobjects) + 0x1C, numChunks);
-    if (numElements <= 0) return;
+    if (numElements <= 0) return 0;
 
     auto** chunks = SafeGetGObjectsChunks(gobjects);
-    if (!chunks) return;
+    if (!chunks) return 0;
 
-    for (int32_t chunkIdx = 0; chunkIdx < numChunks; chunkIdx++)
-    {
-        auto* chunk = chunks[chunkIdx];
-        if (!chunk) continue;
-        for (int32_t inChunkIdx = 0; inChunkIdx < gobjects->ElementsPerChunk; inChunkIdx++)
-        {
-            int32_t objIdx = chunkIdx * gobjects->ElementsPerChunk + inChunkIdx;
-            if (objIdx >= numElements) break;
-            auto* obj = chunk[inChunkIdx].Object;
-            if (!obj) continue;
-            if (!SafeHasTypeFlag(obj, SDK::EClassCastFlags::Actor)) continue;
-            if (SafeIsDefaultObject(obj)) continue;
-
-            bool isEnemy = SafeIsA(obj, g_EnemyClass);
-            if (!isEnemy && g_EnemyClass)
-            {
-                uintptr_t clsAddr = SafeReadPtr(reinterpret_cast<uintptr_t>(obj) + UEObjOffsets::Class);
-                if (clsAddr)
-                {
-                    SDK::FName clsFName;
-                    if (SafeRead(clsAddr + 0x18, clsFName))
-                    {
-                        std::string clsName = clsFName.GetRawString();
-                        if (clsName.find("BP_Enemy_C") != std::string::npos || clsName.find("BP_Enemy") == 0)
-                            isEnemy = true;
-                    }
-                }
-            }
-            if (!isEnemy) continue;
-
-            uintptr_t enemyAddr = reinterpret_cast<uintptr_t>(obj);
-            double health = 0.0;
-            if (!SafeRead(enemyAddr + Offsets::EnemyHealth, health) || health <= 0.0) continue;
-            if (IsUObjectDestroyed(enemyAddr)) continue;
-
-            SDK::FVector enemyLoc;
-            if (!GetActorLocation(enemyAddr, enemyLoc)) continue;
-
-            double dx = enemyLoc.X - playerLoc.X;
-            double dy = enemyLoc.Y - playerLoc.Y;
-            double dz = enemyLoc.Z - playerLoc.Z;
-            double dist = dx * dx + dy * dy + dz * dz;
-
-            if (dist < best.Distance)
-            {
-                best.Address = enemyAddr;
-                best.Distance = dist;
-            }
-        }
-    }
-    g_NearestEnemy = best;
-}
-
-// ============================================================================
-// 扫描所有玩家 (用于传送)
-// ============================================================================
-static void ScanAllPlayers()
-{
-    DWORD now = GetTickCount();
-    if (now - g_LastPlayerScanTick < PLAYER_SCAN_INTERVAL_MS) return;
-    g_LastPlayerScanTick = now;
-
-    if (!g_Cache.Player) return;
-
-    auto* gobjects = SDK::UObject::GObjects.GetTypedPtr();
-    if (!gobjects) return;
-
-    int32_t numElements = 0, numChunks = 0;
-    SafeRead(reinterpret_cast<uintptr_t>(gobjects) + 0x14, numElements);
-    SafeRead(reinterpret_cast<uintptr_t>(gobjects) + 0x1C, numChunks);
-    if (numElements <= 0) return;
-
-    auto** chunks = SafeGetGObjectsChunks(gobjects);
-    if (!chunks) return;
-
-    static SDK::UClass* playerClass = nullptr;
-    if (!playerClass) playerClass = TryEnemyStaticClass(); // placeholder, will use IsA
-
-    // 直接用 ABP_Player_C::StaticClass
     static SDK::UClass* bpPlayerClass = nullptr;
-    if (!bpPlayerClass)
-    {
-        __try { bpPlayerClass = SDK::ABP_Player_C::StaticClass(); }
-        __except (EXCEPTION_EXECUTE_HANDLER) { bpPlayerClass = nullptr; }
-    }
-    if (!bpPlayerClass) return;
+    if (!bpPlayerClass) bpPlayerClass = TryPlayerStaticClass();
+    if (!bpPlayerClass) return 0;
 
     int count = 0;
-    for (int32_t chunkIdx = 0; chunkIdx < numChunks && count < 32; chunkIdx++)
+
+    for (int32_t chunkIdx = 0; chunkIdx < numChunks && count < maxCount; chunkIdx++)
     {
         auto* chunk = chunks[chunkIdx];
         if (!chunk) continue;
-        for (int32_t inChunkIdx = 0; inChunkIdx < gobjects->ElementsPerChunk && count < 32; inChunkIdx++)
+        for (int32_t inChunkIdx = 0; inChunkIdx < gobjects->ElementsPerChunk && count < maxCount; inChunkIdx++)
         {
             int32_t objIdx = chunkIdx * gobjects->ElementsPerChunk + inChunkIdx;
             if (objIdx >= numElements) break;
@@ -534,7 +434,7 @@ static void ScanAllPlayers()
             if (SafeIsDefaultObject(obj)) continue;
 
             uintptr_t objAddr = reinterpret_cast<uintptr_t>(obj);
-            if (objAddr == g_Cache.Player) continue; // 排除自己
+            if (objAddr == g_Cache.Player) continue;
             if (IsUObjectDestroyed(objAddr)) continue;
 
             if (!SafeIsA(obj, bpPlayerClass)) continue;
@@ -542,38 +442,58 @@ static void ScanAllPlayers()
             SDK::FVector loc;
             if (!GetPlayerLocation(objAddr, loc)) continue;
 
-            g_AllPlayers[count].Address = objAddr;
-            g_AllPlayers[count].Location = loc;
+            outPlayers[count].Address = objAddr;
+            outPlayers[count].Location = loc;
             count++;
         }
     }
-    g_AllPlayerCount = count;
+    return count;
+}
+
+static void ScanAllPlayers()
+{
+    DWORD now = GetTickCount();
+    if (now - g_LastPlayerScanTick < PLAYER_SCAN_INTERVAL_MS) return;
+    g_LastPlayerScanTick = now;
+
+    FPlayerInfo tempPlayers[32];
+    int count = DoPlayerScan(tempPlayers, 32);
+    {
+        std::lock_guard<std::mutex> lock(g_PlayerMutex);
+        memcpy(g_AllPlayers, tempPlayers, sizeof(FPlayerInfo) * count);
+        g_AllPlayerCount = count;
+    }
 }
 
 // ============================================================================
-// 传送到指定玩家
+// 传送到指定玩家 (通过 ProcessEvent 调用 K2_SetActorLocation)
 // ============================================================================
 static void TeleportToPlayer(int index)
 {
     if (index < 0 || index >= g_AllPlayerCount) return;
     if (!g_Cache.Player) return;
 
+    // 初始化 K2_SetActorLocation UFunction (只查找一次)
+    if (!g_SetActorLocationFunc)
+        g_SetActorLocationFunc = FindUFunctionByName("K2_SetActorLocation");
+
+    if (!g_SetActorLocationFunc) return;
+
     SDK::FVector targetLoc = g_AllPlayers[index].Location;
-    // 偏移避免重叠
     targetLoc.X += 150.0;
     targetLoc.Z += 60.0;
 
-    // 通过写入 RootComponent 的 RelativeLocation 实现传送
-    uintptr_t rootComp = SafeReadPtr(g_Cache.Player + Offsets::ActorRootComponent);
-    if (rootComp)
-        SafeWrite(rootComp + Offsets::SceneCompRelativeLocation, targetLoc);
+    FK2_SetActorLocationParams params;
+    memset(&params, 0, sizeof(params));
+    params.NewLocation = targetLoc;
+    params.bSweep = false;
+    params.bTeleport = true;
+    params.ReturnValue = false;
 
-    // 同时写入 ClientTransform 的 Translation
-    __try
-    {
-        *reinterpret_cast<SDK::FVector*>(g_Cache.Player + Offsets::ClientTransform + 0x20) = targetLoc;
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER) {}
+    SafeProcessEvent(
+        reinterpret_cast<SDK::UObject*>(g_Cache.Player),
+        g_SetActorLocationFunc,
+        &params);
 }
 
 // ============================================================================
@@ -629,38 +549,63 @@ static void ApplyInfiniteAmmo()
         SafeWriteIfDifferent(runtimeStats + Offsets::AmountGrenades, 5);
 }
 
+// 读取真实值
+static void ReadRealValues()
+{
+    if (!g_Cache.Player) return;
+    uintptr_t charMoveComp = SafeReadPtr(g_Cache.Player + Offsets::CharMoveComp);
+    if (!charMoveComp) return;
+
+    float speed = 0.0f;
+    if (SafeRead(charMoveComp + Offsets::MaxWalkSpeed, speed))
+        g_RealSpeed = speed;
+
+    float jump = 0.0f;
+    if (SafeRead(charMoveComp + Offsets::JumpZVelocity, jump))
+        g_RealJumpHeight = jump;
+}
+
+// 移速修改: 每帧强制写入绝对值
 static void ApplySpeedHack()
 {
     if (!g_Cache.Player) return;
-    float mult = g_SpeedMultiplier.load();
+    float target = g_TargetSpeed.load();
+    if (target <= 0.0f) return;
+
     uintptr_t charMoveComp = SafeReadPtr(g_Cache.Player + Offsets::CharMoveComp);
     if (!charMoveComp) return;
-    SafeWriteIfDifferent<double>(g_Cache.Player + Offsets::BuffMoveSpeed, (double)mult);
-    SafeWriteIfDifferent<float>(charMoveComp + Offsets::MaxWalkSpeed, 600.0f * mult);
-    SafeWriteIfDifferent<float>(charMoveComp + Offsets::MaxWalkSpeedCrouched, 300.0f * mult);
-    SafeWriteIfDifferent<float>(charMoveComp + Offsets::MaxAcceleration, 4096.0f * mult);
+
+    // 使用 SafeWrite (无条件写入) 代替 SafeWriteIfDifferent
+    // 因为游戏可能每帧重置这些值
+    SafeWrite<float>(charMoveComp + Offsets::MaxWalkSpeed, target);
+    SafeWrite<float>(charMoveComp + Offsets::MaxWalkSpeedCrouched, target * 0.5f);
+    SafeWrite<float>(charMoveComp + Offsets::MaxAcceleration, 4096.0f);
 }
 
+// 跳跃高度修改: 每帧强制写入，同时修改 GravityScale 增强效果
 static void ApplyJumpHeight()
 {
     if (!g_Cache.Player) return;
-    float height = g_JumpHeight.load();
-    if (height <= 0.0f) return;
+    float target = g_TargetJumpHeight.load();
+    if (target <= 0.0f) return;
+
     uintptr_t charMoveComp = SafeReadPtr(g_Cache.Player + Offsets::CharMoveComp);
     if (!charMoveComp) return;
-    SafeWriteIfDifferent<float>(charMoveComp + Offsets::JumpZVelocity, height);
+
+    // 强制写入 JumpZVelocity (无条件)
+    SafeWrite<float>(charMoveComp + Offsets::JumpZVelocity, target);
+
+    // 如果设置较高跳跃，同步降低重力让效果更明显
+    if (target > 1000.0f)
+        SafeWrite<float>(charMoveComp + Offsets::GravityScale, 0.7f);
 }
 
-static void ApplyAutoAim()
+// 处理传送请求 (从HTTP线程发起，主线程执行)
+static void ProcessTeleportRequest()
 {
-    if (!g_Cache.Player || !g_NearestEnemy.Address) return;
-    if (IsUObjectDestroyed(g_NearestEnemy.Address))
-    {
-        g_NearestEnemy = { 0, 999999.0 };
-        return;
-    }
-    SafeWrite(g_Cache.Player + Offsets::AutoLookTarget, g_NearestEnemy.Address);
-    SafeWrite(g_Cache.Player + Offsets::IsFocusingTarget, true);
+    int idx = g_TeleportRequest.exchange(-1);
+    if (idx >= 0)
+        TeleportToPlayer(idx);
 }
 
 // ============================================================================
@@ -673,29 +618,30 @@ static std::string BuildStatusJson()
     json += ",\"jump\":" + std::string(g_ModState.bInfiniteJump.load() ? "true" : "false");
     json += ",\"ammo\":" + std::string(g_ModState.bInfiniteAmmo.load() ? "true" : "false");
     json += ",\"speed\":" + std::string(g_ModState.bSpeedHack.load() ? "true" : "false");
-    json += ",\"aim\":" + std::string(g_ModState.bAutoAim.load() ? "true" : "false");
-    json += ",\"speedMultiplier\":" + std::to_string(g_SpeedMultiplier.load());
-    json += ",\"jumpHeight\":" + std::to_string(g_JumpHeight.load());
+    json += ",\"targetSpeed\":" + std::to_string(g_TargetSpeed.load());
+    json += ",\"targetJumpHeight\":" + std::to_string(g_TargetJumpHeight.load());
+    json += ",\"realSpeed\":" + std::to_string(g_RealSpeed.load());
+    json += ",\"realJumpHeight\":" + std::to_string(g_RealJumpHeight.load());
 
     json += ",\"players\":[";
-    for (int i = 0; i < g_AllPlayerCount; i++)
     {
-        if (i > 0) json += ",";
-        json += "{\"x\":" + std::to_string(g_AllPlayers[i].Location.X);
-        json += ",\"y\":" + std::to_string(g_AllPlayers[i].Location.Y);
-        json += ",\"z\":" + std::to_string(g_AllPlayers[i].Location.Z) + "}";
+        std::lock_guard<std::mutex> lock(g_PlayerMutex);
+        for (int i = 0; i < g_AllPlayerCount; i++)
+        {
+            if (i > 0) json += ",";
+            json += "{\"x\":" + std::to_string(g_AllPlayers[i].Location.X);
+            json += ",\"y\":" + std::to_string(g_AllPlayers[i].Location.Y);
+            json += ",\"z\":" + std::to_string(g_AllPlayers[i].Location.Z) + "}";
+        }
     }
     json += "]";
-
-    json += ",\"enemyDist\":" + std::to_string(
-        g_NearestEnemy.Address ? sqrt(g_NearestEnemy.Distance) : 0.0);
 
     json += "}";
     return json;
 }
 
 // ============================================================================
-// 简易JSON解析 (仅用于简单的key:value)
+// 简易JSON解析
 // ============================================================================
 static float ParseJsonFloat(const std::string& body, const std::string& key)
 {
@@ -733,29 +679,27 @@ static void WebServerThread(LPVOID)
     });
 
     svr.Get("/api/status", [](const httplib::Request&, httplib::Response& res) {
-        std::string json = BuildStatusJson();
-        res.set_content(json, "application/json");
+        res.set_content(BuildStatusJson(), "application/json");
     });
 
     svr.Post("/api/toggle/:feature", [](const httplib::Request& req, httplib::Response& res) {
         auto it = req.path_params.find("feature");
-        if (it == req.path_params.end()) { res.set_content("{\"error\":\"missing feature\"}", "application/json"); return; }
+        if (it == req.path_params.end()) { res.set_content("{\"error\":\"missing\"}", "application/json"); return; }
         std::string f = it->second;
         bool newState = false;
         if (f == "nocd") { g_ModState.bNoCooldown = !g_ModState.bNoCooldown.load(); newState = g_ModState.bNoCooldown; }
         else if (f == "jump") { g_ModState.bInfiniteJump = !g_ModState.bInfiniteJump.load(); newState = g_ModState.bInfiniteJump; }
         else if (f == "ammo") { g_ModState.bInfiniteAmmo = !g_ModState.bInfiniteAmmo.load(); newState = g_ModState.bInfiniteAmmo; }
         else if (f == "speed") { g_ModState.bSpeedHack = !g_ModState.bSpeedHack.load(); newState = g_ModState.bSpeedHack; }
-        else if (f == "aim") { g_ModState.bAutoAim = !g_ModState.bAutoAim.load(); newState = g_ModState.bAutoAim; }
-        else { res.set_content("{\"error\":\"unknown feature\"}", "application/json"); return; }
+        else { res.set_content("{\"error\":\"unknown\"}", "application/json"); return; }
         res.set_content("{\"ok\":true,\"state\":" + std::string(newState ? "true" : "false") + "}", "application/json");
     });
 
     svr.Post("/api/speed", [](const httplib::Request& req, httplib::Response& res) {
-        float val = ParseJsonFloat(req.body, "multiplier");
-        if (val < 0.5f) val = 0.5f;
-        if (val > 10.0f) val = 10.0f;
-        g_SpeedMultiplier = val;
+        float val = ParseJsonFloat(req.body, "speed");
+        if (val < 0) val = 0;
+        if (val > 5000) val = 5000;
+        g_TargetSpeed = val;
         res.set_content("{\"ok\":true}", "application/json");
     });
 
@@ -763,17 +707,18 @@ static void WebServerThread(LPVOID)
         float val = ParseJsonFloat(req.body, "height");
         if (val < 0) val = 0;
         if (val > 5000) val = 5000;
-        g_JumpHeight = val;
+        g_TargetJumpHeight = val;
         res.set_content("{\"ok\":true}", "application/json");
     });
 
+    // 传送请求: 设置原子标志，主线程执行实际传送
     svr.Post("/api/teleport", [](const httplib::Request& req, httplib::Response& res) {
         int idx = ParseJsonInt(req.body, "index");
-        TeleportToPlayer(idx);
+        g_TeleportRequest = idx;
         res.set_content("{\"ok\":true}", "application/json");
     });
 
-    svr.listen("127.0.0.1", 1145);
+    svr.listen("0.0.0.0", 1145);
 }
 
 // ============================================================================
@@ -783,35 +728,29 @@ static bool g_PrevF1 = false;
 static bool g_PrevF2 = false;
 static bool g_PrevF3 = false;
 static bool g_PrevF4 = false;
-static bool g_PrevF5 = false;
 static bool g_PrevEnd = false;
 
 static void HandleHotkeys()
 {
     {
         bool cur = (GetAsyncKeyState(VK_F1) & 0x8000) != 0;
-        if (cur && !g_PrevF1) g_ModState.bAutoAim = !g_ModState.bAutoAim.load();
+        if (cur && !g_PrevF1) g_ModState.bNoCooldown = !g_ModState.bNoCooldown.load();
         g_PrevF1 = cur;
     }
     {
         bool cur = (GetAsyncKeyState(VK_F2) & 0x8000) != 0;
-        if (cur && !g_PrevF2) g_ModState.bNoCooldown = !g_ModState.bNoCooldown.load();
+        if (cur && !g_PrevF2) g_ModState.bInfiniteJump = !g_ModState.bInfiniteJump.load();
         g_PrevF2 = cur;
     }
     {
         bool cur = (GetAsyncKeyState(VK_F3) & 0x8000) != 0;
-        if (cur && !g_PrevF3) g_ModState.bInfiniteJump = !g_ModState.bInfiniteJump.load();
+        if (cur && !g_PrevF3) g_ModState.bInfiniteAmmo = !g_ModState.bInfiniteAmmo.load();
         g_PrevF3 = cur;
     }
     {
         bool cur = (GetAsyncKeyState(VK_F4) & 0x8000) != 0;
-        if (cur && !g_PrevF4) g_ModState.bInfiniteAmmo = !g_ModState.bInfiniteAmmo.load();
+        if (cur && !g_PrevF4) g_ModState.bSpeedHack = !g_ModState.bSpeedHack.load();
         g_PrevF4 = cur;
-    }
-    {
-        bool cur = (GetAsyncKeyState(VK_F5) & 0x8000) != 0;
-        if (cur && !g_PrevF5) g_ModState.bSpeedHack = !g_ModState.bSpeedHack.load();
-        g_PrevF5 = cur;
     }
     {
         bool cur = (GetAsyncKeyState(VK_END) & 0x8000) != 0;
@@ -840,7 +779,6 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
         g_LastKnownWorld = SafeReadPtr(imageBase + Offsets::GWorld);
     }
 
-    // 启动Web服务器线程
     CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)WebServerThread, nullptr, 0, nullptr);
 
     int consecutiveFailures = 0;
@@ -859,12 +797,7 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
         consecutiveFailures = 0;
 
         ApplyAntiCheat();
-
-        if (g_ModState.bAutoAim)
-        {
-            ScanForNearestEnemy();
-            ApplyAutoAim();
-        }
+        ReadRealValues();
 
         if (g_ModState.bNoCooldown)    ApplyNoCooldown();
         if (g_ModState.bInfiniteJump)  ApplyInfiniteJump();
@@ -872,6 +805,7 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
         if (g_ModState.bSpeedHack)     ApplySpeedHack();
         ApplyJumpHeight();
 
+        ProcessTeleportRequest();
         ScanAllPlayers();
 
         Sleep(1);
