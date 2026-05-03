@@ -13,7 +13,7 @@
 
 ## 使用方式
 
-1. 编译项目，生成 DLL
+1. 编译项目，生成 DLL。注入器：https://github.com/songzhearen/ffwinject
 2. 将 DLL 注入 `FarFarWest-Win64-Shipping.exe`
 3. 浏览器访问 `http://localhost:1145` 打开控制界面
 
@@ -36,8 +36,7 @@ mod/
 ├── mod.vcxproj        # VS 项目文件
 └── CppSDK/            # UE5 SDK 头文件（自动生成）
 ```
-##注入器
-https://github.com/songzhearen/ffwinject
+
 ## 作者
 
 songzhearen
