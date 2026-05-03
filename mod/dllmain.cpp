@@ -1,5 +1,5 @@
 // dllmain.cpp : 无限火力 Mod v3 - Web UI 控制界面
-// 功能: 无CD / 无限跳跃 / 无限子弹 / 移速修改 / 跳跃高度 / 传送到玩家
+// 功能: 无CD / 无限跳跃 / 无限子弹 / 移速修改 / 传送到玩家 / 传送点
 // 控制: localhost:1145 网页界面 + 热键
 // by songzhearen
 
@@ -44,8 +44,6 @@ namespace Offsets
     constexpr uintptr_t BuffMoveSpeed       = 0x09A8;
 
     // CharacterMovementComponent
-    constexpr uintptr_t GravityScale        = 0x01A8;
-    constexpr uintptr_t JumpZVelocity       = 0x01B0;
     constexpr uintptr_t MaxWalkSpeed        = 0x0288;
     constexpr uintptr_t MaxWalkSpeedCrouched = 0x028C;
     constexpr uintptr_t MaxAcceleration     = 0x029C;
@@ -84,9 +82,7 @@ struct FModState
 static FModState g_ModState;
 
 static std::atomic<float> g_TargetSpeed{0.0f};
-static std::atomic<float> g_TargetJumpHeight{0.0f};
 static std::atomic<float> g_RealSpeed{0.0f};
-static std::atomic<float> g_RealJumpHeight{0.0f};
 
 // ============================================================================
 // 指针缓存
@@ -133,6 +129,12 @@ static std::atomic<int> g_TeleportRequest{-1};
 
 // K2_SetActorLocation UFunction 缓存
 static SDK::UFunction* g_SetActorLocationFunc = nullptr;
+
+// 传送点 (最多5个)
+static SDK::FVector g_TeleportPoints[5];
+static bool g_TeleportPointActive[5] = {false, false, false, false, false};
+static std::atomic<int> g_TeleportPointRequest{-1};   // 请求传送到点
+static std::atomic<int> g_SavePointRequest{-1};       // 请求保存当前位
 
 // ============================================================================
 // 工具函数
@@ -349,6 +351,12 @@ static void OnLevelTransition()
     }
     g_LastPlayerScanTick = 0;
     g_SetActorLocationFunc = nullptr;
+    // 切换地图时清除所有传送点
+    for (int i = 0; i < 5; i++)
+    {
+        g_TeleportPointActive[i] = false;
+        g_TeleportPoints[i] = {};
+    }
 }
 
 static bool ValidateAndRefreshPointers()
@@ -559,10 +567,6 @@ static void ReadRealValues()
     float speed = 0.0f;
     if (SafeRead(charMoveComp + Offsets::MaxWalkSpeed, speed))
         g_RealSpeed = speed;
-
-    float jump = 0.0f;
-    if (SafeRead(charMoveComp + Offsets::JumpZVelocity, jump))
-        g_RealJumpHeight = jump;
 }
 
 // 移速修改: 每帧强制写入绝对值
@@ -582,30 +586,69 @@ static void ApplySpeedHack()
     SafeWrite<float>(charMoveComp + Offsets::MaxAcceleration, 4096.0f);
 }
 
-// 跳跃高度修改: 每帧强制写入，同时修改 GravityScale 增强效果
-static void ApplyJumpHeight()
+// 保存当前位置为传送点
+static void SaveTeleportPoint(int index)
 {
+    if (index < 0 || index >= 5) return;
     if (!g_Cache.Player) return;
-    float target = g_TargetJumpHeight.load();
-    if (target <= 0.0f) return;
+    SDK::FVector loc;
+    if (!GetPlayerLocation(g_Cache.Player, loc)) return;
+    g_TeleportPoints[index] = loc;
+    g_TeleportPointActive[index] = true;
+}
 
-    uintptr_t charMoveComp = SafeReadPtr(g_Cache.Player + Offsets::CharMoveComp);
-    if (!charMoveComp) return;
+// 传送到已保存的传送点
+static void TeleportToPoint(int index)
+{
+    if (index < 0 || index >= 5) return;
+    if (!g_TeleportPointActive[index]) return;
+    if (!g_Cache.Player) return;
 
-    // 强制写入 JumpZVelocity (无条件)
-    SafeWrite<float>(charMoveComp + Offsets::JumpZVelocity, target);
+    if (!g_SetActorLocationFunc)
+        g_SetActorLocationFunc = FindUFunctionByName("K2_SetActorLocation");
+    if (!g_SetActorLocationFunc) return;
 
-    // 如果设置较高跳跃，同步降低重力让效果更明显
-    if (target > 1000.0f)
-        SafeWrite<float>(charMoveComp + Offsets::GravityScale, 0.7f);
+    SDK::FVector targetLoc = g_TeleportPoints[index];
+    targetLoc.Z += 60.0;
+
+    FK2_SetActorLocationParams params;
+    memset(&params, 0, sizeof(params));
+    params.NewLocation = targetLoc;
+    params.bSweep = false;
+    params.bTeleport = true;
+    params.ReturnValue = false;
+
+    SafeProcessEvent(
+        reinterpret_cast<SDK::UObject*>(g_Cache.Player),
+        g_SetActorLocationFunc,
+        &params);
+}
+
+// 删除传送点
+static void DeleteTeleportPoint(int index)
+{
+    if (index < 0 || index >= 5) return;
+    g_TeleportPointActive[index] = false;
+    g_TeleportPoints[index] = {};
 }
 
 // 处理传送请求 (从HTTP线程发起，主线程执行)
 static void ProcessTeleportRequest()
 {
+    // 传送到玩家
     int idx = g_TeleportRequest.exchange(-1);
     if (idx >= 0)
         TeleportToPlayer(idx);
+
+    // 传送到保存的点
+    int pointIdx = g_TeleportPointRequest.exchange(-1);
+    if (pointIdx >= 0)
+        TeleportToPoint(pointIdx);
+
+    // 保存传送点
+    int saveIdx = g_SavePointRequest.exchange(-1);
+    if (saveIdx >= 0)
+        SaveTeleportPoint(saveIdx);
 }
 
 // ============================================================================
@@ -619,9 +662,25 @@ static std::string BuildStatusJson()
     json += ",\"ammo\":" + std::string(g_ModState.bInfiniteAmmo.load() ? "true" : "false");
     json += ",\"speed\":" + std::string(g_ModState.bSpeedHack.load() ? "true" : "false");
     json += ",\"targetSpeed\":" + std::to_string(g_TargetSpeed.load());
-    json += ",\"targetJumpHeight\":" + std::to_string(g_TargetJumpHeight.load());
     json += ",\"realSpeed\":" + std::to_string(g_RealSpeed.load());
-    json += ",\"realJumpHeight\":" + std::to_string(g_RealJumpHeight.load());
+
+    json += ",\"points\":[";
+    for (int i = 0; i < 5; i++)
+    {
+        if (i > 0) json += ",";
+        if (g_TeleportPointActive[i])
+        {
+            json += "{\"active\":true";
+            json += ",\"x\":" + std::to_string(g_TeleportPoints[i].X);
+            json += ",\"y\":" + std::to_string(g_TeleportPoints[i].Y);
+            json += ",\"z\":" + std::to_string(g_TeleportPoints[i].Z) + "}";
+        }
+        else
+        {
+            json += "{\"active\":false}";
+        }
+    }
+    json += "]";
 
     json += ",\"players\":[";
     {
@@ -703,18 +762,34 @@ static void WebServerThread(LPVOID)
         res.set_content("{\"ok\":true}", "application/json");
     });
 
-    svr.Post("/api/jumpheight", [](const httplib::Request& req, httplib::Response& res) {
-        float val = ParseJsonFloat(req.body, "height");
-        if (val < 0) val = 0;
-        if (val > 5000) val = 5000;
-        g_TargetJumpHeight = val;
-        res.set_content("{\"ok\":true}", "application/json");
-    });
-
     // 传送请求: 设置原子标志，主线程执行实际传送
     svr.Post("/api/teleport", [](const httplib::Request& req, httplib::Response& res) {
         int idx = ParseJsonInt(req.body, "index");
         g_TeleportRequest = idx;
+        res.set_content("{\"ok\":true}", "application/json");
+    });
+
+    // 保存传送点
+    svr.Post("/api/savepoint", [](const httplib::Request& req, httplib::Response& res) {
+        int idx = ParseJsonInt(req.body, "index");
+        if (idx < 0 || idx >= 5) { res.set_content("{\"error\":\"invalid index\"}", "application/json"); return; }
+        g_SavePointRequest = idx;
+        res.set_content("{\"ok\":true}", "application/json");
+    });
+
+    // 传送到已保存的点
+    svr.Post("/api/gotopoint", [](const httplib::Request& req, httplib::Response& res) {
+        int idx = ParseJsonInt(req.body, "index");
+        if (idx < 0 || idx >= 5) { res.set_content("{\"error\":\"invalid index\"}", "application/json"); return; }
+        g_TeleportPointRequest = idx;
+        res.set_content("{\"ok\":true}", "application/json");
+    });
+
+    // 删除传送点
+    svr.Post("/api/delpoint", [](const httplib::Request& req, httplib::Response& res) {
+        int idx = ParseJsonInt(req.body, "index");
+        if (idx < 0 || idx >= 5) { res.set_content("{\"error\":\"invalid index\"}", "application/json"); return; }
+        DeleteTeleportPoint(idx);
         res.set_content("{\"ok\":true}", "application/json");
     });
 
@@ -803,7 +878,6 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
         if (g_ModState.bInfiniteJump)  ApplyInfiniteJump();
         if (g_ModState.bInfiniteAmmo)  ApplyInfiniteAmmo();
         if (g_ModState.bSpeedHack)     ApplySpeedHack();
-        ApplyJumpHeight();
 
         ProcessTeleportRequest();
         ScanAllPlayers();

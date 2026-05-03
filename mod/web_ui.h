@@ -95,23 +95,19 @@ h1{text-align:center;color:#00d4ff;margin-bottom:4px;font-size:1.5em}
     </div>
     <div class="hint">默认约600，设为0恢复原速</div>
   </div>
-  <div class="input-group">
-    <div class="input-label">
-      <span class="label">跳跃高度</span>
-      <span class="real-val" id="realJump">读取中...</span>
-    </div>
-    <div class="input-row">
-      <input type="number" id="jumpHeight" value="0" min="0" max="5000" step="100" placeholder="0=不修改">
-      <button class="btn btn-primary btn-sm" onclick="setJumpHeight()">设置</button>
-    </div>
-    <div class="hint">默认约400-500，设为0恢复默认</div>
-  </div>
 </div>
 
 <div class="card">
   <div class="card-title">传送到玩家</div>
   <div class="player-list" id="playerList">
     <div class="no-data">扫描中...</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">传送点</div>
+  <div class="player-list" id="pointList">
+    <div class="no-data">加载中...</div>
   </div>
 </div>
 
@@ -130,14 +126,46 @@ function setSpeed(){
   fetch(API+'/api/speed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({speed:v})}).catch(()=>{});
 }
 
-function setJumpHeight(){
-  const v=parseFloat(document.getElementById('jumpHeight').value);
-  if(isNaN(v)||v<0)return;
-  fetch(API+'/api/jumpheight',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({height:v})}).catch(()=>{});
-}
-
 function teleport(idx){
   fetch(API+'/api/teleport',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:idx})}).catch(()=>{});
+}
+
+function savePoint(idx){
+  fetch(API+'/api/savepoint',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:idx})}).catch(()=>{});
+}
+
+function gotoPoint(idx){
+  fetch(API+'/api/gotopoint',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:idx})}).catch(()=>{});
+}
+
+function delPoint(idx){
+  fetch(API+'/api/delpoint',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:idx})}).catch(()=>{});
+}
+
+function renderPoints(points){
+  if(!points)return;
+  let html='';
+  for(let i=0;i<points.length;i++){
+    const p=points[i];
+    html+='<div class="player-item"><div class="player-info">';
+    if(p.active){
+      html+='<div class="player-name">传送点 '+(i+1)+'</div>';
+      html+='<div class="player-pos">('+p.x.toFixed(0)+', '+p.y.toFixed(0)+', '+p.z.toFixed(0)+')</div>';
+    }else{
+      html+='<div class="player-name">传送点 '+(i+1)+'</div>';
+      html+='<div class="player-pos">未设置</div>';
+    }
+    html+='</div><div style="display:flex;gap:6px">';
+    if(!p.active){
+      html+='<button class="btn btn-primary btn-sm" onclick="savePoint('+i+')">保存</button>';
+    }else{
+      html+='<button class="btn btn-primary btn-sm" onclick="gotoPoint('+i+')">传送</button>';
+      html+='<button class="btn btn-primary btn-sm" onclick="savePoint('+i+')">更新</button>';
+      html+='<button class="btn btn-primary btn-sm" onclick="delPoint('+i+')">删除</button>';
+    }
+    html+='</div></div>';
+  }
+  document.getElementById('pointList').innerHTML=html;
 }
 
 function renderPlayers(players){
@@ -180,18 +208,14 @@ async function refresh(){
     });
 
     const speedInput=document.getElementById('speedVal');
-    const jumpInput=document.getElementById('jumpHeight');
     if(speedInput!==document.activeElement&&d.targetSpeed!==undefined&&d.targetSpeed>0)
       speedInput.value=d.targetSpeed;
-    if(jumpInput!==document.activeElement&&d.targetJumpHeight!==undefined&&d.targetJumpHeight>0)
-      jumpInput.value=d.targetJumpHeight;
 
     if(d.realSpeed!==undefined)
       document.getElementById('realSpeed').textContent='当前: '+d.realSpeed.toFixed(1);
-    if(d.realJumpHeight!==undefined)
-      document.getElementById('realJump').textContent='当前: '+d.realJumpHeight.toFixed(1);
 
     renderPlayers(d.players);
+    renderPoints(d.points);
   }catch(e){
     connected=false;
     document.getElementById('connDot').className='status-dot dot-red';
