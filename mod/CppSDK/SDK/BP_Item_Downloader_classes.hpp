@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "Engine_structs.hpp"
 #include "BP_Item_classes.hpp"
+#include "Engine_structs.hpp"
 
 
 namespace SDK
@@ -41,7 +41,6 @@ public:
 	void ExecuteUbergraph_BP_Item_Downloader(int32 EntryPoint);
 	void F_DestroyAreas();
 	void F_GetItemDatas(struct FS_ItemDatas* itemDatas);
-	void F_InitReferences();
 	void F_SaveValues();
 	void F_StartDownload();
 	void F_StopDownload();

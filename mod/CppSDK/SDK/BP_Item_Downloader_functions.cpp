@@ -72,20 +72,6 @@ void ABP_Item_Downloader_C::F_GetItemDatas(struct FS_ItemDatas* itemDatas)
 }
 
 
-// Function BP_Item_Downloader.BP_Item_Downloader_C.F_InitReferences
-// (Public, BlueprintCallable, BlueprintEvent)
-
-void ABP_Item_Downloader_C::F_InitReferences()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Item_Downloader_C", "F_InitReferences");
-
-	UObject::ProcessEvent(Func, nullptr);
-}
-
-
 // Function BP_Item_Downloader.BP_Item_Downloader_C.F_SaveValues
 // (Public, BlueprintCallable, BlueprintEvent)
 

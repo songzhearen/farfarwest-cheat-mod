@@ -11,12 +11,12 @@
 #include "Basic.hpp"
 
 #include "CoreUObject_structs.hpp"
-#include "S_Bestiary_structs.hpp"
-#include "SteamCorePro_structs.hpp"
-#include "S_PlayerChallenges_structs.hpp"
 #include "S_ItemTweaks_structs.hpp"
+#include "SteamCorePro_structs.hpp"
 #include "Engine_structs.hpp"
 #include "S_RuntimeInventory_structs.hpp"
+#include "S_PlayerChallenges_structs.hpp"
+#include "S_Bestiary_structs.hpp"
 #include "S_PlayerItems_structs.hpp"
 
 

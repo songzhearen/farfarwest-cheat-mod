@@ -18,7 +18,7 @@ namespace SDK
 {
 
 // BlueprintGeneratedClass AC_PlayerStateJoker.AC_PlayerStateJoker_C
-// 0x0058 (0x0118 - 0x00C0)
+// 0x0060 (0x0120 - 0x00C0)
 class UAC_PlayerStateJoker_C final : public UActorComponent
 {
 public:
@@ -32,9 +32,10 @@ public:
 	struct FTimerHandle                           jokerHitMeTimerHeal;                               // 0x00F0(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
 	double                                        jokerHitMeLastSavedHighestPlayerHeal;              // 0x00F8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	bool                                          isJokerSoulEaterActive;                            // 0x0100(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_101[0x3];                                      // 0x0101(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
-	class FName                                   itemWeaponA;                                       // 0x0104(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	class FName                                   itemWeaponB;                                       // 0x010C(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_101[0x7];                                      // 0x0101(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
+	class ABP_GameState_C*                        GameState;                                         // 0x0108(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnTemplate, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class FName                                   itemWeaponA;                                       // 0x0110(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	class FName                                   itemWeaponB;                                       // 0x0118(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void ExecuteUbergraph_AC_PlayerStateJoker(int32 EntryPoint);
@@ -47,6 +48,7 @@ public:
 	void F_JokerSecondWindHeal();
 	void F_JokerSecondWindReset();
 	void F_JokerToolBoxReset();
+	void F_SetPlayerMaxHeal(double heal);
 	void F_StoreCurrentUsedWeapons();
 	void F_TriggerJokerBelowHeal();
 	void F_TriggerJokerLazy();

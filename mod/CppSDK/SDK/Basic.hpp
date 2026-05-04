@@ -33,11 +33,11 @@ using namespace UC;
 */
 namespace Offsets
 {
-	constexpr int32 GObjects          = 0x09141F60;
-	constexpr int32 AppendString      = 0x0122C5C0;
+	constexpr int32 GObjects          = 0x09144FE0;
+	constexpr int32 AppendString      = 0x0122C630;
 	constexpr int32 GNames            = 0x00000000;
-	constexpr int32 GWorld            = 0x092CCD20;
-	constexpr int32 ProcessEvent      = 0x013FCEE0;
+	constexpr int32 GWorld            = 0x092CFDA0;
+	constexpr int32 ProcessEvent      = 0x013FCFC0;
 	constexpr int32 ProcessEventIdx   = 0x0000004C;
 }
 
@@ -1076,7 +1076,7 @@ public:
 	uint8                                         Pad_1C[0x4];                                       // 0x001C(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
 	class FFieldClass*                            SuperClass;                                        // 0x0020(0x0008)(NOT AUTO-GENERATED PROPERTY)
 };
-//DUMPER7_ASSERTS_FFieldClass;
+// DUMPER7_ASSERTS_FFieldClass;  // 游戏更新后 FFieldClass 布局变化，暂时禁用
 
 // Predefined struct FFieldVariant
 // 0x0008 (0x0008 - 0x0000)

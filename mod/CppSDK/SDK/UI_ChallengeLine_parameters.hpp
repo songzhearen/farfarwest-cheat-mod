@@ -10,12 +10,12 @@
 
 #include "Basic.hpp"
 
-#include "CoreUObject_structs.hpp"
-#include "E_ChallengeCategory_structs.hpp"
-#include "S_PlayerReward_structs.hpp"
-#include "UMG_structs.hpp"
 #include "Engine_structs.hpp"
 #include "S_PlayerChallenges_structs.hpp"
+#include "E_ChallengeCategory_structs.hpp"
+#include "CoreUObject_structs.hpp"
+#include "S_PlayerReward_structs.hpp"
+#include "UMG_structs.hpp"
 
 
 namespace SDK::Params

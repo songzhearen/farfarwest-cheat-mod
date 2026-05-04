@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
 #include "CoreUObject_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK
@@ -47,6 +47,7 @@ public:
 	struct FVector                                initialBoxExtend;                                  // 0x0340(0x0018)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
+	void ReceiveBeginPlay();
 	void F_GetShootAtLoc(bool* Found, struct FVector* Loc, class USceneComponent** SceneComponent);
 	void F_CanBeAutoAimed(bool* CanBeAutoAimed, struct FVector* autoAimedLocation);
 	void F_PingObject(bool* canBePinged, class UClass** pingActor, class FText* ChatLine, class USceneComponent** AttachedComponent);
@@ -84,7 +85,6 @@ public:
 	void F_RemoveNiagaraSystemOnEnemy(class UNiagaraSystem* System);
 	void F_BuffManagerClearBuffFromActor(class UClass* Buff);
 	void F_StartPhysic(class UPrimitiveComponent* Component, const struct FVector& HitLoc, const struct FVector& Normal, double Strenght, class AActor* hitOwner, E_DamageCategory DamageCategory);
-	void ReceiveBeginPlay();
 	void F_AutoPhysic();
 	void F_Child_PhysicStart(class AActor* Owner_0);
 	void F_DamageFeedback(const struct FHitResult& Hit, class AActor* Owner_0, double Damages, class UClass* DamageType, bool Critical, E_DamageCategory Element, class FName ItemName);

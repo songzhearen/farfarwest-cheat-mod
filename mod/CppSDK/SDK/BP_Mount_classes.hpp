@@ -10,13 +10,13 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
+#include "E_Army_structs.hpp"
 #include "CoreUObject_structs.hpp"
 #include "PhysicsCore_structs.hpp"
 #include "AIModule_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
-#include "E_Army_structs.hpp"
 
 
 namespace SDK
@@ -39,7 +39,7 @@ public:
 	class USceneComponent*                        Socket_PingLocation;                               // 0x0698(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
 	class USkeletalMeshComponent*                 MountMesh;                                         // 0x06A0(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
 	class USceneComponent*                        SceneHorseGroundAlign;                             // 0x06A8(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
-	class UPostProcessComponent*                  postprocess;                                       // 0x06B0(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
+	class UPostProcessComponent*                  PostProcess;                                       // 0x06B0(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
 	class UPointLightComponent*                   ChromaticLight;                                    // 0x06B8(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
 	class USceneComponent*                        Socket_HorseInterp;                                // 0x06C0(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
 	class USceneComponent*                        Holder;                                            // 0x06C8(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
@@ -109,6 +109,7 @@ public:
 	uint8                                         Pad_88A[0x6];                                      // 0x088A(0x0006)(Fixing Size After Last Property [ Dumper-7 ])
 	class USoundBase*                             horseSoundFromSkinData;                            // 0x0890(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
 	TArray<class UClass*>                         Spawned_Buffs;                                     // 0x0898(0x0010)(Edit, BlueprintVisible, Net, DisableEditOnInstance)
+	double                                        screenFlashes;                                     // 0x08A8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void ExecuteUbergraph_BP_Mount(int32 EntryPoint);

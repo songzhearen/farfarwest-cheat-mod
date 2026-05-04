@@ -50,41 +50,5 @@ void UUI_BuildId_C::ExecuteUbergraph_UI_BuildId(int32 EntryPoint)
 	UObject::ProcessEvent(Func, &Parms);
 }
 
-
-// Function UI_BuildId.UI_BuildId_C.F_ShowFramerate
-// (BlueprintCallable, BlueprintEvent)
-
-void UUI_BuildId_C::F_ShowFramerate()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("UI_BuildId_C", "F_ShowFramerate");
-
-	UObject::ProcessEvent(Func, nullptr);
-}
-
-
-// Function UI_BuildId.UI_BuildId_C.Tick
-// (BlueprintCosmetic, Event, Public, BlueprintEvent)
-// Parameters:
-// const struct FGeometry&                 MyGeometry                                             (BlueprintVisible, BlueprintReadOnly, Parm, IsPlainOldData, NoDestructor)
-// float                                   InDeltaTime                                            (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-
-void UUI_BuildId_C::Tick(const struct FGeometry& MyGeometry, float InDeltaTime)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("UI_BuildId_C", "Tick");
-
-	Params::UI_BuildId_C_Tick Parms{};
-
-	Parms.MyGeometry = std::move(MyGeometry);
-	Parms.InDeltaTime = InDeltaTime;
-
-	UObject::ProcessEvent(Func, &Parms);
-}
-
 }
 

@@ -237,7 +237,7 @@ void UBP_CanyonGameInstance_C::F_GetPlayerId(const class FString& PlayerName)
 
 
 // Function BP_CanyonGameInstance.BP_CanyonGameInstance_C.F_InitCulture
-// (Public, BlueprintCallable, BlueprintEvent)
+// (Public, HasDefaults, BlueprintCallable, BlueprintEvent)
 
 void UBP_CanyonGameInstance_C::F_InitCulture()
 {

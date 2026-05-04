@@ -17,7 +17,7 @@ namespace SDK
 {
 
 // BlueprintGeneratedClass BP_Event_Cryptic_Kamikazes.BP_Event_Cryptic_Kamikazes_C
-// 0x0000 (0x0410 - 0x0410)
+// 0x0000 (0x0418 - 0x0418)
 class ABP_Event_Cryptic_Kamikazes_C final : public ABP_Event_Storm_C
 {
 public:

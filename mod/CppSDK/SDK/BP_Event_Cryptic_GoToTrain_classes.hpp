@@ -18,11 +18,11 @@ namespace SDK
 {
 
 // BlueprintGeneratedClass BP_Event_Cryptic_GoToTrain.BP_Event_Cryptic_GoToTrain_C
-// 0x0008 (0x0418 - 0x0410)
+// 0x0008 (0x0420 - 0x0418)
 class ABP_Event_Cryptic_GoToTrain_C final : public ABP_Event_Storm_C
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame_BP_Event_Cryptic_GoToTrain_C;       // 0x0410(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	struct FPointerToUberGraphFrame               UberGraphFrame_BP_Event_Cryptic_GoToTrain_C;       // 0x0418(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 
 public:
 	void ExecuteUbergraph_BP_Event_Cryptic_GoToTrain(int32 EntryPoint);

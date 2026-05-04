@@ -10,11 +10,11 @@
 
 #include "Basic.hpp"
 
+#include "Engine_structs.hpp"
+#include "Engine_classes.hpp"
 #include "ABP_Cryptic_Grenadier_structs.hpp"
 #include "CoreUObject_structs.hpp"
 #include "AnimGraphRuntime_structs.hpp"
-#include "Engine_structs.hpp"
-#include "Engine_classes.hpp"
 #include "ControlRig_structs.hpp"
 
 

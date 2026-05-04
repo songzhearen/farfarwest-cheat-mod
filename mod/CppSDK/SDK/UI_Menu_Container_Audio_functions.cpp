@@ -79,26 +79,6 @@ void UUI_Menu_Container_Audio_C::F_ApplyAndSave()
 }
 
 
-// Function UI_Menu_Container_Audio.UI_Menu_Container_Audio_C.F_ReceiveAudioDevices
-// (HasOutParams, BlueprintCallable, BlueprintEvent)
-// Parameters:
-// const TArray<struct FAudioInputDeviceInfo2>&AvailableDevices                                       (ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm)
-
-void UUI_Menu_Container_Audio_C::F_ReceiveAudioDevices(const TArray<struct FAudioInputDeviceInfo2>& AvailableDevices)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("UI_Menu_Container_Audio_C", "F_ReceiveAudioDevices");
-
-	Params::UI_Menu_Container_Audio_C_F_ReceiveAudioDevices Parms{};
-
-	Parms.AvailableDevices = std::move(AvailableDevices);
-
-	UObject::ProcessEvent(Func, &Parms);
-}
-
-
 // Function UI_Menu_Container_Audio.UI_Menu_Container_Audio_C.F_Save
 // (BlueprintCallable, BlueprintEvent)
 
@@ -110,28 +90,6 @@ void UUI_Menu_Container_Audio_C::F_Save()
 		Func = Class->GetFunction("UI_Menu_Container_Audio_C", "F_Save");
 
 	UObject::ProcessEvent(Func, nullptr);
-}
-
-
-// Function UI_Menu_Container_Audio.UI_Menu_Container_Audio_C.Tick
-// (BlueprintCosmetic, Event, Public, BlueprintEvent)
-// Parameters:
-// const struct FGeometry&                 MyGeometry                                             (BlueprintVisible, BlueprintReadOnly, Parm, IsPlainOldData, NoDestructor)
-// float                                   InDeltaTime                                            (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-
-void UUI_Menu_Container_Audio_C::Tick(const struct FGeometry& MyGeometry, float InDeltaTime)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("UI_Menu_Container_Audio_C", "Tick");
-
-	Params::UI_Menu_Container_Audio_C_Tick Parms{};
-
-	Parms.MyGeometry = std::move(MyGeometry);
-	Parms.InDeltaTime = InDeltaTime;
-
-	UObject::ProcessEvent(Func, &Parms);
 }
 
 }

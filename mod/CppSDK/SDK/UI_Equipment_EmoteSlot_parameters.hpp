@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "S_PlayerEmote_structs.hpp"
 #include "E_ItemCategory_structs.hpp"
+#include "S_PlayerEmote_structs.hpp"
 
 
 namespace SDK::Params

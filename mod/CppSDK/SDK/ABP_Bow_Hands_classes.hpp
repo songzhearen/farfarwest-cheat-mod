@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "ABP_Bow_Hands_structs.hpp"
 #include "AnimGraphRuntime_structs.hpp"
+#include "ABP_Bow_Hands_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
 

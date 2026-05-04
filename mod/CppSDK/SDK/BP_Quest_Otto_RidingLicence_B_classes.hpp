@@ -35,7 +35,7 @@ public:
 	class ABP_HorseTest_Ring_C*                   firstRing;                                         // 0x0350(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnTemplate, NoDestructor, HasGetValueTypeHash)
 	class UUI_Counter_C*                          UI_Counter;                                        // 0x0358(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, InstancedReference, NoDestructor, HasGetValueTypeHash)
 	int32                                         crossedRings;                                      // 0x0360(0x0004)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
-	int32                                         requiredRings;                                     // 0x0364(0x0004)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	int32                                         requiredRings;                                     // 0x0364(0x0004)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void ExecuteUbergraph_BP_Quest_Otto_RidingLicence_B(int32 EntryPoint);
@@ -51,6 +51,7 @@ public:
 	void OnRep_crossedRings();
 	void OnRep_isWaitingForPlayers();
 	void OnRep_raceStarted();
+	void OnRep_requiredRings();
 	void OnRequestFailed_92E212EC446DD35370D619869C4815D5();
 	void OnRequestFailed_A4B1DC9C4CF5C9C8E96EBEBD4FCA3FC5();
 

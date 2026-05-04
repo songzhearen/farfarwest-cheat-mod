@@ -81,6 +81,25 @@ public:
 };
 DUMPER7_ASSERTS_CPP_FunctionLibrary_GetCurrentRHI;
 
+// Function FarFarWest.CPP_FunctionLibrary.GetOSDefaultLanguage
+// 0x0010 (0x0010 - 0x0000)
+struct CPP_FunctionLibrary_GetOSDefaultLanguage final
+{
+public:
+	class FString                                 ReturnValue;                                       // 0x0000(0x0010)(Parm, OutParm, ZeroConstructor, ReturnParm, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+};
+DUMPER7_ASSERTS_CPP_FunctionLibrary_GetOSDefaultLanguage;
+
+// Function FarFarWest.CPP_FunctionLibrary.GetSafeMicrophoneList
+// 0x0018 (0x0018 - 0x0000)
+struct CPP_FunctionLibrary_GetSafeMicrophoneList final
+{
+public:
+	class UObject*                                WorldContextObject;                                // 0x0000(0x0008)(Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	TArray<class FString>                         ReturnValue;                                       // 0x0008(0x0010)(Parm, OutParm, ZeroConstructor, ReturnParm, NativeAccessSpecifierPublic)
+};
+DUMPER7_ASSERTS_CPP_FunctionLibrary_GetSafeMicrophoneList;
+
 // Function FarFarWest.CPP_FunctionLibrary.HasFocusOnWindow
 // 0x0001 (0x0001 - 0x0000)
 struct CPP_FunctionLibrary_HasFocusOnWindow final
@@ -122,7 +141,7 @@ public:
 DUMPER7_ASSERTS_CPP_FunctionLibrary_SafeDoesSaveGameExist;
 
 // Function FarFarWest.CPP_FunctionLibrary.SafeLoadGameFromSlot
-// 0x0030 (0x0030 - 0x0000)
+// 0x0038 (0x0038 - 0x0000)
 struct CPP_FunctionLibrary_SafeLoadGameFromSlot final
 {
 public:
@@ -130,7 +149,9 @@ public:
 	int32                                         UserIndex;                                         // 0x0010(0x0004)(Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 	uint8                                         Pad_14[0x4];                                       // 0x0014(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
 	class FString                                 EncryptionKey;                                     // 0x0018(0x0010)(Parm, ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-	class USaveGame*                              ReturnValue;                                       // 0x0028(0x0008)(Parm, OutParm, ZeroConstructor, ReturnParm, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	bool                                          bUseSavExtension;                                  // 0x0028(0x0001)(Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	uint8                                         Pad_29[0x7];                                       // 0x0029(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
+	class USaveGame*                              ReturnValue;                                       // 0x0030(0x0008)(Parm, OutParm, ZeroConstructor, ReturnParm, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 };
 DUMPER7_ASSERTS_CPP_FunctionLibrary_SafeLoadGameFromSlot;
 
@@ -144,8 +165,9 @@ public:
 	int32                                         UserIndex;                                         // 0x0018(0x0004)(Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 	uint8                                         Pad_1C[0x4];                                       // 0x001C(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
 	class FString                                 EncryptionKey;                                     // 0x0020(0x0010)(Parm, ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-	bool                                          ReturnValue;                                       // 0x0030(0x0001)(Parm, OutParm, ZeroConstructor, ReturnParm, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
-	uint8                                         Pad_31[0x7];                                       // 0x0031(0x0007)(Fixing Struct Size After Last Property [ Dumper-7 ])
+	bool                                          bUseSavExtension;                                  // 0x0030(0x0001)(Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	bool                                          ReturnValue;                                       // 0x0031(0x0001)(Parm, OutParm, ZeroConstructor, ReturnParm, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+	uint8                                         Pad_32[0x6];                                       // 0x0032(0x0006)(Fixing Struct Size After Last Property [ Dumper-7 ])
 };
 DUMPER7_ASSERTS_CPP_FunctionLibrary_SafeSaveGameToSlot;
 

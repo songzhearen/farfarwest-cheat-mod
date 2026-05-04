@@ -315,9 +315,9 @@ void ABP_PlayerState_C::F_AddKwartToGameState(int32 pickedUpKwarts)
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // const class UClass*&                    Item                                                   (ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ZeroConstructor, ReferenceParm, NoDestructor, HasGetValueTypeHash)
-// const struct FS_PlayerCurrentItem&      CurrentItem_0                                          (ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ZeroConstructor, ReferenceParm, NoDestructor, HasGetValueTypeHash)
+// const struct FS_PlayerCurrentItem&      currentItem_0                                          (ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ZeroConstructor, ReferenceParm, NoDestructor, HasGetValueTypeHash)
 
-void ABP_PlayerState_C::F_AddPersistentItem(const class UClass*& Item, const struct FS_PlayerCurrentItem& CurrentItem_0)
+void ABP_PlayerState_C::F_AddPersistentItem(const class UClass*& Item, const struct FS_PlayerCurrentItem& currentItem_0)
 {
 	static class UFunction* Func = nullptr;
 
@@ -327,7 +327,7 @@ void ABP_PlayerState_C::F_AddPersistentItem(const class UClass*& Item, const str
 	Params::BP_PlayerState_C_F_AddPersistentItem Parms{};
 
 	Parms.Item = Item;
-	Parms.CurrentItem_0 = std::move(CurrentItem_0);
+	Parms.currentItem_0 = std::move(currentItem_0);
 
 	UObject::ProcessEvent(Func, &Parms);
 }
@@ -362,6 +362,20 @@ void ABP_PlayerState_C::F_AssignPlayerColors()
 
 	if (Func == nullptr)
 		Func = Class->GetFunction("BP_PlayerState_C", "F_AssignPlayerColors");
+
+	UObject::ProcessEvent(Func, nullptr);
+}
+
+
+// Function BP_PlayerState.BP_PlayerState_C.F_AutoKickIsMoreThan4Players
+// (Public, HasDefaults, BlueprintCallable, BlueprintEvent)
+
+void ABP_PlayerState_C::F_AutoKickIsMoreThan4Players()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_PlayerState_C", "F_AutoKickIsMoreThan4Players");
 
 	UObject::ProcessEvent(Func, nullptr);
 }
@@ -748,9 +762,9 @@ void ABP_PlayerState_C::F_GetInteractableDatas(struct FS_InteractableDatas* Inte
 // Parameters:
 // bool*                                   Found                                                  (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class UClass**                          Item                                                   (Parm, OutParm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-// struct FS_PlayerCurrentItem*            CurrentItem_0                                          (Parm, OutParm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+// struct FS_PlayerCurrentItem*            currentItem_0                                          (Parm, OutParm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_PlayerState_C::F_GetPersitentItem(bool* Found, class UClass** Item, struct FS_PlayerCurrentItem* CurrentItem_0)
+void ABP_PlayerState_C::F_GetPersitentItem(bool* Found, class UClass** Item, struct FS_PlayerCurrentItem* currentItem_0)
 {
 	static class UFunction* Func = nullptr;
 
@@ -767,8 +781,8 @@ void ABP_PlayerState_C::F_GetPersitentItem(bool* Found, class UClass** Item, str
 	if (Item != nullptr)
 		*Item = Parms.Item;
 
-	if (CurrentItem_0 != nullptr)
-		*CurrentItem_0 = std::move(Parms.CurrentItem_0);
+	if (currentItem_0 != nullptr)
+		*currentItem_0 = std::move(Parms.currentItem_0);
 }
 
 
@@ -783,6 +797,30 @@ void ABP_PlayerState_C::F_GoToLobby_Server()
 		Func = Class->GetFunction("BP_PlayerState_C", "F_GoToLobby_Server");
 
 	UObject::ProcessEvent(Func, nullptr);
+}
+
+
+// Function BP_PlayerState.BP_PlayerState_C.F_HasHeroJoker
+// (Public, HasOutParams, BlueprintCallable, BlueprintEvent, BlueprintPure)
+// Parameters:
+// class FName                             Joker                                                  (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// bool*                                   hasJoker                                               (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+
+void ABP_PlayerState_C::F_HasHeroJoker(class FName Joker, bool* hasJoker)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_PlayerState_C", "F_HasHeroJoker");
+
+	Params::BP_PlayerState_C_F_HasHeroJoker Parms{};
+
+	Parms.Joker = Joker;
+
+	UObject::ProcessEvent(Func, &Parms);
+
+	if (hasJoker != nullptr)
+		*hasJoker = Parms.hasJoker;
 }
 
 
@@ -1259,11 +1297,12 @@ void ABP_PlayerState_C::F_SendLocalLeaderboardToServer_Client()
 
 
 // Function BP_PlayerState.BP_PlayerState_C.F_SendLocalProgressToServer
-// (Net, NetReliable, NetServer, BlueprintCallable, BlueprintEvent)
+// (Net, NetReliable, NetServer, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // const struct FS_PlayerProgress&         playerProgress                                         (BlueprintVisible, BlueprintReadOnly, Parm, HasGetValueTypeHash)
+// const TArray<class FName>&              heroJokers                                             (ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm)
 
-void ABP_PlayerState_C::F_SendLocalProgressToServer(const struct FS_PlayerProgress& playerProgress)
+void ABP_PlayerState_C::F_SendLocalProgressToServer(const struct FS_PlayerProgress& playerProgress, const TArray<class FName>& heroJokers)
 {
 	static class UFunction* Func = nullptr;
 
@@ -1273,6 +1312,7 @@ void ABP_PlayerState_C::F_SendLocalProgressToServer(const struct FS_PlayerProgre
 	Params::BP_PlayerState_C_F_SendLocalProgressToServer Parms{};
 
 	Parms.playerProgress = std::move(playerProgress);
+	Parms.heroJokers = std::move(heroJokers);
 
 	UObject::ProcessEvent(Func, &Parms);
 }

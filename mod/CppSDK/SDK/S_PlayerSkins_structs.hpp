@@ -12,9 +12,9 @@
 
 #include "E_Rarity_structs.hpp"
 #include "CoreUObject_structs.hpp"
+#include "S_PlayerEmoteMesh_structs.hpp"
 #include "S_PlayerSkinBonePhysic_structs.hpp"
 #include "S_PlayerEmoteSkeletalMesh_structs.hpp"
-#include "S_PlayerEmoteMesh_structs.hpp"
 
 
 namespace SDK

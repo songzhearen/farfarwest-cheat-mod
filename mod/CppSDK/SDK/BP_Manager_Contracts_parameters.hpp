@@ -10,14 +10,14 @@
 
 #include "Basic.hpp"
 
-#include "CoreUObject_structs.hpp"
-#include "UMG_structs.hpp"
-#include "S_InteractableDatas_structs.hpp"
-#include "SteamCoreShared_structs.hpp"
-#include "S_Mission_structs.hpp"
 #include "E_Army_structs.hpp"
-#include "Engine_structs.hpp"
+#include "S_InteractableDatas_structs.hpp"
+#include "CoreUObject_structs.hpp"
 #include "E_DamageCategory_structs.hpp"
+#include "Engine_structs.hpp"
+#include "S_Mission_structs.hpp"
+#include "UMG_structs.hpp"
+#include "SteamCoreShared_structs.hpp"
 
 
 namespace SDK::Params
@@ -275,28 +275,6 @@ public:
 	TArray<class UClass*>                         BuffObjects;                                       // 0x0008(0x0010)(Parm, OutParm)
 };
 DUMPER7_ASSERTS_BP_Manager_Contracts_C_F_GetBuffs;
-
-// Function BP_Manager_Contracts.BP_Manager_Contracts_C.F_GetContractWithMostVotes
-// 0x0050 (0x0050 - 0x0000)
-struct BP_Manager_Contracts_C_F_GetContractWithMostVotes final
-{
-public:
-	class ABP_Contract_C*                         Array_Element;                                     // 0x0000(0x0008)(Parm, OutParm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-	class ABP_Contract_C*                         highestVotes;                                      // 0x0008(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnTemplate, NoDestructor, HasGetValueTypeHash)
-	int32                                         amountVotes;                                       // 0x0010(0x0004)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         Temp_int_Array_Index_Variable;                     // 0x0014(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         Temp_int_Loop_Counter_Variable;                    // 0x0018(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         CallFunc_Add_IntInt_ReturnValue;                   // 0x001C(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	TArray<class ABP_Contract_C*>                 CallFunc_GetAllActorsOfClass_OutActors;            // 0x0020(0x0010)(ReferenceParm)
-	int32                                         CallFunc_Array_Length_ReturnValue;                 // 0x0030(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_34[0x4];                                       // 0x0034(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
-	class ABP_Contract_C*                         CallFunc_Array_Get_Item;                           // 0x0038(0x0008)(ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-	bool                                          CallFunc_Less_IntInt_ReturnValue;                  // 0x0040(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_41[0x3];                                       // 0x0041(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
-	int32                                         CallFunc_Array_Length_ReturnValue_1;               // 0x0044(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	bool                                          CallFunc_Greater_IntInt_ReturnValue;               // 0x0048(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_BP_Manager_Contracts_C_F_GetContractWithMostVotes;
 
 // Function BP_Manager_Contracts.BP_Manager_Contracts_C.F_GetInteractableDatas
 // 0x0080 (0x0080 - 0x0000)

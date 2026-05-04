@@ -11,9 +11,9 @@
 #include "Basic.hpp"
 
 #include "CoreUObject_structs.hpp"
-#include "UI_Equipment_classes.hpp"
 #include "Engine_structs.hpp"
 #include "UMG_structs.hpp"
+#include "UI_Equipment_classes.hpp"
 
 
 namespace SDK

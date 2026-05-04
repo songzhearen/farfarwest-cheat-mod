@@ -10,12 +10,12 @@
 
 #include "Basic.hpp"
 
-#include "E_ItemCategory_structs.hpp"
-#include "S_Mission_structs.hpp"
-#include "CoreUObject_structs.hpp"
-#include "E_Army_structs.hpp"
 #include "S_ChatMessage_structs.hpp"
+#include "E_ItemCategory_structs.hpp"
 #include "SlateCore_structs.hpp"
+#include "S_Mission_structs.hpp"
+#include "E_Army_structs.hpp"
+#include "CoreUObject_structs.hpp"
 #include "UMG_structs.hpp"
 
 

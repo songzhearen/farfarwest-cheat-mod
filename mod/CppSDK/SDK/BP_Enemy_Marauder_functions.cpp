@@ -34,9 +34,9 @@ void ABP_Enemy_Marauder_C::F_SpawnShield()
 // Function BP_Enemy_Marauder.BP_Enemy_Marauder_C.F_GetShootLoc
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent, BlueprintPure)
 // Parameters:
-// struct FVector*                         shootLoc                                               (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// struct FVector*                         ShootLoc                                               (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Enemy_Marauder_C::F_GetShootLoc(struct FVector* shootLoc)
+void ABP_Enemy_Marauder_C::F_GetShootLoc(struct FVector* ShootLoc)
 {
 	static class UFunction* Func = nullptr;
 
@@ -47,8 +47,8 @@ void ABP_Enemy_Marauder_C::F_GetShootLoc(struct FVector* shootLoc)
 
 	UObject::ProcessEvent(Func, &Parms);
 
-	if (shootLoc != nullptr)
-		*shootLoc = std::move(Parms.shootLoc);
+	if (ShootLoc != nullptr)
+		*ShootLoc = std::move(Parms.ShootLoc);
 }
 
 

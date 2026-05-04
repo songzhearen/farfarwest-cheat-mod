@@ -11,8 +11,8 @@
 #include "Basic.hpp"
 
 #include "CoreUObject_structs.hpp"
-#include "E_Rarity_structs.hpp"
 #include "Engine_structs.hpp"
+#include "E_Rarity_structs.hpp"
 
 
 namespace SDK::Params

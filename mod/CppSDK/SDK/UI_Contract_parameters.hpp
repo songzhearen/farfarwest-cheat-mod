@@ -10,63 +10,15 @@
 
 #include "Basic.hpp"
 
+#include "SlateCore_structs.hpp"
+#include "Engine_structs.hpp"
 #include "S_Mission_structs.hpp"
 #include "E_ItemCategory_structs.hpp"
-#include "Engine_structs.hpp"
-#include "SlateCore_structs.hpp"
 #include "S_MapProperties_structs.hpp"
 
 
 namespace SDK::Params
 {
-
-// Function UI_Contract.UI_Contract_C.F_UpdateModifiers
-// 0x0030 (0x0030 - 0x0000)
-struct UI_Contract_C_F_UpdateModifiers final
-{
-public:
-	bool                                          hasAppliedAtLeastOneModifier;                      // 0x0000(0x0001)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_1[0x3];                                        // 0x0001(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
-	int32                                         Temp_int_Variable;                                 // 0x0004(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         CallFunc_Subtract_IntInt_ReturnValue;              // 0x0008(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         CallFunc_Add_IntInt_ReturnValue;                   // 0x000C(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	class UUI_Contract_Modifier_C*                CallFunc_Create_ReturnValue;                       // 0x0010(0x0008)(ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
-	class UClass*                                 CallFunc_Array_Get_Item;                           // 0x0018(0x0008)(ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-	class UHorizontalBoxSlot*                     CallFunc_AddChildToHorizontalBox_ReturnValue;      // 0x0020(0x0008)(ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
-	bool                                          CallFunc_LessEqual_IntInt_ReturnValue;             // 0x0028(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	bool                                          CallFunc_Greater_IntInt_ReturnValue;               // 0x0029(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_UI_Contract_C_F_UpdateModifiers;
-
-// Function UI_Contract.UI_Contract_C.F_Refresh
-// 0x0038 (0x0038 - 0x0000)
-struct UI_Contract_C_F_Refresh final
-{
-public:
-	struct FS_Mission                             mission_0;                                         // 0x0000(0x0038)(BlueprintVisible, BlueprintReadOnly, Parm, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_UI_Contract_C_F_Refresh;
-
-// Function UI_Contract.UI_Contract_C.F_ClickButton
-// 0x0008 (0x0008 - 0x0000)
-struct UI_Contract_C_F_ClickButton final
-{
-public:
-	class UButton*                                ClickedButton;                                     // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_UI_Contract_C_F_ClickButton;
-
-// Function UI_Contract.UI_Contract_C.F_SelectItem
-// 0x0010 (0x0010 - 0x0000)
-struct UI_Contract_C_F_SelectItem final
-{
-public:
-	class UClass*                                 Item;                                              // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-	E_ItemCategory                                Category;                                          // 0x0008(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_9[0x3];                                        // 0x0009(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
-	int32                                         SpellSlot;                                         // 0x000C(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_UI_Contract_C_F_SelectItem;
 
 // Function UI_Contract.UI_Contract_C.ExecuteUbergraph_UI_Contract
 // 0x0180 (0x0180 - 0x0000)
@@ -95,6 +47,54 @@ public:
 	class FText                                   CallFunc_Format_ReturnValue_1;                     // 0x0170(0x0010)()
 };
 DUMPER7_ASSERTS_UI_Contract_C_ExecuteUbergraph_UI_Contract;
+
+// Function UI_Contract.UI_Contract_C.F_ClickButton
+// 0x0008 (0x0008 - 0x0000)
+struct UI_Contract_C_F_ClickButton final
+{
+public:
+	class UButton*                                ClickedButton;                                     // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_UI_Contract_C_F_ClickButton;
+
+// Function UI_Contract.UI_Contract_C.F_Refresh
+// 0x0038 (0x0038 - 0x0000)
+struct UI_Contract_C_F_Refresh final
+{
+public:
+	struct FS_Mission                             mission_0;                                         // 0x0000(0x0038)(BlueprintVisible, BlueprintReadOnly, Parm, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_UI_Contract_C_F_Refresh;
+
+// Function UI_Contract.UI_Contract_C.F_SelectItem
+// 0x0010 (0x0010 - 0x0000)
+struct UI_Contract_C_F_SelectItem final
+{
+public:
+	class UClass*                                 Item;                                              // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+	E_ItemCategory                                Category;                                          // 0x0008(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_9[0x3];                                        // 0x0009(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
+	int32                                         SpellSlot;                                         // 0x000C(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_UI_Contract_C_F_SelectItem;
+
+// Function UI_Contract.UI_Contract_C.F_UpdateModifiers
+// 0x0030 (0x0030 - 0x0000)
+struct UI_Contract_C_F_UpdateModifiers final
+{
+public:
+	bool                                          hasAppliedAtLeastOneModifier;                      // 0x0000(0x0001)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_1[0x3];                                        // 0x0001(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
+	int32                                         Temp_int_Variable;                                 // 0x0004(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	int32                                         CallFunc_Subtract_IntInt_ReturnValue;              // 0x0008(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	int32                                         CallFunc_Add_IntInt_ReturnValue;                   // 0x000C(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	class UUI_Contract_Modifier_C*                CallFunc_Create_ReturnValue;                       // 0x0010(0x0008)(ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 CallFunc_Array_Get_Item;                           // 0x0018(0x0008)(ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+	class UHorizontalBoxSlot*                     CallFunc_AddChildToHorizontalBox_ReturnValue;      // 0x0020(0x0008)(ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
+	bool                                          CallFunc_LessEqual_IntInt_ReturnValue;             // 0x0028(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          CallFunc_Greater_IntInt_ReturnValue;               // 0x0029(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_UI_Contract_C_F_UpdateModifiers;
 
 }
 

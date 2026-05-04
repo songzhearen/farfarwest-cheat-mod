@@ -17,6 +17,50 @@
 namespace SDK
 {
 
+// Function UI_Menu_Container_Save.UI_Menu_Container_Save_C.BndEvt__UI_Menu_Container_Save_UI_Template_DestroySave_K2Node_ComponentBoundEvent_0_disp_Click__DelegateSignature
+// (BlueprintEvent)
+// Parameters:
+// class UUserWidget*                      Widget                                                 (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
+// int32                                   ID                                                     (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+
+void UUI_Menu_Container_Save_C::BndEvt__UI_Menu_Container_Save_UI_Template_DestroySave_K2Node_ComponentBoundEvent_0_disp_Click__DelegateSignature(class UUserWidget* Widget, int32 ID)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("UI_Menu_Container_Save_C", "BndEvt__UI_Menu_Container_Save_UI_Template_DestroySave_K2Node_ComponentBoundEvent_0_disp_Click__DelegateSignature");
+
+	Params::UI_Menu_Container_Save_C_BndEvt__UI_Menu_Container_Save_UI_Template_DestroySave_K2Node_ComponentBoundEvent_0_disp_Click__DelegateSignature Parms{};
+
+	Parms.Widget = Widget;
+	Parms.ID = ID;
+
+	UObject::ProcessEvent(Func, &Parms);
+}
+
+
+// Function UI_Menu_Container_Save.UI_Menu_Container_Save_C.BndEvt__UI_Menu_Container_Save_UI_Template_SaveBackup_K2Node_ComponentBoundEvent_1_disp_Click__DelegateSignature
+// (BlueprintEvent)
+// Parameters:
+// class UUserWidget*                      Widget                                                 (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
+// int32                                   ID                                                     (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+
+void UUI_Menu_Container_Save_C::BndEvt__UI_Menu_Container_Save_UI_Template_SaveBackup_K2Node_ComponentBoundEvent_1_disp_Click__DelegateSignature(class UUserWidget* Widget, int32 ID)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("UI_Menu_Container_Save_C", "BndEvt__UI_Menu_Container_Save_UI_Template_SaveBackup_K2Node_ComponentBoundEvent_1_disp_Click__DelegateSignature");
+
+	Params::UI_Menu_Container_Save_C_BndEvt__UI_Menu_Container_Save_UI_Template_SaveBackup_K2Node_ComponentBoundEvent_1_disp_Click__DelegateSignature Parms{};
+
+	Parms.Widget = Widget;
+	Parms.ID = ID;
+
+	UObject::ProcessEvent(Func, &Parms);
+}
+
+
 // Function UI_Menu_Container_Save.UI_Menu_Container_Save_C.Construct
 // (BlueprintCosmetic, Event, Public, BlueprintEvent)
 
@@ -48,6 +92,48 @@ void UUI_Menu_Container_Save_C::ExecuteUbergraph_UI_Menu_Container_Save(int32 En
 	Parms.EntryPoint = EntryPoint;
 
 	UObject::ProcessEvent(Func, &Parms);
+}
+
+
+// Function UI_Menu_Container_Save.UI_Menu_Container_Save_C.F_AcceptDestroy
+// (BlueprintCallable, BlueprintEvent)
+
+void UUI_Menu_Container_Save_C::F_AcceptDestroy()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("UI_Menu_Container_Save_C", "F_AcceptDestroy");
+
+	UObject::ProcessEvent(Func, nullptr);
+}
+
+
+// Function UI_Menu_Container_Save.UI_Menu_Container_Save_C.F_BackUpCurrentSave
+// (BlueprintCallable, BlueprintEvent)
+
+void UUI_Menu_Container_Save_C::F_BackUpCurrentSave()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("UI_Menu_Container_Save_C", "F_BackUpCurrentSave");
+
+	UObject::ProcessEvent(Func, nullptr);
+}
+
+
+// Function UI_Menu_Container_Save.UI_Menu_Container_Save_C.F_RefreshBackups
+// (BlueprintCallable, BlueprintEvent)
+
+void UUI_Menu_Container_Save_C::F_RefreshBackups()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("UI_Menu_Container_Save_C", "F_RefreshBackups");
+
+	UObject::ProcessEvent(Func, nullptr);
 }
 
 

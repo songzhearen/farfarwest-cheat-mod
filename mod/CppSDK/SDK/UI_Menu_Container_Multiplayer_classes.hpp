@@ -66,6 +66,7 @@ public:
 	void F_UntickAllDifficulties(const class UUI_MultiplayerFilterLine_C*& selectedNewCheckbox);
 	void OnCallback_B95EB32A47EF11CD26DBA0B0DA6254E5(const TArray<struct FSteamSessionResult>& Results);
 	void OnCallback_D960279E4BDA6675149EE5B82CD704D9(const TArray<struct FSteamSessionResult>& Results);
+	void Tick(const struct FGeometry& MyGeometry, float InDeltaTime);
 
 public:
 	static class UClass* StaticClass()

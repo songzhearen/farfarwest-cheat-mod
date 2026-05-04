@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
-#include "S_PlayerItemJokers_structs.hpp"
 #include "Engine_structs.hpp"
 #include "S_PlayerJokers_structs.hpp"
 #include "E_Rarity_structs.hpp"
+#include "S_PlayerItemJokers_structs.hpp"
 #include "UMG_classes.hpp"
 #include "E_ItemCategory_structs.hpp"
 

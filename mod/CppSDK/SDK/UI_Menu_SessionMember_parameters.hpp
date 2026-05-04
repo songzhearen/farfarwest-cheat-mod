@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "S_PlayerSkins_structs.hpp"
 #include "SteamCorePro_structs.hpp"
+#include "S_PlayerSkins_structs.hpp"
 
 
 namespace SDK::Params

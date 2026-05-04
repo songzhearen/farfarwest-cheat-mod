@@ -10,11 +10,11 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
-#include "CoreUObject_structs.hpp"
 #include "S_Activable_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
+#include "CoreUObject_structs.hpp"
 
 
 namespace SDK

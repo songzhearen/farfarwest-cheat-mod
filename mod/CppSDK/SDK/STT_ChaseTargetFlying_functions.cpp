@@ -40,12 +40,12 @@ void USTT_ChaseTargetFlying_C::ExecuteUbergraph_STT_ChaseTargetFlying(int32 Entr
 // Function STT_ChaseTargetFlying.STT_ChaseTargetFlying_C.F_GetLocationInPlayerView
 // (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent)
 // Parameters:
-// const struct FVector&                   StartLoc                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// const struct FVector&                   startLoc                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // const struct FVector&                   targetLoc                                              (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // bool*                                   foundLoc                                               (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // struct FVector*                         Loc                                                    (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void USTT_ChaseTargetFlying_C::F_GetLocationInPlayerView(const struct FVector& StartLoc, const struct FVector& targetLoc, bool* foundLoc, struct FVector* Loc)
+void USTT_ChaseTargetFlying_C::F_GetLocationInPlayerView(const struct FVector& startLoc, const struct FVector& targetLoc, bool* foundLoc, struct FVector* Loc)
 {
 	static class UFunction* Func = nullptr;
 
@@ -54,7 +54,7 @@ void USTT_ChaseTargetFlying_C::F_GetLocationInPlayerView(const struct FVector& S
 
 	Params::STT_ChaseTargetFlying_C_F_GetLocationInPlayerView Parms{};
 
-	Parms.StartLoc = std::move(StartLoc);
+	Parms.startLoc = std::move(startLoc);
 	Parms.targetLoc = std::move(targetLoc);
 
 	UObject::ProcessEvent(Func, &Parms);
@@ -70,11 +70,11 @@ void USTT_ChaseTargetFlying_C::F_GetLocationInPlayerView(const struct FVector& S
 // Function STT_ChaseTargetFlying.STT_ChaseTargetFlying_C.F_IsTargetInView
 // (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent)
 // Parameters:
-// const struct FVector&                   StartLoc                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// const struct FVector&                   startLoc                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // const struct FVector&                   targetLoc                                              (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // bool*                                   InView                                                 (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void USTT_ChaseTargetFlying_C::F_IsTargetInView(const struct FVector& StartLoc, const struct FVector& targetLoc, bool* InView)
+void USTT_ChaseTargetFlying_C::F_IsTargetInView(const struct FVector& startLoc, const struct FVector& targetLoc, bool* InView)
 {
 	static class UFunction* Func = nullptr;
 
@@ -83,7 +83,7 @@ void USTT_ChaseTargetFlying_C::F_IsTargetInView(const struct FVector& StartLoc, 
 
 	Params::STT_ChaseTargetFlying_C_F_IsTargetInView Parms{};
 
-	Parms.StartLoc = std::move(StartLoc);
+	Parms.startLoc = std::move(startLoc);
 	Parms.targetLoc = std::move(targetLoc);
 
 	UObject::ProcessEvent(Func, &Parms);

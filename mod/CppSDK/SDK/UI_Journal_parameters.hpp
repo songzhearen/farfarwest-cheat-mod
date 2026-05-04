@@ -10,11 +10,11 @@
 
 #include "Basic.hpp"
 
+#include "S_PlayerChallenges_structs.hpp"
+#include "E_ChallengeCategory_structs.hpp"
 #include "SlateCore_structs.hpp"
 #include "UMG_structs.hpp"
 #include "E_ItemCategory_structs.hpp"
-#include "E_ChallengeCategory_structs.hpp"
-#include "S_PlayerChallenges_structs.hpp"
 #include "CoreUObject_structs.hpp"
 
 

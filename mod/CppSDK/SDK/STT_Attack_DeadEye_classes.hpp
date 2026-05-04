@@ -25,7 +25,7 @@ class USTT_Attack_DeadEye_C final : public UStateTreeTaskBlueprintBase
 public:
 	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x0070(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 	class ABP_Enemy_Cryptic_DeadEye_C*            bpEnemy;                                           // 0x0078(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnTemplate, NoDestructor, HasGetValueTypeHash)
-	struct FVector                                shootLoc;                                          // 0x0080(0x0018)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FVector                                ShootLoc;                                          // 0x0080(0x0018)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void ExecuteUbergraph_STT_Attack_DeadEye(int32 EntryPoint);

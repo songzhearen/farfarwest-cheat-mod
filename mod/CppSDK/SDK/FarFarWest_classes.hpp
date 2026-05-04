@@ -28,12 +28,14 @@ public:
 	static TArray<class FString> GetAvailableBackups(const class FString& BackupPrefix);
 	static void GetButtonAndOwnerUnderCursor(class UObject* WorldContextObject, class UButton** OutButton, class UUserWidget** OutOwner);
 	static class FString GetCurrentRHI();
+	static class FString GetOSDefaultLanguage();
+	static TArray<class FString> GetSafeMicrophoneList(class UObject* WorldContextObject);
 	static bool HasFocusOnWindow();
 	static bool IsRunningOnSteamDeck();
 	static bool SafeDeleteSaveGameFromSlot(const class FString& SlotName);
 	static bool SafeDoesSaveGameExist(const class FString& SlotName);
-	static class USaveGame* SafeLoadGameFromSlot(const class FString& SlotName, int32 UserIndex, const class FString& EncryptionKey);
-	static bool SafeSaveGameToSlot(class USaveGame* SaveGameObject, const class FString& SlotName, int32 UserIndex, const class FString& EncryptionKey);
+	static class USaveGame* SafeLoadGameFromSlot(const class FString& SlotName, int32 UserIndex, const class FString& EncryptionKey, bool bUseSavExtension);
+	static bool SafeSaveGameToSlot(class USaveGame* SaveGameObject, const class FString& SlotName, int32 UserIndex, const class FString& EncryptionKey, bool bUseSavExtension);
 	static void UpdateSliderFromMouse(class USlider* TargetSlider);
 	static void WindowsAlert(const class FString& Title, const class FString& Message);
 

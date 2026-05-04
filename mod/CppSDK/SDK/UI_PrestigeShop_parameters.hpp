@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
-#include "CoreUObject_structs.hpp"
 #include "UMG_structs.hpp"
-#include "S_PlayerSkins_structs.hpp"
 #include "S_PlayerItems_structs.hpp"
+#include "S_PlayerSkins_structs.hpp"
+#include "CoreUObject_structs.hpp"
 #include "Engine_structs.hpp"
 #include "SlateCore_structs.hpp"
 #include "S_PrestigeShopSlot_structs.hpp"

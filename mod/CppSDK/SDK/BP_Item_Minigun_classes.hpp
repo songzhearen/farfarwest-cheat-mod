@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "Engine_structs.hpp"
 #include "BP_Item_classes.hpp"
+#include "Engine_structs.hpp"
 
 
 namespace SDK
@@ -47,7 +47,7 @@ public:
 	void F_Child_StopShoot();
 	void F_GetMinigunBullet(class UClass** Bullet);
 	double F_GetMinigunFireRate();
-	void F_MinigunAmmo(int32 Minus);
+	void F_MinigunAmmo(int32 Minus, bool triggerMovementSpeedJokers);
 	void F_MinigunShoot();
 	void F_UpdateSound(double Alpha);
 	void OnBlendOut_15C823DA421C935BCE282F986748DFFD(class FName NotifyName);

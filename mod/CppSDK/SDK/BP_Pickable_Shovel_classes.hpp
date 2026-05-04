@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK
@@ -38,7 +38,6 @@ public:
 	void F_HitMarkerRequest(bool Critical, bool* Receive);
 	void F_DamageFeedback(const struct FHitResult& Hit, class AActor* Owner_0, double Damages, class UClass* DamageType, bool Critical, E_DamageCategory Element, class FName ItemName);
 	void F_HoverInteract();
-	void F_Activate(int32 Wildcard, double Delay, class AActor* Owner_0);
 	void F_ReceiveBuff(class AActor* Owner_0, const struct FVector& ReceivedLoc, class UClass* BuffObject);
 	void F_KillCombo();
 	void F_Channel(class AActor* ChannelingOwner, int32 Wildcard);
@@ -64,6 +63,7 @@ public:
 	void F_RemoveNiagaraSystemOnEnemy(class UNiagaraSystem* System);
 	void F_BuffManagerClearBuffFromActor(class UClass* Buff);
 	void F_Interact(class AActor* Owner_0, int32 Wildcard);
+	void F_Activate(int32 Wildcard, double Delay, class AActor* Owner_0);
 	void ExecuteUbergraph_BP_Pickable_Shovel(int32 EntryPoint);
 
 public:

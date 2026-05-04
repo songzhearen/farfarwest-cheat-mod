@@ -11,15 +11,15 @@
 #include "Basic.hpp"
 
 #include "Engine_structs.hpp"
-#include "UI_Menu_Root_classes.hpp"
 #include "E_ItemCategory_structs.hpp"
+#include "UI_Menu_Root_classes.hpp"
 
 
 namespace SDK
 {
 
 // WidgetBlueprintGeneratedClass UI_Menu_BackupSelector.UI_Menu_BackupSelector_C
-// 0x0080 (0x03B8 - 0x0338)
+// 0x0090 (0x03C8 - 0x0338)
 class UUI_Menu_BackupSelector_C final : public UUI_Menu_Root_C
 {
 public:
@@ -40,6 +40,9 @@ public:
 	uint8                                         Pad_39D[0x3];                                      // 0x039D(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
 	class FString                                 backupName;                                        // 0x03A0(0x0010)(Edit, BlueprintVisible, ZeroConstructor, ExposeOnSpawn, HasGetValueTypeHash)
 	bool                                          isCorrupted;                                       // 0x03B0(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_3B1[0x7];                                      // 0x03B1(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
+	class USG_PlayerProgress_C*                   loadedProgress;                                    // 0x03B8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class USG_PlayerProgress_C*                   promptedSave;                                      // 0x03C0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void BndEvt__UI_Menu_BackupSelector_UI_Template_Button_K2Node_ComponentBoundEvent_0_disp_Click__DelegateSignature(class UUserWidget* Widget, int32 ID);

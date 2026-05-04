@@ -11,8 +11,8 @@
 #include "Basic.hpp"
 
 #include "E_ItemCategory_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 #include "CoreUObject_structs.hpp"
+#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK::Params

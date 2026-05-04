@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "S_PlayerItems_structs.hpp"
 #include "UMG_structs.hpp"
 #include "E_ItemCategory_structs.hpp"
-#include "S_PlayerItems_structs.hpp"
 
 
 namespace SDK::Params

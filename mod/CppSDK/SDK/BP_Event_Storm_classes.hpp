@@ -18,26 +18,26 @@ namespace SDK
 {
 
 // BlueprintGeneratedClass BP_Event_Storm.BP_Event_Storm_C
-// 0x0098 (0x0410 - 0x0378)
+// 0x0098 (0x0418 - 0x0380)
 class ABP_Event_Storm_C : public ABP_Event_C
 {
 public:
-	struct FPointerToUberGraphFrame               UberGraphFrame_BP_Event_Storm_C;                   // 0x0378(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
-	bool                                          Active;                                            // 0x0380(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_381[0x7];                                      // 0x0381(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
-	TArray<class UClass*>                         spawnEasy;                                         // 0x0388(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
-	double                                        delayBetweenMobsEasy;                              // 0x0398(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	TArray<class UClass*>                         spawnNormal;                                       // 0x03A0(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
-	double                                        delayBetweenMobsNormal;                            // 0x03B0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	TArray<class UClass*>                         spawnHard;                                         // 0x03B8(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
-	double                                        delayBetweenMobsHard;                              // 0x03C8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	TArray<class UClass*>                         spawnVeryHard;                                     // 0x03D0(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
-	double                                        delayBetweenMobsVeryHard;                          // 0x03E0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	struct FTimerHandle                           timerEasy;                                         // 0x03E8(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	struct FTimerHandle                           timerNormal;                                       // 0x03F0(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	struct FTimerHandle                           timerHard;                                         // 0x03F8(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	struct FTimerHandle                           timerVeryHard;                                     // 0x0400(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	float                                         spawnDistance;                                     // 0x0408(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FPointerToUberGraphFrame               UberGraphFrame_BP_Event_Storm_C;                   // 0x0380(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
+	bool                                          Active;                                            // 0x0388(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_389[0x7];                                      // 0x0389(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
+	TArray<class UClass*>                         spawnEasy;                                         // 0x0390(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
+	double                                        delayBetweenMobsEasy;                              // 0x03A0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	TArray<class UClass*>                         spawnNormal;                                       // 0x03A8(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
+	double                                        delayBetweenMobsNormal;                            // 0x03B8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	TArray<class UClass*>                         spawnHard;                                         // 0x03C0(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
+	double                                        delayBetweenMobsHard;                              // 0x03D0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	TArray<class UClass*>                         spawnVeryHard;                                     // 0x03D8(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
+	double                                        delayBetweenMobsVeryHard;                          // 0x03E8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FTimerHandle                           timerEasy;                                         // 0x03F0(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	struct FTimerHandle                           timerNormal;                                       // 0x03F8(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	struct FTimerHandle                           timerHard;                                         // 0x0400(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	struct FTimerHandle                           timerVeryHard;                                     // 0x0408(0x0008)(Edit, BlueprintVisible, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	float                                         spawnDistance;                                     // 0x0410(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void F_SpawnEasy();

@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "BP_Structure_classes.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK

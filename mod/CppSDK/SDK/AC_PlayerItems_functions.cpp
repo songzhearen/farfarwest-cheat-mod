@@ -20,9 +20,9 @@ namespace SDK
 // Function AC_PlayerItems.AC_PlayerItems_C.F_GetCurrentItem
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent, BlueprintPure)
 // Parameters:
-// class UClass**                          CurrentItem                                            (Parm, OutParm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+// class UClass**                          currentItem                                            (Parm, OutParm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void UAC_PlayerItems_C::F_GetCurrentItem(class UClass** CurrentItem)
+void UAC_PlayerItems_C::F_GetCurrentItem(class UClass** currentItem)
 {
 	static class UFunction* Func = nullptr;
 
@@ -33,8 +33,8 @@ void UAC_PlayerItems_C::F_GetCurrentItem(class UClass** CurrentItem)
 
 	UObject::ProcessEvent(Func, &Parms);
 
-	if (CurrentItem != nullptr)
-		*CurrentItem = Parms.CurrentItem;
+	if (currentItem != nullptr)
+		*currentItem = Parms.currentItem;
 }
 
 

@@ -12,11 +12,11 @@
 
 #include "Engine_structs.hpp"
 #include "SlateCore_structs.hpp"
-#include "E_Rarity_structs.hpp"
 #include "UMG_structs.hpp"
-#include "S_MapProperties_structs.hpp"
-#include "S_PlayerJokers_structs.hpp"
 #include "CoreUObject_structs.hpp"
+#include "S_PlayerJokers_structs.hpp"
+#include "S_MapProperties_structs.hpp"
+#include "E_Rarity_structs.hpp"
 
 
 namespace SDK::Params

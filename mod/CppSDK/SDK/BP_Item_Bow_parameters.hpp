@@ -10,11 +10,11 @@
 
 #include "Basic.hpp"
 
-#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
+#include "E_DamageCategory_structs.hpp"
+#include "S_ItemDatas_structs.hpp"
 #include "CoreUObject_structs.hpp"
 #include "EnhancedInput_structs.hpp"
-#include "S_ItemDatas_structs.hpp"
 
 
 namespace SDK::Params

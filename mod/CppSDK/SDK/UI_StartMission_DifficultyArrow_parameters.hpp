@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "S_InteractableDatas_structs.hpp"
 #include "CoreUObject_structs.hpp"
+#include "S_InteractableDatas_structs.hpp"
 #include "E_ItemCategory_structs.hpp"
 
 

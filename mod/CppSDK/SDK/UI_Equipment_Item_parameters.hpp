@@ -11,13 +11,13 @@
 #include "Basic.hpp"
 
 #include "SlateCore_structs.hpp"
-#include "S_PlayerItemJokers_structs.hpp"
 #include "Engine_structs.hpp"
-#include "CoreUObject_structs.hpp"
 #include "S_PlayerJokers_structs.hpp"
+#include "S_PlayerItemJokers_structs.hpp"
 #include "E_ItemCategory_structs.hpp"
-#include "S_ItemTweaks_structs.hpp"
 #include "S_PlayerItems_structs.hpp"
+#include "S_ItemTweaks_structs.hpp"
+#include "CoreUObject_structs.hpp"
 #include "UMG_structs.hpp"
 
 

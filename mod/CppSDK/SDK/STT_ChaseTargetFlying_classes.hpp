@@ -35,8 +35,8 @@ public:
 
 public:
 	void ExecuteUbergraph_STT_ChaseTargetFlying(int32 EntryPoint);
-	void F_GetLocationInPlayerView(const struct FVector& StartLoc, const struct FVector& targetLoc, bool* foundLoc, struct FVector* Loc);
-	void F_IsTargetInView(const struct FVector& StartLoc, const struct FVector& targetLoc, bool* InView);
+	void F_GetLocationInPlayerView(const struct FVector& startLoc, const struct FVector& targetLoc, bool* foundLoc, struct FVector* Loc);
+	void F_IsTargetInView(const struct FVector& startLoc, const struct FVector& targetLoc, bool* InView);
 	void F_StartMovement();
 	void OnMoveFinished_12B4EA6F4865E4FE6D0DE490CF838A74(EPathFollowingResult Result, class AAIController* AIController);
 	void OnRequestFailed_12B4EA6F4865E4FE6D0DE490CF838A74();

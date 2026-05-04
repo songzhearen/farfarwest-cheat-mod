@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "BP_Enemy_classes.hpp"
 #include "Engine_structs.hpp"
 #include "CoreUObject_structs.hpp"
-#include "BP_Enemy_classes.hpp"
 #include "AIModule_structs.hpp"
 #include "E_Rarity_structs.hpp"
 
@@ -38,7 +38,7 @@ public:
 
 public:
 	void F_SpawnShield();
-	void F_GetShootLoc(struct FVector* shootLoc);
+	void F_GetShootLoc(struct FVector* ShootLoc);
 	void F_SpawnKwarts();
 	void F_SearchEnemy(bool* FoundEnemy, class AActor** NearestEnemy);
 	void OnNotifyEnd_E9CEE56C4A93B7234FC8838FD38134BB(class FName NotifyName);

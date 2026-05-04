@@ -19,7 +19,7 @@ namespace SDK
 {
 
 // BlueprintGeneratedClass BP_Manager_Menu.BP_Manager_Menu_C
-// 0x0090 (0x0340 - 0x02B0)
+// 0x0098 (0x0348 - 0x02B0)
 class ABP_Manager_Menu_C final : public AActor
 {
 public:
@@ -48,14 +48,16 @@ public:
 	bool                                          isPushToTalkMode;                                  // 0x0338(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	bool                                          isCapturingMic;                                    // 0x0339(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	bool                                          useRightStickInputs;                               // 0x033A(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_33B[0x5];                                      // 0x033B(0x0005)(Fixing Size After Last Property [ Dumper-7 ])
+	class UUI_Cursor_C*                           mouseCursorDefault;                                // 0x0340(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, InstancedReference, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void ExecuteUbergraph_BP_Manager_Menu(int32 EntryPoint);
 	void F_AdjustPingLocationToSeekedActor(class UClass* Ping, class UClass* SeekedActor, const struct FVector& Location, class FName fallbackSeekedTag, bool* Found);
 	void F_AutoInputs();
 	void F_CheckIfActorAlreadyPinged(class USceneComponent* SceneComponent, bool* AlreadyPinged, class ABP_ObjectPing_C** Ping);
+	void F_CheckMicRecordsPermanently();
 	void F_CheckPermaMic();
-	void F_CheckPicRecordsPermanently();
 	void F_CloseAllUis();
 	void F_CloseCheat();
 	void F_CloseMap();
@@ -69,6 +71,8 @@ public:
 	void F_FindNearbyMapPing(const struct FVector& Location, bool* foundNearbyPing, class AActor** Ping);
 	void F_ForceClick();
 	void F_HandleLobbyJournal();
+	void F_HandleMouseType();
+	void F_InitMouseCursor();
 	void F_IsObjectAlreadyPinged(class AActor* Actor, bool* AlreadyPinged);
 	void F_MouseMovementSpeed();
 	void F_MoveMouseWithAxis(double X, double Y);
@@ -78,14 +82,13 @@ public:
 	void F_PlacePingOnCursor();
 	void F_PressEscape();
 	void F_PressMap();
-	void F_ReceiveDevices(const TArray<struct FAudioInputDeviceInfo>& AvailableDevices);
 	void F_RemoveActivePing(bool* pingDestroyed);
 	void F_ResetMouse();
 	void F_SetInput_Game();
 	void F_SetInput_Ui(bool disableInputs, bool Show_Mouse_Cursor, bool isAnySpecialMenuOpened_0, class UUI_Equipment_GoBack_C* activeGoBackButton_0, bool resetMousePos, const bool bFlushInput, bool CloseEmoteWheel, bool useRightStickInputs_0);
 	void F_SetInputToCurrentUi();
 	void F_TracePing();
-	void F_UpdateAudioInput();
+	void F_UpdateAudioInputDevice();
 	void InpActEvt_AnyKey_K2Node_InputKeyEvent_0(const struct FKey& Key);
 	void InpActEvt_IA_Dash_K2Node_EnhancedInputActionEvent_2(const struct FInputActionValue& ActionValue, float ElapsedTime, float TriggeredTime, const class UInputAction* SourceAction);
 	void InpActEvt_IA_Escape_K2Node_EnhancedInputActionEvent_8(const struct FInputActionValue& ActionValue, float ElapsedTime, float TriggeredTime, const class UInputAction* SourceAction);
@@ -98,6 +101,7 @@ public:
 	void InpActEvt_IA_PushToTalk_K2Node_EnhancedInputActionEvent_10(const struct FInputActionValue& ActionValue, float ElapsedTime, float TriggeredTime, const class UInputAction* SourceAction);
 	void InpActEvt_IA_PushToTalk_K2Node_EnhancedInputActionEvent_9(const struct FInputActionValue& ActionValue, float ElapsedTime, float TriggeredTime, const class UInputAction* SourceAction);
 	void InpActEvt_IA_Shoot_K2Node_EnhancedInputActionEvent_1(const struct FInputActionValue& ActionValue, float ElapsedTime, float TriggeredTime, const class UInputAction* SourceAction);
+	void NewFunction();
 	void ReceiveBeginPlay();
 	void ReceiveTick(float DeltaSeconds);
 

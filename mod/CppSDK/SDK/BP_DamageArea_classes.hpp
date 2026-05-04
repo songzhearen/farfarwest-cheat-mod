@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK
@@ -35,7 +35,6 @@ public:
 	class UClass*                                 BuffObject;                                        // 0x02F0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
 
 public:
-	void F_ReceiveBuff(class AActor* Owner_0, const struct FVector& ReceivedLoc, class UClass* BuffObject_0);
 	void ReceiveBeginPlay();
 	void ExecuteUbergraph_BP_DamageArea(int32 EntryPoint);
 	void F_GetShootAtLoc(bool* Found, struct FVector* Loc, class USceneComponent** SceneComponent);
@@ -49,6 +48,7 @@ public:
 	void F_Interact(class AActor* Owner_0, int32 Wildcard);
 	void F_HoverInteract();
 	void F_Activate(int32 Wildcard, double Delay, class AActor* Owner_0);
+	void F_ReceiveBuff(class AActor* Owner_0, const struct FVector& ReceivedLoc, class UClass* BuffObject_0);
 	void F_KillCombo();
 	void F_Channel(class AActor* ChannelingOwner, int32 Wildcard);
 	void F_StopChannel(class AActor* ChannelingActor);

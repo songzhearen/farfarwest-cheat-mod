@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "BP_NPC_classes.hpp"
 #include "AIModule_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK

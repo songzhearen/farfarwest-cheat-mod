@@ -18,7 +18,7 @@ namespace SDK
 {
 
 // WidgetBlueprintGeneratedClass UI_Menu_Container_OptionsHolder.UI_Menu_Container_OptionsHolder_C
-// 0x0040 (0x0378 - 0x0338)
+// 0x0048 (0x0380 - 0x0338)
 class UUI_Menu_Container_OptionsHolder_C final : public UUI_Menu_Container_C
 {
 public:
@@ -30,6 +30,7 @@ public:
 	class UUI_Template_LargeButton_C*             UI_Template_Audio;                                 // 0x0360(0x0008)(BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance, InstancedReference, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
 	class UOverlay*                               Overlay_Holder;                                    // 0x0368(0x0008)(BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance, InstancedReference, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
 	class UWidgetAnimation*                       Appear;                                            // 0x0370(0x0008)(BlueprintVisible, BlueprintReadOnly, ZeroConstructor, Transient, RepSkip, NoDestructor, HasGetValueTypeHash)
+	class UUserWidget*                            childWidget;                                       // 0x0378(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, InstancedReference, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void F_Blackscreen();

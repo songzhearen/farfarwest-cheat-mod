@@ -297,27 +297,6 @@ void ABP_Manager_Contracts_C::F_GetBuffs(bool* Found, TArray<class UClass*>* Buf
 }
 
 
-// Function BP_Manager_Contracts.BP_Manager_Contracts_C.F_GetContractWithMostVotes
-// (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent, BlueprintPure)
-// Parameters:
-// class ABP_Contract_C**                  Array_Element                                          (Parm, OutParm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-
-void ABP_Manager_Contracts_C::F_GetContractWithMostVotes(class ABP_Contract_C** Array_Element)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Manager_Contracts_C", "F_GetContractWithMostVotes");
-
-	Params::BP_Manager_Contracts_C_F_GetContractWithMostVotes Parms{};
-
-	UObject::ProcessEvent(Func, &Parms);
-
-	if (Array_Element != nullptr)
-		*Array_Element = Parms.Array_Element;
-}
-
-
 // Function BP_Manager_Contracts.BP_Manager_Contracts_C.F_GetInteractableDatas
 // (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent)
 // Parameters:

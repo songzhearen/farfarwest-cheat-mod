@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "E_ChallengeCategory_structs.hpp"
 #include "Engine_classes.hpp"
+#include "E_ChallengeCategory_structs.hpp"
 
 
 namespace SDK
@@ -24,7 +24,7 @@ class ABP_Challenge_C : public AActor
 public:
 	class USceneComponent*                        DefaultSceneRoot;                                  // 0x02B0(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
 	class FText                                   Name_0;                                            // 0x02B8(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
-	class UClass*                                 Reward;                                            // 0x02C8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 reward;                                            // 0x02C8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
 	int32                                         requiredAmount;                                    // 0x02D0(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	class FName                                   challengePath;                                     // 0x02D4(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	E_ChallengeCategory                           challengeCategory;                                 // 0x02DC(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)

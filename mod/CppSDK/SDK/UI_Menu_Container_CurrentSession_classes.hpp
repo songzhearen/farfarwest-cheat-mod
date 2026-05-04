@@ -12,8 +12,8 @@
 
 #include "Engine_structs.hpp"
 #include "SteamCoreShared_structs.hpp"
-#include "UMG_structs.hpp"
 #include "UI_Menu_Container_classes.hpp"
+#include "UMG_structs.hpp"
 
 
 namespace SDK

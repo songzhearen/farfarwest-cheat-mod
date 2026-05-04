@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK
@@ -20,7 +20,7 @@ namespace SDK
 
 // BlueprintGeneratedClass BP_TextGuide.BP_TextGuide_C
 // 0x0038 (0x02E8 - 0x02B0)
-class ABP_TextGuide_C final : public AActor
+class ABP_TextGuide_C : public AActor
 {
 public:
 	struct FPointerToUberGraphFrame               UberGraphFrame;                                    // 0x02B0(0x0008)(ZeroConstructor, Transient, DuplicateTransient)

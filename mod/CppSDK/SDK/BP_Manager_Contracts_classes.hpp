@@ -10,11 +10,11 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "S_Mission_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
 #include "E_Army_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK
@@ -67,7 +67,6 @@ public:
 	void F_EventAlert();
 	void F_GenerateContracts();
 	void F_GetBuffs(bool* Found, TArray<class UClass*>* BuffObjects);
-	void F_GetContractWithMostVotes(class ABP_Contract_C** Array_Element);
 	void F_GetInteractableDatas(struct FS_InteractableDatas* InteractableDatas);
 	void F_GetShootAtLoc(bool* Found, struct FVector* Loc, class USceneComponent** SceneComponent);
 	void F_HasAnyPlayerUnlockedDifficulty(int32 Difficulty, bool* Unlocked);

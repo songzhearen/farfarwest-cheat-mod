@@ -10,18 +10,18 @@
 
 #include "Basic.hpp"
 
+#include "S_PlayerCurrentItem_structs.hpp"
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
-#include "S_PlayerCurrentItem_structs.hpp"
 #include "CoreUObject_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK
 {
 
 // BlueprintGeneratedClass AC_PlayerItems.AC_PlayerItems_C
-// 0x0098 (0x0158 - 0x00C0)
+// 0x00A0 (0x0160 - 0x00C0)
 class UAC_PlayerItems_C final : public UActorComponent
 {
 public:
@@ -55,9 +55,10 @@ public:
 	int32                                         currentItemWildcard;                               // 0x0140(0x0004)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	uint8                                         Pad_144[0x4];                                      // 0x0144(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
 	struct FS_PlayerCurrentItem                   playerCurrentItem;                                 // 0x0148(0x0010)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, RepNotify, NoDestructor, HasGetValueTypeHash)
+	bool                                          isAimingInput;                                     // 0x0158(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
-	void F_GetCurrentItem(class UClass** CurrentItem);
+	void F_GetCurrentItem(class UClass** currentItem);
 	void OnRep_playerCurrentItem();
 	void F_LoadPersistentItem(bool* FoundPersistentItem);
 	void F_GetEquipedSpellAmountByElement(int32* Acid, int32* Fire, int32* Elec, int32* Voodoo, int32* Cactus);

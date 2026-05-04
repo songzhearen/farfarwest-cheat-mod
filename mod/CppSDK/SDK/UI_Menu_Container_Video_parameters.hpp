@@ -13,8 +13,8 @@
 #include "SlateCore_structs.hpp"
 #include "Engine_structs.hpp"
 #include "CoreUObject_structs.hpp"
-#include "UMG_structs.hpp"
 #include "S_ButtonSelectorSetting_structs.hpp"
+#include "UMG_structs.hpp"
 
 
 namespace SDK::Params
@@ -174,13 +174,15 @@ public:
 DUMPER7_ASSERTS_UI_Menu_Container_Video_C_F_CheckOverrides;
 
 // Function UI_Menu_Container_Video.UI_Menu_Container_Video_C.F_EnableDlssOrFsr
-// 0x0003 (0x0003 - 0x0000)
+// 0x0018 (0x0018 - 0x0000)
 struct UI_Menu_Container_Video_C_F_EnableDlssOrFsr final
 {
 public:
-	bool                                          CallFunc_IsRunningOnSteamDeck_ReturnValue;         // 0x0000(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	bool                                          CallFunc_IsDLSSGSupported_ReturnValue;             // 0x0001(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	bool                                          CallFunc_IsDLSSSupported_ReturnValue;              // 0x0002(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	class FString                                 CallFunc_GetCurrentRHI_ReturnValue;                // 0x0000(0x0010)(ZeroConstructor, HasGetValueTypeHash)
+	bool                                          CallFunc_EqualEqual_StrStr_ReturnValue;            // 0x0010(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          CallFunc_IsRunningOnSteamDeck_ReturnValue;         // 0x0011(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          CallFunc_IsDLSSGSupported_ReturnValue;             // 0x0012(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          CallFunc_IsDLSSSupported_ReturnValue;              // 0x0013(0x0001)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_UI_Menu_Container_Video_C_F_EnableDlssOrFsr;
 

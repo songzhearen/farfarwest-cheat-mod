@@ -10,25 +10,14 @@
 
 #include "Basic.hpp"
 
-#include "CoreUObject_structs.hpp"
 #include "S_InteractableDatas_structs.hpp"
-#include "Engine_structs.hpp"
+#include "CoreUObject_structs.hpp"
 #include "E_DamageCategory_structs.hpp"
+#include "Engine_structs.hpp"
 
 
 namespace SDK::Params
 {
-
-// Function BP_DamageArea.BP_DamageArea_C.F_ReceiveBuff
-// 0x0028 (0x0028 - 0x0000)
-struct BP_DamageArea_C_F_ReceiveBuff final
-{
-public:
-	class AActor*                                 Owner_0;                                           // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-	struct FVector                                ReceivedLoc;                                       // 0x0008(0x0018)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	class UClass*                                 BuffObject_0;                                      // 0x0020(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-};
-DUMPER7_ASSERTS_BP_DamageArea_C_F_ReceiveBuff;
 
 // Function BP_DamageArea.BP_DamageArea_C.ExecuteUbergraph_BP_DamageArea
 // 0x0408 (0x0408 - 0x0000)
@@ -273,6 +262,17 @@ public:
 	class AActor*                                 Owner_0;                                           // 0x0010(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_BP_DamageArea_C_F_Activate;
+
+// Function BP_DamageArea.BP_DamageArea_C.F_ReceiveBuff
+// 0x0028 (0x0028 - 0x0000)
+struct BP_DamageArea_C_F_ReceiveBuff final
+{
+public:
+	class AActor*                                 Owner_0;                                           // 0x0000(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+	struct FVector                                ReceivedLoc;                                       // 0x0008(0x0018)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 BuffObject_0;                                      // 0x0020(0x0008)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+};
+DUMPER7_ASSERTS_BP_DamageArea_C_F_ReceiveBuff;
 
 // Function BP_DamageArea.BP_DamageArea_C.F_Channel
 // 0x0010 (0x0010 - 0x0000)

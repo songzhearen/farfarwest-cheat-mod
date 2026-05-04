@@ -24,7 +24,7 @@
 // ============================================================================
 namespace Offsets
 {
-    constexpr uintptr_t GWorld              = 0x092CCD20;
+    constexpr uintptr_t GWorld              = 0x092CFDA0;
     constexpr uintptr_t OwningGameInstance  = 0x0228;
     constexpr uintptr_t LocalPlayers        = 0x0038;
     constexpr uintptr_t PlayerController    = 0x0030;
@@ -50,7 +50,7 @@ namespace Offsets
 
     // ABP_PlayerState_C
     constexpr uintptr_t PlayerRuntimeStats  = 0x03B8;
-    constexpr uintptr_t IsSuspicious        = 0x0985;
+    constexpr uintptr_t IsSuspicious        = 0x0975;
 
     // FS_PlayerRuntimeStats
     constexpr uintptr_t DatasWepA           = 0x0000;

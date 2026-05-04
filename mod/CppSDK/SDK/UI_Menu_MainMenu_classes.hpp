@@ -37,7 +37,7 @@ public:
 	void ExecuteUbergraph_UI_Menu_MainMenu(int32 EntryPoint);
 	void F_GoBack(bool forced);
 	void F_Open();
-	void F_OpenTab(class UClass* Class_0);
+	void F_OpenTab(class UClass* Class_0, bool Force);
 
 public:
 	static class UClass* StaticClass()

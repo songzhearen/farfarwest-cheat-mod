@@ -10,15 +10,15 @@
 
 #include "Basic.hpp"
 
-#include "Engine_structs.hpp"
 #include "BP_Item_classes.hpp"
+#include "Engine_structs.hpp"
 
 
 namespace SDK
 {
 
 // BlueprintGeneratedClass BP_Item_CrypticSnake.BP_Item_CrypticSnake_C
-// 0x0038 (0x04E8 - 0x04B0)
+// 0x0040 (0x04F0 - 0x04B0)
 class ABP_Item_CrypticSnake_C final : public ABP_Item_C
 {
 public:
@@ -29,6 +29,7 @@ public:
 	class UArrowComponent*                        Socket_Shoot;                                      // 0x04D0(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
 	double                                        clickValue;                                        // 0x04D8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	class UUI_CrypticSnake_C*                     ui_Snake;                                          // 0x04E0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, InstancedReference, NoDestructor, HasGetValueTypeHash)
+	double                                        CameraShake;                                       // 0x04E8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void ExecuteUbergraph_BP_Item_CrypticSnake(int32 EntryPoint);

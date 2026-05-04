@@ -18,18 +18,26 @@ namespace SDK
 {
 
 // WidgetBlueprintGeneratedClass UI_Menu_Container_Save.UI_Menu_Container_Save_C
-// 0x0020 (0x0358 - 0x0338)
+// 0x0038 (0x0370 - 0x0338)
 class UUI_Menu_Container_Save_C final : public UUI_Menu_Container_C
 {
 public:
 	struct FPointerToUberGraphFrame               UberGraphFrame_UI_Menu_Container_Save_C;           // 0x0338(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
 	class UVerticalBox*                           VerticalBox_Intro;                                 // 0x0340(0x0008)(BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance, InstancedReference, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
 	class UVerticalBox*                           VerticalBox_Holder;                                // 0x0348(0x0008)(BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance, InstancedReference, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
-	bool                                          showTexts;                                         // 0x0350(0x0001)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, ExposeOnSpawn, HasGetValueTypeHash)
+	class UUI_Template_Button_C*                  UI_Template_SaveBackup;                            // 0x0350(0x0008)(BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance, InstancedReference, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+	class UUI_Template_Button_C*                  UI_Template_DestroySave;                           // 0x0358(0x0008)(BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance, InstancedReference, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+	class UHorizontalBox*                         HorizontalBox_82;                                  // 0x0360(0x0008)(BlueprintVisible, ExportObject, BlueprintReadOnly, ZeroConstructor, DisableEditOnInstance, InstancedReference, RepSkip, NoDestructor, PersistentInstance, HasGetValueTypeHash)
+	bool                                          showTexts;                                         // 0x0368(0x0001)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, ExposeOnSpawn, HasGetValueTypeHash)
 
 public:
+	void BndEvt__UI_Menu_Container_Save_UI_Template_DestroySave_K2Node_ComponentBoundEvent_0_disp_Click__DelegateSignature(class UUserWidget* Widget, int32 ID);
+	void BndEvt__UI_Menu_Container_Save_UI_Template_SaveBackup_K2Node_ComponentBoundEvent_1_disp_Click__DelegateSignature(class UUserWidget* Widget, int32 ID);
 	void Construct();
 	void ExecuteUbergraph_UI_Menu_Container_Save(int32 EntryPoint);
+	void F_AcceptDestroy();
+	void F_BackUpCurrentSave();
+	void F_RefreshBackups();
 	void PreConstruct(bool IsDesignTime);
 
 public:

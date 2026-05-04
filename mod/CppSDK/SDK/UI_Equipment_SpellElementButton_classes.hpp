@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
-#include "UI_Equipment_classes.hpp"
 #include "Engine_structs.hpp"
 #include "E_DamageCategory_structs.hpp"
+#include "UI_Equipment_classes.hpp"
 #include "E_ItemCategory_structs.hpp"
 
 

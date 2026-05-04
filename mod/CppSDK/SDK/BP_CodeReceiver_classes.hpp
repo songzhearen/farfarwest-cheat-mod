@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
 #include "S_Activable_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK

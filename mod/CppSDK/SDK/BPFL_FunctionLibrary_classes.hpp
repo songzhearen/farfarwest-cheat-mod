@@ -10,13 +10,13 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
-#include "E_MissionArea_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 #include "SteamCorePro_structs.hpp"
-#include "UMG_structs.hpp"
 #include "E_Rarity_structs.hpp"
+#include "E_MissionArea_structs.hpp"
+#include "UMG_structs.hpp"
 
 
 namespace SDK
@@ -47,7 +47,6 @@ public:
 	static void F_GetRarityInfos(E_Rarity Index_0, class UObject* __WorldContext, struct FLinearColor* Color, class FText* Name_0, class FText* Long_Name);
 	static void F_FilterSessions(const TArray<struct FSteamSessionResult>& SteamSessionResult, int32 SettingId, bool searchedState, class UObject* __WorldContext, TArray<struct FSteamSessionResult>* filteredSessions);
 	static void F_ShortMessage(const class FText& Text, const struct FLinearColor& TextColor, bool Sound, class UObject* __WorldContext);
-	static void F_HasAnyoneReward(class UClass* Reward, class UObject* __WorldContext, bool* UnlockedByAnyone);
 	static void F_AllPlayersCloseEnough(const struct FVector& Location, double Radius, class UObject* __WorldContext, bool* CloseEnough);
 	static void F_GetMapDifficultyInfos(int32 Difficulty, class UObject* __WorldContext, class FText* DifficultyText, int32* Xp);
 	static void F_CalculateMissionInfos(const struct FS_Mission& mission, class UObject* __WorldContext, int32* Xp);
@@ -60,7 +59,6 @@ public:
 	static void F_StringToId(const class FString& String, class UObject* __WorldContext, int32* ID);
 	static void F_SortByClass(TArray<class UClass*>& Array, class UObject* __WorldContext, TArray<class UClass*>* ArrayOut);
 	static void F_GetLowestPlayerLevel(class UObject* __WorldContext, int32* lowestLevel);
-	static void F_HasEveryoneReward(class UClass* Reward, class UObject* __WorldContext, bool* UnlockedByEveryone, TArray<class ABP_PlayerState_C*>* playersMissingReward);
 	static void F_InvalidateWeaponStats(class UObject* __WorldContext);
 	static void F_IsLocationCloseEnough(const struct FVector& Loc, const struct FVector& Origin, double Distance, class UObject* __WorldContext, bool* CloseEnough);
 	static void F_IsLocationFarEnough(TArray<struct FVector>& AvoidedLocations, const struct FVector& Location, double Distance, class UObject* __WorldContext, bool* FarEnough);
@@ -90,12 +88,13 @@ public:
 	static void F_EnoughRoomForPuddle(const struct FVector& BoxPos, class UClass* Class_0, float Radius, class UObject* __WorldContext, bool* EnoughRoom, TArray<class AActor*>* HitPuddles);
 	static void F_GetMapLoadingState(class UObject* __WorldContext, bool* FinishedLoading, bool* mapGeneratorFinished);
 	static void F_GetDamageElement(const class UDamageType* Object, class UObject* __WorldContext, E_DamageCategory* Element);
-	static void F_PredictActorTrajectory(class AActor* Actor, const struct FVector& ProjectileStartLoc, double MaxEstimatedRange, float Precision, class UObject* __WorldContext, struct FVector* StartLoc, struct FVector* HitLocation, double* DistanceToTarget);
+	static void F_PredictActorTrajectory(class AActor* Actor, const struct FVector& ProjectileStartLoc, double MaxEstimatedRange, float Precision, class UObject* __WorldContext, struct FVector* startLoc, struct FVector* HitLocation, double* DistanceToTarget);
 	static void F_GetPlayerState(class AActor* Actor, class UObject* __WorldContext, class ABP_PlayerState_C** AsBP_Player_State);
 	static void F_GetGameInstance(class UObject* __WorldContext, class UBP_CanyonGameInstance_C** AsBG_Game_Instance);
 	static void F_PrintPlayerItems(const struct FS_PlayerSelectedItems& Items, class UObject* __WorldContext);
 	static void F_GetElementInfos(E_DamageCategory Element, class UObject* __WorldContext, struct FLinearColor* Color, struct FLinearColor* DamagesColor, class UMaterialInterface** Material, class UNiagaraSystem** NiagaraSystem, class FText* Name_0, class UTexture2D** Icon, class FName* associatedItem);
 
+	void F_GetItemNameForSpell(class UClass* itemClass, class UObject* __WorldContext, class FName* ItemName);
 	void F_GetSessionSettingValue(const struct FSteamSessionResult& SteamSessionResult, const class FString& Key, class UObject* __WorldContext, int32* integerOut, class FString* stringOut);
 	void F_GetIndexFromWeights(TArray<int32>& Weights, class UObject* __WorldContext, E_Rarity* rarirty);
 

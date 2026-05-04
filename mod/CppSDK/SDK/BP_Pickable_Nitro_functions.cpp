@@ -6,30 +6,30 @@
 * https://github.com/Encryqed/Dumper-7
 */
 
-// Package: BP_Contract
+// Package: BP_Pickable_Nitro
 
 #include "Basic.hpp"
 
-#include "BP_Contract_classes.hpp"
-#include "BP_Contract_parameters.hpp"
+#include "BP_Pickable_Nitro_classes.hpp"
+#include "BP_Pickable_Nitro_parameters.hpp"
 
 
 namespace SDK
 {
 
-// Function BP_Contract.BP_Contract_C.ExecuteUbergraph_BP_Contract
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.ExecuteUbergraph_BP_Pickable_Nitro
 // (Final, UbergraphFunction, HasDefaults)
 // Parameters:
 // int32                                   EntryPoint                                             (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::ExecuteUbergraph_BP_Contract(int32 EntryPoint)
+void ABP_Pickable_Nitro_C::ExecuteUbergraph_BP_Pickable_Nitro(int32 EntryPoint)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "ExecuteUbergraph_BP_Contract");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "ExecuteUbergraph_BP_Pickable_Nitro");
 
-	Params::BP_Contract_C_ExecuteUbergraph_BP_Contract Parms{};
+	Params::BP_Pickable_Nitro_C_ExecuteUbergraph_BP_Pickable_Nitro Parms{};
 
 	Parms.EntryPoint = EntryPoint;
 
@@ -37,21 +37,21 @@ void ABP_Contract_C::ExecuteUbergraph_BP_Contract(int32 EntryPoint)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_Activate
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_Activate
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // int32                                   Wildcard                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // double                                  Delay                                                  (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_Activate(int32 Wildcard, double Delay, class AActor* Owner_0)
+void ABP_Pickable_Nitro_C::F_Activate(int32 Wildcard, double Delay, class AActor* Owner_0)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_Activate");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_Activate");
 
-	Params::BP_Contract_C_F_Activate Parms{};
+	Params::BP_Pickable_Nitro_C_F_Activate Parms{};
 
 	Parms.Wildcard = Wildcard;
 	Parms.Delay = Delay;
@@ -61,7 +61,7 @@ void ABP_Contract_C::F_Activate(int32 Wildcard, double Delay, class AActor* Owne
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_Activate_Location
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_Activate_Location
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // const struct FVector&                   Location                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
@@ -69,14 +69,14 @@ void ABP_Contract_C::F_Activate(int32 Wildcard, double Delay, class AActor* Owne
 // int32                                   Wildcard                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class UPrimitiveComponent*              Component                                              (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_Activate_Location(const struct FVector& Location, class AActor* Owner_0, int32 Wildcard, class UPrimitiveComponent* Component)
+void ABP_Pickable_Nitro_C::F_Activate_Location(const struct FVector& Location, class AActor* Owner_0, int32 Wildcard, class UPrimitiveComponent* Component)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_Activate_Location");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_Activate_Location");
 
-	Params::BP_Contract_C_F_Activate_Location Parms{};
+	Params::BP_Pickable_Nitro_C_F_Activate_Location Parms{};
 
 	Parms.Location = std::move(Location);
 	Parms.Owner_0 = Owner_0;
@@ -87,20 +87,20 @@ void ABP_Contract_C::F_Activate_Location(const struct FVector& Location, class A
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_AddImpulseServer
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_AddImpulseServer
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // const struct FVector&                   HitNormal                                              (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // const struct FVector&                   Location                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_AddImpulseServer(const struct FVector& HitNormal, const struct FVector& Location)
+void ABP_Pickable_Nitro_C::F_AddImpulseServer(const struct FVector& HitNormal, const struct FVector& Location)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_AddImpulseServer");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_AddImpulseServer");
 
-	Params::BP_Contract_C_F_AddImpulseServer Parms{};
+	Params::BP_Pickable_Nitro_C_F_AddImpulseServer Parms{};
 
 	Parms.HitNormal = std::move(HitNormal);
 	Parms.Location = std::move(Location);
@@ -109,20 +109,20 @@ void ABP_Contract_C::F_AddImpulseServer(const struct FVector& HitNormal, const s
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_Bounce
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_Bounce
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // const struct FVector&                   DirectionAxis                                          (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // const struct FVector&                   BounceLoc                                              (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_Bounce(const struct FVector& DirectionAxis, const struct FVector& BounceLoc)
+void ABP_Pickable_Nitro_C::F_Bounce(const struct FVector& DirectionAxis, const struct FVector& BounceLoc)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_Bounce");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_Bounce");
 
-	Params::BP_Contract_C_F_Bounce Parms{};
+	Params::BP_Pickable_Nitro_C_F_Bounce Parms{};
 
 	Parms.DirectionAxis = std::move(DirectionAxis);
 	Parms.BounceLoc = std::move(BounceLoc);
@@ -131,19 +131,19 @@ void ABP_Contract_C::F_Bounce(const struct FVector& DirectionAxis, const struct 
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_BuffManagerClearBuffFromActor
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_BuffManagerClearBuffFromActor
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class UClass*                           Buff                                                   (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_BuffManagerClearBuffFromActor(class UClass* Buff)
+void ABP_Pickable_Nitro_C::F_BuffManagerClearBuffFromActor(class UClass* Buff)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_BuffManagerClearBuffFromActor");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_BuffManagerClearBuffFromActor");
 
-	Params::BP_Contract_C_F_BuffManagerClearBuffFromActor Parms{};
+	Params::BP_Pickable_Nitro_C_F_BuffManagerClearBuffFromActor Parms{};
 
 	Parms.Buff = Buff;
 
@@ -151,20 +151,20 @@ void ABP_Contract_C::F_BuffManagerClearBuffFromActor(class UClass* Buff)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_CanBeAutoAimed
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_CanBeAutoAimed
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // bool*                                   CanBeAutoAimed                                         (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // struct FVector*                         autoAimedLocation                                      (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_CanBeAutoAimed(bool* CanBeAutoAimed, struct FVector* autoAimedLocation)
+void ABP_Pickable_Nitro_C::F_CanBeAutoAimed(bool* CanBeAutoAimed, struct FVector* autoAimedLocation)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_CanBeAutoAimed");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_CanBeAutoAimed");
 
-	Params::BP_Contract_C_F_CanBeAutoAimed Parms{};
+	Params::BP_Pickable_Nitro_C_F_CanBeAutoAimed Parms{};
 
 	UObject::ProcessEvent(Func, &Parms);
 
@@ -176,20 +176,20 @@ void ABP_Contract_C::F_CanBeAutoAimed(bool* CanBeAutoAimed, struct FVector* auto
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_Channel
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_Channel
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class AActor*                           ChannelingOwner                                        (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 // int32                                   Wildcard                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_Channel(class AActor* ChannelingOwner, int32 Wildcard)
+void ABP_Pickable_Nitro_C::F_Channel(class AActor* ChannelingOwner, int32 Wildcard)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_Channel");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_Channel");
 
-	Params::BP_Contract_C_F_Channel Parms{};
+	Params::BP_Pickable_Nitro_C_F_Channel Parms{};
 
 	Parms.ChannelingOwner = ChannelingOwner;
 	Parms.Wildcard = Wildcard;
@@ -198,7 +198,7 @@ void ABP_Contract_C::F_Channel(class AActor* ChannelingOwner, int32 Wildcard)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_DamageFeedback
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_DamageFeedback
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // const struct FHitResult&                Hit                                                    (BlueprintVisible, BlueprintReadOnly, Parm, IsPlainOldData, NoDestructor, ContainsInstancedReference)
@@ -209,14 +209,14 @@ void ABP_Contract_C::F_Channel(class AActor* ChannelingOwner, int32 Wildcard)
 // E_DamageCategory                        Element                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class FName                             ItemName                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_DamageFeedback(const struct FHitResult& Hit, class AActor* Owner_0, double Damages, class UClass* DamageType, bool Critical, E_DamageCategory Element, class FName ItemName)
+void ABP_Pickable_Nitro_C::F_DamageFeedback(const struct FHitResult& Hit, class AActor* Owner_0, double Damages, class UClass* DamageType, bool Critical, E_DamageCategory Element, class FName ItemName)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_DamageFeedback");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_DamageFeedback");
 
-	Params::BP_Contract_C_F_DamageFeedback Parms{};
+	Params::BP_Pickable_Nitro_C_F_DamageFeedback Parms{};
 
 	Parms.Hit = std::move(Hit);
 	Parms.Owner_0 = Owner_0;
@@ -230,34 +230,34 @@ void ABP_Contract_C::F_DamageFeedback(const struct FHitResult& Hit, class AActor
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_EventAlert
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_EventAlert
 // (Public, BlueprintCallable, BlueprintEvent)
 
-void ABP_Contract_C::F_EventAlert()
+void ABP_Pickable_Nitro_C::F_EventAlert()
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_EventAlert");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_EventAlert");
 
 	UObject::ProcessEvent(Func, nullptr);
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_GetBuffs
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_GetBuffs
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // bool*                                   Found                                                  (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // TArray<class UClass*>*                  BuffObjects                                            (Parm, OutParm)
 
-void ABP_Contract_C::F_GetBuffs(bool* Found, TArray<class UClass*>* BuffObjects)
+void ABP_Pickable_Nitro_C::F_GetBuffs(bool* Found, TArray<class UClass*>* BuffObjects)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_GetBuffs");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_GetBuffs");
 
-	Params::BP_Contract_C_F_GetBuffs Parms{};
+	Params::BP_Pickable_Nitro_C_F_GetBuffs Parms{};
 
 	UObject::ProcessEvent(Func, &Parms);
 
@@ -269,19 +269,19 @@ void ABP_Contract_C::F_GetBuffs(bool* Found, TArray<class UClass*>* BuffObjects)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_GetInteractableDatas
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_GetInteractableDatas
 // (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // struct FS_InteractableDatas*            InteractableDatas                                      (Parm, OutParm, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_GetInteractableDatas(struct FS_InteractableDatas* InteractableDatas)
+void ABP_Pickable_Nitro_C::F_GetInteractableDatas(struct FS_InteractableDatas* InteractableDatas)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_GetInteractableDatas");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_GetInteractableDatas");
 
-	Params::BP_Contract_C_F_GetInteractableDatas Parms{};
+	Params::BP_Pickable_Nitro_C_F_GetInteractableDatas Parms{};
 
 	UObject::ProcessEvent(Func, &Parms);
 
@@ -290,21 +290,21 @@ void ABP_Contract_C::F_GetInteractableDatas(struct FS_InteractableDatas* Interac
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_GetShootAtLoc
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_GetShootAtLoc
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // bool*                                   Found                                                  (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // struct FVector*                         Loc                                                    (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class USceneComponent**                 SceneComponent                                         (Parm, OutParm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_GetShootAtLoc(bool* Found, struct FVector* Loc, class USceneComponent** SceneComponent)
+void ABP_Pickable_Nitro_C::F_GetShootAtLoc(bool* Found, struct FVector* Loc, class USceneComponent** SceneComponent)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_GetShootAtLoc");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_GetShootAtLoc");
 
-	Params::BP_Contract_C_F_GetShootAtLoc Parms{};
+	Params::BP_Pickable_Nitro_C_F_GetShootAtLoc Parms{};
 
 	UObject::ProcessEvent(Func, &Parms);
 
@@ -319,20 +319,20 @@ void ABP_Contract_C::F_GetShootAtLoc(bool* Found, struct FVector* Loc, class USc
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_HitMarkerRequest
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_HitMarkerRequest
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // bool                                    Critical                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // bool*                                   Receive                                                (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_HitMarkerRequest(bool Critical, bool* Receive)
+void ABP_Pickable_Nitro_C::F_HitMarkerRequest(bool Critical, bool* Receive)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_HitMarkerRequest");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_HitMarkerRequest");
 
-	Params::BP_Contract_C_F_HitMarkerRequest Parms{};
+	Params::BP_Pickable_Nitro_C_F_HitMarkerRequest Parms{};
 
 	Parms.Critical = Critical;
 
@@ -343,48 +343,34 @@ void ABP_Contract_C::F_HitMarkerRequest(bool Critical, bool* Receive)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_HoverInteract
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_HoverInteract
 // (Public, BlueprintCallable, BlueprintEvent)
 
-void ABP_Contract_C::F_HoverInteract()
+void ABP_Pickable_Nitro_C::F_HoverInteract()
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_HoverInteract");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_HoverInteract");
 
 	UObject::ProcessEvent(Func, nullptr);
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_ImpactFeedback
-// (BlueprintCallable, BlueprintEvent)
-
-void ABP_Contract_C::F_ImpactFeedback()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_ImpactFeedback");
-
-	UObject::ProcessEvent(Func, nullptr);
-}
-
-
-// Function BP_Contract.BP_Contract_C.F_Interact
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_Interact
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 // int32                                   Wildcard                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_Interact(class AActor* Owner_0, int32 Wildcard)
+void ABP_Pickable_Nitro_C::F_Interact(class AActor* Owner_0, int32 Wildcard)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_Interact");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_Interact");
 
-	Params::BP_Contract_C_F_Interact Parms{};
+	Params::BP_Pickable_Nitro_C_F_Interact Parms{};
 
 	Parms.Owner_0 = Owner_0;
 	Parms.Wildcard = Wildcard;
@@ -393,33 +379,33 @@ void ABP_Contract_C::F_Interact(class AActor* Owner_0, int32 Wildcard)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_KillCombo
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_KillCombo
 // (Public, BlueprintCallable, BlueprintEvent)
 
-void ABP_Contract_C::F_KillCombo()
+void ABP_Pickable_Nitro_C::F_KillCombo()
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_KillCombo");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_KillCombo");
 
 	UObject::ProcessEvent(Func, nullptr);
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_PassWildcard
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_PassWildcard
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // int32                                   Wildcard                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_PassWildcard(int32 Wildcard)
+void ABP_Pickable_Nitro_C::F_PassWildcard(int32 Wildcard)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_PassWildcard");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_PassWildcard");
 
-	Params::BP_Contract_C_F_PassWildcard Parms{};
+	Params::BP_Pickable_Nitro_C_F_PassWildcard Parms{};
 
 	Parms.Wildcard = Wildcard;
 
@@ -427,7 +413,7 @@ void ABP_Contract_C::F_PassWildcard(int32 Wildcard)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_PingObject
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_PingObject
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // bool*                                   canBePinged                                            (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
@@ -435,14 +421,14 @@ void ABP_Contract_C::F_PassWildcard(int32 Wildcard)
 // class FText*                            ChatLine                                               (Parm, OutParm)
 // class USceneComponent**                 AttachedComponent                                      (Parm, OutParm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_PingObject(bool* canBePinged, class UClass** pingActor, class FText* ChatLine, class USceneComponent** AttachedComponent)
+void ABP_Pickable_Nitro_C::F_PingObject(bool* canBePinged, class UClass** pingActor, class FText* ChatLine, class USceneComponent** AttachedComponent)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_PingObject");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_PingObject");
 
-	Params::BP_Contract_C_F_PingObject Parms{};
+	Params::BP_Pickable_Nitro_C_F_PingObject Parms{};
 
 	UObject::ProcessEvent(Func, &Parms);
 
@@ -460,19 +446,19 @@ void ABP_Contract_C::F_PingObject(bool* canBePinged, class UClass** pingActor, c
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_QuestProgress
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_QuestProgress
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class FName                             Tag                                                    (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_QuestProgress(class FName Tag)
+void ABP_Pickable_Nitro_C::F_QuestProgress(class FName Tag)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_QuestProgress");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_QuestProgress");
 
-	Params::BP_Contract_C_F_QuestProgress Parms{};
+	Params::BP_Pickable_Nitro_C_F_QuestProgress Parms{};
 
 	Parms.Tag = Tag;
 
@@ -480,21 +466,21 @@ void ABP_Contract_C::F_QuestProgress(class FName Tag)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_ReceiveBuff
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_ReceiveBuff
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 // const struct FVector&                   ReceivedLoc                                            (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class UClass*                           BuffObject                                             (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_ReceiveBuff(class AActor* Owner_0, const struct FVector& ReceivedLoc, class UClass* BuffObject)
+void ABP_Pickable_Nitro_C::F_ReceiveBuff(class AActor* Owner_0, const struct FVector& ReceivedLoc, class UClass* BuffObject)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_ReceiveBuff");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_ReceiveBuff");
 
-	Params::BP_Contract_C_F_ReceiveBuff Parms{};
+	Params::BP_Pickable_Nitro_C_F_ReceiveBuff Parms{};
 
 	Parms.Owner_0 = Owner_0;
 	Parms.ReceivedLoc = std::move(ReceivedLoc);
@@ -504,19 +490,19 @@ void ABP_Contract_C::F_ReceiveBuff(class AActor* Owner_0, const struct FVector& 
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_RemoveBuff
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_RemoveBuff
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class UClass*                           BuffObject                                             (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_RemoveBuff(class UClass* BuffObject)
+void ABP_Pickable_Nitro_C::F_RemoveBuff(class UClass* BuffObject)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_RemoveBuff");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_RemoveBuff");
 
-	Params::BP_Contract_C_F_RemoveBuff Parms{};
+	Params::BP_Pickable_Nitro_C_F_RemoveBuff Parms{};
 
 	Parms.BuffObject = BuffObject;
 
@@ -524,19 +510,19 @@ void ABP_Contract_C::F_RemoveBuff(class UClass* BuffObject)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_RemoveNiagaraSystemOnEnemy
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_RemoveNiagaraSystemOnEnemy
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class UNiagaraSystem*                   System                                                 (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_RemoveNiagaraSystemOnEnemy(class UNiagaraSystem* System)
+void ABP_Pickable_Nitro_C::F_RemoveNiagaraSystemOnEnemy(class UNiagaraSystem* System)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_RemoveNiagaraSystemOnEnemy");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_RemoveNiagaraSystemOnEnemy");
 
-	Params::BP_Contract_C_F_RemoveNiagaraSystemOnEnemy Parms{};
+	Params::BP_Pickable_Nitro_C_F_RemoveNiagaraSystemOnEnemy Parms{};
 
 	Parms.System = System;
 
@@ -544,19 +530,19 @@ void ABP_Contract_C::F_RemoveNiagaraSystemOnEnemy(class UNiagaraSystem* System)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_SendUnlockables
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_SendUnlockables
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // const TArray<class UClass*>&            Unlockables                                            (ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm)
 
-void ABP_Contract_C::F_SendUnlockables(const TArray<class UClass*>& Unlockables)
+void ABP_Pickable_Nitro_C::F_SendUnlockables(const TArray<class UClass*>& Unlockables)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_SendUnlockables");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_SendUnlockables");
 
-	Params::BP_Contract_C_F_SendUnlockables Parms{};
+	Params::BP_Pickable_Nitro_C_F_SendUnlockables Parms{};
 
 	Parms.Unlockables = std::move(Unlockables);
 
@@ -564,7 +550,7 @@ void ABP_Contract_C::F_SendUnlockables(const TArray<class UClass*>& Unlockables)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_ServerDamages
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_ServerDamages
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // double                                  Damages                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
@@ -573,14 +559,14 @@ void ABP_Contract_C::F_SendUnlockables(const TArray<class UClass*>& Unlockables)
 // E_DamageCategory                        Element                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class FName                             ItemName                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_ServerDamages(double Damages, class UClass* DamageType, class AActor* Causer, E_DamageCategory Element, class FName ItemName)
+void ABP_Pickable_Nitro_C::F_ServerDamages(double Damages, class UClass* DamageType, class AActor* Causer, E_DamageCategory Element, class FName ItemName)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_ServerDamages");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_ServerDamages");
 
-	Params::BP_Contract_C_F_ServerDamages Parms{};
+	Params::BP_Pickable_Nitro_C_F_ServerDamages Parms{};
 
 	Parms.Damages = Damages;
 	Parms.DamageType = DamageType;
@@ -592,21 +578,21 @@ void ABP_Contract_C::F_ServerDamages(double Damages, class UClass* DamageType, c
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_ServerExplosion
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_ServerExplosion
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class FName                             ExplosionName                                          (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // double                                  Damages                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class AActor*                           Causer                                                 (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_ServerExplosion(class FName ExplosionName, double Damages, class AActor* Causer)
+void ABP_Pickable_Nitro_C::F_ServerExplosion(class FName ExplosionName, double Damages, class AActor* Causer)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_ServerExplosion");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_ServerExplosion");
 
-	Params::BP_Contract_C_F_ServerExplosion Parms{};
+	Params::BP_Pickable_Nitro_C_F_ServerExplosion Parms{};
 
 	Parms.ExplosionName = ExplosionName;
 	Parms.Damages = Damages;
@@ -616,19 +602,19 @@ void ABP_Contract_C::F_ServerExplosion(class FName ExplosionName, double Damages
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_SetAttachedActor
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_SetAttachedActor
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class AActor*                           AttachedActor                                          (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_SetAttachedActor(class AActor* AttachedActor)
+void ABP_Pickable_Nitro_C::F_SetAttachedActor(class AActor* AttachedActor)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_SetAttachedActor");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_SetAttachedActor");
 
-	Params::BP_Contract_C_F_SetAttachedActor Parms{};
+	Params::BP_Pickable_Nitro_C_F_SetAttachedActor Parms{};
 
 	Parms.AttachedActor = AttachedActor;
 
@@ -636,34 +622,34 @@ void ABP_Contract_C::F_SetAttachedActor(class AActor* AttachedActor)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_SetCanBeDestroyedIfNoPlayerAround
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_SetCanBeDestroyedIfNoPlayerAround
 // (Public, BlueprintCallable, BlueprintEvent)
 
-void ABP_Contract_C::F_SetCanBeDestroyedIfNoPlayerAround()
+void ABP_Pickable_Nitro_C::F_SetCanBeDestroyedIfNoPlayerAround()
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_SetCanBeDestroyedIfNoPlayerAround");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_SetCanBeDestroyedIfNoPlayerAround");
 
 	UObject::ProcessEvent(Func, nullptr);
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_SetCustomMaterialParameter
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_SetCustomMaterialParameter
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class FName                             Param                                                  (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // double                                  Value                                                  (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_SetCustomMaterialParameter(class FName Param, double Value)
+void ABP_Pickable_Nitro_C::F_SetCustomMaterialParameter(class FName Param, double Value)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_SetCustomMaterialParameter");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_SetCustomMaterialParameter");
 
-	Params::BP_Contract_C_F_SetCustomMaterialParameter Parms{};
+	Params::BP_Pickable_Nitro_C_F_SetCustomMaterialParameter Parms{};
 
 	Parms.Param = Param;
 	Parms.Value = Value;
@@ -672,33 +658,19 @@ void ABP_Contract_C::F_SetCustomMaterialParameter(class FName Param, double Valu
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_SetNewContract
-// (BlueprintCallable, BlueprintEvent)
-
-void ABP_Contract_C::F_SetNewContract()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_SetNewContract");
-
-	UObject::ProcessEvent(Func, nullptr);
-}
-
-
-// Function BP_Contract.BP_Contract_C.F_SpawnNiagaraSystemOnEnemy
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_SpawnNiagaraSystemOnEnemy
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class UNiagaraSystem*                   System                                                 (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_SpawnNiagaraSystemOnEnemy(class UNiagaraSystem* System)
+void ABP_Pickable_Nitro_C::F_SpawnNiagaraSystemOnEnemy(class UNiagaraSystem* System)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_SpawnNiagaraSystemOnEnemy");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_SpawnNiagaraSystemOnEnemy");
 
-	Params::BP_Contract_C_F_SpawnNiagaraSystemOnEnemy Parms{};
+	Params::BP_Pickable_Nitro_C_F_SpawnNiagaraSystemOnEnemy Parms{};
 
 	Parms.System = System;
 
@@ -706,19 +678,19 @@ void ABP_Contract_C::F_SpawnNiagaraSystemOnEnemy(class UNiagaraSystem* System)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_StartInteract
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_StartInteract
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_StartInteract(class AActor* Owner_0)
+void ABP_Pickable_Nitro_C::F_StartInteract(class AActor* Owner_0)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_StartInteract");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_StartInteract");
 
-	Params::BP_Contract_C_F_StartInteract Parms{};
+	Params::BP_Pickable_Nitro_C_F_StartInteract Parms{};
 
 	Parms.Owner_0 = Owner_0;
 
@@ -726,7 +698,7 @@ void ABP_Contract_C::F_StartInteract(class AActor* Owner_0)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_StartPhysic
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_StartPhysic
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class UPrimitiveComponent*              Component                                              (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
@@ -736,14 +708,14 @@ void ABP_Contract_C::F_StartInteract(class AActor* Owner_0)
 // class AActor*                           hitOwner                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 // E_DamageCategory                        DamageCategory                                         (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_StartPhysic(class UPrimitiveComponent* Component, const struct FVector& HitLoc, const struct FVector& Normal, double Strenght, class AActor* hitOwner, E_DamageCategory DamageCategory)
+void ABP_Pickable_Nitro_C::F_StartPhysic(class UPrimitiveComponent* Component, const struct FVector& HitLoc, const struct FVector& Normal, double Strenght, class AActor* hitOwner, E_DamageCategory DamageCategory)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_StartPhysic");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_StartPhysic");
 
-	Params::BP_Contract_C_F_StartPhysic Parms{};
+	Params::BP_Pickable_Nitro_C_F_StartPhysic Parms{};
 
 	Parms.Component = Component;
 	Parms.HitLoc = std::move(HitLoc);
@@ -756,19 +728,19 @@ void ABP_Contract_C::F_StartPhysic(class UPrimitiveComponent* Component, const s
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_StopChannel
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_StopChannel
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class AActor*                           ChannelingActor                                        (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_StopChannel(class AActor* ChannelingActor)
+void ABP_Pickable_Nitro_C::F_StopChannel(class AActor* ChannelingActor)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_StopChannel");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_StopChannel");
 
-	Params::BP_Contract_C_F_StopChannel Parms{};
+	Params::BP_Pickable_Nitro_C_F_StopChannel Parms{};
 
 	Parms.ChannelingActor = ChannelingActor;
 
@@ -776,19 +748,19 @@ void ABP_Contract_C::F_StopChannel(class AActor* ChannelingActor)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_StopInteract
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_StopInteract
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_StopInteract(class AActor* Owner_0)
+void ABP_Pickable_Nitro_C::F_StopInteract(class AActor* Owner_0)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_StopInteract");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_StopInteract");
 
-	Params::BP_Contract_C_F_StopInteract Parms{};
+	Params::BP_Pickable_Nitro_C_F_StopInteract Parms{};
 
 	Parms.Owner_0 = Owner_0;
 
@@ -796,81 +768,25 @@ void ABP_Contract_C::F_StopInteract(class AActor* Owner_0)
 }
 
 
-// Function BP_Contract.BP_Contract_C.F_TriggerTalisman
+// Function BP_Pickable_Nitro.BP_Pickable_Nitro_C.F_TriggerTalisman
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class ABP_Item_C*                       Item                                                   (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 // class AActor*                           WildClassActor                                         (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Contract_C::F_TriggerTalisman(class ABP_Item_C* Item, class AActor* WildClassActor)
+void ABP_Pickable_Nitro_C::F_TriggerTalisman(class ABP_Item_C* Item, class AActor* WildClassActor)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_TriggerTalisman");
+		Func = Class->GetFunction("BP_Pickable_Nitro_C", "F_TriggerTalisman");
 
-	Params::BP_Contract_C_F_TriggerTalisman Parms{};
+	Params::BP_Pickable_Nitro_C_F_TriggerTalisman Parms{};
 
 	Parms.Item = Item;
 	Parms.WildClassActor = WildClassActor;
 
 	UObject::ProcessEvent(Func, &Parms);
-}
-
-
-// Function BP_Contract.BP_Contract_C.F_UpdateVotes
-// (Public, HasDefaults, BlueprintCallable, BlueprintEvent)
-
-void ABP_Contract_C::F_UpdateVotes()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "F_UpdateVotes");
-
-	UObject::ProcessEvent(Func, nullptr);
-}
-
-
-// Function BP_Contract.BP_Contract_C.OnRep_mission
-// (BlueprintCallable, BlueprintEvent)
-
-void ABP_Contract_C::OnRep_mission()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "OnRep_mission");
-
-	UObject::ProcessEvent(Func, nullptr);
-}
-
-
-// Function BP_Contract.BP_Contract_C.OnRep_playerVotes
-// (BlueprintCallable, BlueprintEvent)
-
-void ABP_Contract_C::OnRep_playerVotes()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "OnRep_playerVotes");
-
-	UObject::ProcessEvent(Func, nullptr);
-}
-
-
-// Function BP_Contract.BP_Contract_C.ReceiveBeginPlay
-// (Event, Protected, BlueprintEvent)
-
-void ABP_Contract_C::ReceiveBeginPlay()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Contract_C", "ReceiveBeginPlay");
-
-	UObject::ProcessEvent(Func, nullptr);
 }
 
 }

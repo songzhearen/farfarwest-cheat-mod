@@ -10,12 +10,12 @@
 
 #include "Basic.hpp"
 
-#include "Engine_structs.hpp"
-#include "CoreUObject_structs.hpp"
-#include "S_ItemDatas_structs.hpp"
-#include "S_PlayerItems_structs.hpp"
-#include "E_ItemCategory_structs.hpp"
 #include "E_DamageCategory_structs.hpp"
+#include "Engine_structs.hpp"
+#include "S_ItemDatas_structs.hpp"
+#include "CoreUObject_structs.hpp"
+#include "E_ItemCategory_structs.hpp"
+#include "S_PlayerItems_structs.hpp"
 
 
 namespace SDK::Params

@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
-#include "S_LastBulletShot_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
 #include "S_SpawnBullets_structs.hpp"
+#include "S_LastBulletShot_structs.hpp"
 
 
 namespace SDK

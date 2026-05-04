@@ -18,7 +18,7 @@ namespace SDK
 {
 
 // BlueprintGeneratedClass BP_EnemyShield_Cryptic.BP_EnemyShield_Cryptic_C
-// 0x0028 (0x02F0 - 0x02C8)
+// 0x0030 (0x02F8 - 0x02C8)
 class ABP_EnemyShield_Cryptic_C final : public ABP_EnemyShield_C
 {
 public:
@@ -27,6 +27,7 @@ public:
 	int32                                         destroyedBalls;                                    // 0x02D8(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	uint8                                         Pad_2DC[0x4];                                      // 0x02DC(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
 	TArray<class ABP_CrypticSphere_C*>            spawnedSpheres;                                    // 0x02E0(0x0010)(Edit, BlueprintVisible, DisableEditOnTemplate, DisableEditOnInstance)
+	int32                                         spawnedAmount;                                     // 0x02F0(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
 	void ExecuteUbergraph_BP_EnemyShield_Cryptic(int32 EntryPoint);

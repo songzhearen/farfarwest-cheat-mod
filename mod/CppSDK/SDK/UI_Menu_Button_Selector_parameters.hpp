@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
-#include "UMG_structs.hpp"
-#include "S_ButtonSelectorSetting_structs.hpp"
 #include "E_ItemCategory_structs.hpp"
+#include "S_ButtonSelectorSetting_structs.hpp"
+#include "UMG_structs.hpp"
 #include "SlateCore_structs.hpp"
 
 

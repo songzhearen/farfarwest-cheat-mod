@@ -244,6 +244,20 @@ void ABP_Quest_Otto_RidingLicence_C_C::OnRep_raceStarted()
 }
 
 
+// Function BP_Quest_Otto_RidingLicence_C.BP_Quest_Otto_RidingLicence_C_C.OnRep_requiredRings
+// (BlueprintCallable, BlueprintEvent)
+
+void ABP_Quest_Otto_RidingLicence_C_C::OnRep_requiredRings()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_Quest_Otto_RidingLicence_C_C", "OnRep_requiredRings");
+
+	UObject::ProcessEvent(Func, nullptr);
+}
+
+
 // Function BP_Quest_Otto_RidingLicence_C.BP_Quest_Otto_RidingLicence_C_C.OnRequestFailed_1A9943C4402773AEDC5395B12BA442E1
 // (BlueprintCallable, BlueprintEvent)
 

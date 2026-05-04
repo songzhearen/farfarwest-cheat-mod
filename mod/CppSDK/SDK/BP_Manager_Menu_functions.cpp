@@ -68,7 +68,7 @@ void ABP_Manager_Menu_C::F_AdjustPingLocationToSeekedActor(class UClass* Ping, c
 
 
 // Function BP_Manager_Menu.BP_Manager_Menu_C.F_AutoInputs
-// (Public, HasDefaults, BlueprintCallable, BlueprintEvent)
+// (Public, BlueprintCallable, BlueprintEvent)
 
 void ABP_Manager_Menu_C::F_AutoInputs()
 {
@@ -109,6 +109,20 @@ void ABP_Manager_Menu_C::F_CheckIfActorAlreadyPinged(class USceneComponent* Scen
 }
 
 
+// Function BP_Manager_Menu.BP_Manager_Menu_C.F_CheckMicRecordsPermanently
+// (BlueprintCallable, BlueprintEvent)
+
+void ABP_Manager_Menu_C::F_CheckMicRecordsPermanently()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_Manager_Menu_C", "F_CheckMicRecordsPermanently");
+
+	UObject::ProcessEvent(Func, nullptr);
+}
+
+
 // Function BP_Manager_Menu.BP_Manager_Menu_C.F_CheckPermaMic
 // (BlueprintCallable, BlueprintEvent)
 
@@ -118,20 +132,6 @@ void ABP_Manager_Menu_C::F_CheckPermaMic()
 
 	if (Func == nullptr)
 		Func = Class->GetFunction("BP_Manager_Menu_C", "F_CheckPermaMic");
-
-	UObject::ProcessEvent(Func, nullptr);
-}
-
-
-// Function BP_Manager_Menu.BP_Manager_Menu_C.F_CheckPicRecordsPermanently
-// (BlueprintCallable, BlueprintEvent)
-
-void ABP_Manager_Menu_C::F_CheckPicRecordsPermanently()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Manager_Menu_C", "F_CheckPicRecordsPermanently");
 
 	UObject::ProcessEvent(Func, nullptr);
 }
@@ -340,6 +340,34 @@ void ABP_Manager_Menu_C::F_HandleLobbyJournal()
 }
 
 
+// Function BP_Manager_Menu.BP_Manager_Menu_C.F_HandleMouseType
+// (Public, BlueprintCallable, BlueprintEvent)
+
+void ABP_Manager_Menu_C::F_HandleMouseType()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_Manager_Menu_C", "F_HandleMouseType");
+
+	UObject::ProcessEvent(Func, nullptr);
+}
+
+
+// Function BP_Manager_Menu.BP_Manager_Menu_C.F_InitMouseCursor
+// (Public, BlueprintCallable, BlueprintEvent)
+
+void ABP_Manager_Menu_C::F_InitMouseCursor()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_Manager_Menu_C", "F_InitMouseCursor");
+
+	UObject::ProcessEvent(Func, nullptr);
+}
+
+
 // Function BP_Manager_Menu.BP_Manager_Menu_C.F_IsObjectAlreadyPinged
 // (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent, BlueprintPure)
 // Parameters:
@@ -484,26 +512,6 @@ void ABP_Manager_Menu_C::F_PressMap()
 }
 
 
-// Function BP_Manager_Menu.BP_Manager_Menu_C.F_ReceiveDevices
-// (HasOutParams, BlueprintCallable, BlueprintEvent)
-// Parameters:
-// const TArray<struct FAudioInputDeviceInfo>&AvailableDevices                                       (ConstParm, BlueprintVisible, BlueprintReadOnly, Parm, OutParm, ReferenceParm)
-
-void ABP_Manager_Menu_C::F_ReceiveDevices(const TArray<struct FAudioInputDeviceInfo>& AvailableDevices)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Manager_Menu_C", "F_ReceiveDevices");
-
-	Params::BP_Manager_Menu_C_F_ReceiveDevices Parms{};
-
-	Parms.AvailableDevices = std::move(AvailableDevices);
-
-	UObject::ProcessEvent(Func, &Parms);
-}
-
-
 // Function BP_Manager_Menu.BP_Manager_Menu_C.F_RemoveActivePing
 // (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent)
 // Parameters:
@@ -615,15 +623,15 @@ void ABP_Manager_Menu_C::F_TracePing()
 }
 
 
-// Function BP_Manager_Menu.BP_Manager_Menu_C.F_UpdateAudioInput
+// Function BP_Manager_Menu.BP_Manager_Menu_C.F_UpdateAudioInputDevice
 // (BlueprintCallable, BlueprintEvent)
 
-void ABP_Manager_Menu_C::F_UpdateAudioInput()
+void ABP_Manager_Menu_C::F_UpdateAudioInputDevice()
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Manager_Menu_C", "F_UpdateAudioInput");
+		Func = Class->GetFunction("BP_Manager_Menu_C", "F_UpdateAudioInputDevice");
 
 	UObject::ProcessEvent(Func, nullptr);
 }
@@ -932,6 +940,20 @@ void ABP_Manager_Menu_C::InpActEvt_IA_Shoot_K2Node_EnhancedInputActionEvent_1(co
 	Parms.SourceAction = SourceAction;
 
 	UObject::ProcessEvent(Func, &Parms);
+}
+
+
+// Function BP_Manager_Menu.BP_Manager_Menu_C.NewFunction
+// (Public, BlueprintCallable, BlueprintEvent)
+
+void ABP_Manager_Menu_C::NewFunction()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_Manager_Menu_C", "NewFunction");
+
+	UObject::ProcessEvent(Func, nullptr);
 }
 
 

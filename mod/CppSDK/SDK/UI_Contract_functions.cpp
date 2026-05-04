@@ -17,17 +17,43 @@
 namespace SDK
 {
 
-// Function UI_Contract.UI_Contract_C.F_UpdateModifiers
-// (Public, BlueprintCallable, BlueprintEvent)
+// Function UI_Contract.UI_Contract_C.ExecuteUbergraph_UI_Contract
+// (Final, UbergraphFunction, HasDefaults)
+// Parameters:
+// int32                                   EntryPoint                                             (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void UUI_Contract_C::F_UpdateModifiers()
+void UUI_Contract_C::ExecuteUbergraph_UI_Contract(int32 EntryPoint)
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("UI_Contract_C", "F_UpdateModifiers");
+		Func = Class->GetFunction("UI_Contract_C", "ExecuteUbergraph_UI_Contract");
 
-	UObject::ProcessEvent(Func, nullptr);
+	Params::UI_Contract_C_ExecuteUbergraph_UI_Contract Parms{};
+
+	Parms.EntryPoint = EntryPoint;
+
+	UObject::ProcessEvent(Func, &Parms);
+}
+
+
+// Function UI_Contract.UI_Contract_C.F_ClickButton
+// (Public, BlueprintCallable, BlueprintEvent)
+// Parameters:
+// class UButton*                          ClickedButton                                          (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
+
+void UUI_Contract_C::F_ClickButton(class UButton* ClickedButton)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("UI_Contract_C", "F_ClickButton");
+
+	Params::UI_Contract_C_F_ClickButton Parms{};
+
+	Parms.ClickedButton = ClickedButton;
+
+	UObject::ProcessEvent(Func, &Parms);
 }
 
 
@@ -65,26 +91,6 @@ void UUI_Contract_C::F_ReleaseButton()
 }
 
 
-// Function UI_Contract.UI_Contract_C.F_ClickButton
-// (Public, BlueprintCallable, BlueprintEvent)
-// Parameters:
-// class UButton*                          ClickedButton                                          (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, InstancedReference, NoDestructor, HasGetValueTypeHash)
-
-void UUI_Contract_C::F_ClickButton(class UButton* ClickedButton)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("UI_Contract_C", "F_ClickButton");
-
-	Params::UI_Contract_C_F_ClickButton Parms{};
-
-	Parms.ClickedButton = ClickedButton;
-
-	UObject::ProcessEvent(Func, &Parms);
-}
-
-
 // Function UI_Contract.UI_Contract_C.F_SelectItem
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
@@ -109,23 +115,17 @@ void UUI_Contract_C::F_SelectItem(class UClass* Item, E_ItemCategory Category, i
 }
 
 
-// Function UI_Contract.UI_Contract_C.ExecuteUbergraph_UI_Contract
-// (Final, UbergraphFunction, HasDefaults)
-// Parameters:
-// int32                                   EntryPoint                                             (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// Function UI_Contract.UI_Contract_C.F_UpdateModifiers
+// (Public, BlueprintCallable, BlueprintEvent)
 
-void UUI_Contract_C::ExecuteUbergraph_UI_Contract(int32 EntryPoint)
+void UUI_Contract_C::F_UpdateModifiers()
 {
 	static class UFunction* Func = nullptr;
 
 	if (Func == nullptr)
-		Func = Class->GetFunction("UI_Contract_C", "ExecuteUbergraph_UI_Contract");
+		Func = Class->GetFunction("UI_Contract_C", "F_UpdateModifiers");
 
-	Params::UI_Contract_C_ExecuteUbergraph_UI_Contract Parms{};
-
-	Parms.EntryPoint = EntryPoint;
-
-	UObject::ProcessEvent(Func, &Parms);
+	UObject::ProcessEvent(Func, nullptr);
 }
 
 }

@@ -199,7 +199,7 @@ public:
 		return GetDefaultObjImpl<UPCGCopyAttributesSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGCopyAttributesSettings;
+DUMPER7_ASSERTS_UPCGCopyAttributesSettings;
 
 // Class PCG.PCGAttributeTransferSettings
 // 0x0000 (0x01A0 - 0x01A0)
@@ -1878,7 +1878,7 @@ public:
 		return GetDefaultObjImpl<UPCGCleanSplineSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGCleanSplineSettings;
+DUMPER7_ASSERTS_UPCGCleanSplineSettings;
 
 // Class PCG.PCGInstanceDataInterface
 // 0x0008 (0x0098 - 0x0090)
@@ -2788,7 +2788,7 @@ public:
 		return GetDefaultObjImpl<UPCGSpatialData>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGSpatialData;
+DUMPER7_ASSERTS_UPCGSpatialData;
 
 // Class PCG.PCGBasePointData
 // 0x0118 (0x01B0 - 0x0098)
@@ -2864,7 +2864,7 @@ public:
 		return GetDefaultObjImpl<UPCGBasePointData>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGBasePointData;
+DUMPER7_ASSERTS_UPCGBasePointData;
 
 // Class PCG.PCGSpatialDataWithPointCache
 // 0x0078 (0x0110 - 0x0098)
@@ -2889,7 +2889,7 @@ public:
 		return GetDefaultObjImpl<UPCGSpatialDataWithPointCache>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGSpatialDataWithPointCache;
+DUMPER7_ASSERTS_UPCGSpatialDataWithPointCache;
 
 // Class PCG.PCGElevationIsolinesSettings
 // 0x0028 (0x00F0 - 0x00C8)
@@ -3126,7 +3126,7 @@ public:
 		return GetDefaultObjImpl<UPCGDistanceSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGDistanceSettings;
+DUMPER7_ASSERTS_UPCGDistanceSettings;
 
 // Class PCG.PCGLandscapeData
 // 0x0070 (0x0220 - 0x01B0)
@@ -3191,7 +3191,7 @@ public:
 		return GetDefaultObjImpl<UPCGPolyLineData>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGPolyLineData;
+DUMPER7_ASSERTS_UPCGPolyLineData;
 
 // Class PCG.PCGSettingsWithDynamicInputs
 // 0x0010 (0x00D8 - 0x00C8)
@@ -3238,7 +3238,7 @@ public:
 		return GetDefaultObjImpl<UPCGLandscapeSplineData>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGLandscapeSplineData;
+DUMPER7_ASSERTS_UPCGLandscapeSplineData;
 
 // Class PCG.PCGPointArrayData
 // 0x01B0 (0x0360 - 0x01B0)
@@ -3864,7 +3864,7 @@ public:
 		return GetDefaultObjImpl<UPCGHiGenGridSizeSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGHiGenGridSizeSettings;
+DUMPER7_ASSERTS_UPCGHiGenGridSizeSettings;
 
 // Class PCG.PCGVirtualTextureData
 // 0x0000 (0x01B0 - 0x01B0)
@@ -4714,7 +4714,7 @@ public:
 		return GetDefaultObjImpl<UPCGSubdivideSegmentSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGSubdivideSegmentSettings;
+DUMPER7_ASSERTS_UPCGSubdivideSegmentSettings;
 
 // Class PCG.PCGBaseSubgraphSettings
 // 0x0000 (0x00C8 - 0x00C8)
@@ -5414,7 +5414,7 @@ public:
 		return GetDefaultObjImpl<UPCGPointNeighborhoodSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGPointNeighborhoodSettings;
+DUMPER7_ASSERTS_UPCGPointNeighborhoodSettings;
 
 // Class PCG.PCGMetadataBitwiseSettings
 // 0x0088 (0x0200 - 0x0178)
@@ -5440,7 +5440,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataBitwiseSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataBitwiseSettings;
+DUMPER7_ASSERTS_UPCGMetadataBitwiseSettings;
 
 // Class PCG.PCGMetadataBooleanSettings
 // 0x0088 (0x0200 - 0x0178)
@@ -5466,7 +5466,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataBooleanSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataBooleanSettings;
+DUMPER7_ASSERTS_UPCGMetadataBooleanSettings;
 
 // Class PCG.PCGDataNumSettings
 // 0x0008 (0x00D0 - 0x00C8)
@@ -5587,7 +5587,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataCompareSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataCompareSettings;
+DUMPER7_ASSERTS_UPCGMetadataCompareSettings;
 
 // Class PCG.PCGMetadataMakeRotatorSettings
 // 0x00C8 (0x0240 - 0x0178)
@@ -5642,7 +5642,7 @@ public:
 		return GetDefaultObjImpl<UPCGDeleteTagsSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGDeleteTagsSettings;
+DUMPER7_ASSERTS_UPCGDeleteTagsSettings;
 
 // Class PCG.PCGMetadataMakeTransformSettings
 // 0x00C0 (0x0238 - 0x0178)
@@ -5726,7 +5726,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataMathsSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataMathsSettings;
+DUMPER7_ASSERTS_UPCGMetadataMathsSettings;
 
 // Class PCG.PCGMetadataPartitionSettings
 // 0x0030 (0x00F8 - 0x00C8)
@@ -5895,7 +5895,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataRotatorSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataRotatorSettings;
+DUMPER7_ASSERTS_UPCGMetadataRotatorSettings;
 
 // Class PCG.PCGMetadataStringOpSettings
 // 0x00C8 (0x0240 - 0x0178)
@@ -5923,7 +5923,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataStringOpSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataStringOpSettings;
+DUMPER7_ASSERTS_UPCGMetadataStringOpSettings;
 
 // Class PCG.PCGSpatialNoiseSettings
 // 0x0148 (0x0210 - 0x00C8)
@@ -5967,7 +5967,7 @@ public:
 		return GetDefaultObjImpl<UPCGSpatialNoiseSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGSpatialNoiseSettings;
+DUMPER7_ASSERTS_UPCGSpatialNoiseSettings;
 
 // Class PCG.PCGMetadataTransformSettings
 // 0x00C8 (0x0240 - 0x0178)
@@ -5995,7 +5995,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataTransformSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataTransformSettings;
+DUMPER7_ASSERTS_UPCGMetadataTransformSettings;
 
 // Class PCG.PCGMetadataTrigSettings
 // 0x0088 (0x0200 - 0x0178)
@@ -6021,7 +6021,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataTrigSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataTrigSettings;
+DUMPER7_ASSERTS_UPCGMetadataTrigSettings;
 
 // Class PCG.PCGSelectPointsSettings
 // 0x0008 (0x00D0 - 0x00C8)
@@ -6072,7 +6072,7 @@ public:
 		return GetDefaultObjImpl<UPCGMetadataVectorSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGMetadataVectorSettings;
+DUMPER7_ASSERTS_UPCGMetadataVectorSettings;
 
 // Class PCG.PCGAddComponentSettings
 // 0x00E0 (0x01A8 - 0x00C8)
@@ -6670,7 +6670,7 @@ public:
 		return GetDefaultObjImpl<UPCGAttributeRemapSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGAttributeRemapSettings;
+DUMPER7_ASSERTS_UPCGAttributeRemapSettings;
 
 // Class PCG.PCGTransformPointsSettings
 // 0x00B8 (0x0180 - 0x00C8)
@@ -6762,7 +6762,7 @@ public:
 		return GetDefaultObjImpl<UPCGAttributeSelectSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGAttributeSelectSettings;
+DUMPER7_ASSERTS_UPCGAttributeSelectSettings;
 
 // Class PCG.PCGSplitPointsSettings
 // 0x0008 (0x00D0 - 0x00C8)
@@ -6817,7 +6817,7 @@ public:
 		return GetDefaultObjImpl<UPCGBlurSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGBlurSettings;
+DUMPER7_ASSERTS_UPCGBlurSettings;
 
 // Class PCG.PCGBoundsModifierSettings
 // 0x0040 (0x0108 - 0x00C8)
@@ -7235,7 +7235,7 @@ public:
 		return GetDefaultObjImpl<UPCGDeleteAttributesSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGDeleteAttributesSettings;
+DUMPER7_ASSERTS_UPCGDeleteAttributesSettings;
 
 // Class PCG.PCGDensityFilterSettings
 // 0x0010 (0x00D8 - 0x00C8)
@@ -7383,7 +7383,7 @@ public:
 		return GetDefaultObjImpl<UPCGFilterByAttributeSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGFilterByAttributeSettings;
+DUMPER7_ASSERTS_UPCGFilterByAttributeSettings;
 
 // Class PCG.PCGFilterByTagSettings
 // 0x0020 (0x00E8 - 0x00C8)
@@ -7411,7 +7411,7 @@ public:
 		return GetDefaultObjImpl<UPCGFilterByTagSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGFilterByTagSettings;
+DUMPER7_ASSERTS_UPCGFilterByTagSettings;
 
 // Class PCG.PCGFilterElementsByIndexSettings
 // 0x0060 (0x0128 - 0x00C8)
@@ -8255,7 +8255,7 @@ public:
 		return GetDefaultObjImpl<UPCGSpawnActorSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGSpawnActorSettings;
+DUMPER7_ASSERTS_UPCGSpawnActorSettings;
 
 // Class PCG.PCGSpawnSplineSettings
 // 0x00A8 (0x0170 - 0x00C8)
@@ -8313,7 +8313,7 @@ public:
 		return GetDefaultObjImpl<UPCGReverseSplineSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGReverseSplineSettings;
+DUMPER7_ASSERTS_UPCGReverseSplineSettings;
 
 // Class PCG.PCGSplineSamplerSettings
 // 0x0138 (0x0200 - 0x00C8)
@@ -8366,7 +8366,7 @@ public:
 		return GetDefaultObjImpl<UPCGSplitSplinesSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGSplitSplinesSettings;
+DUMPER7_ASSERTS_UPCGSplitSplinesSettings;
 
 // Class PCG.PCGStaticMeshSpawnerKernel
 // 0x0008 (0x00A0 - 0x0098)
@@ -8821,7 +8821,7 @@ public:
 		return GetDefaultObjImpl<UPCGOffsetPolygon2DSettings>();
 	}
 };
-//DUMPER7_ASSERTS_UPCGOffsetPolygon2DSettings;
+DUMPER7_ASSERTS_UPCGOffsetPolygon2DSettings;
 
 // Class PCG.PCGPolygon2DOperationSettings
 // 0x0018 (0x00E0 - 0x00C8)
@@ -8897,7 +8897,7 @@ public:
 		return GetDefaultObjImpl<UPCGGridLinkageSettings>();
 	}
 };
-////DUMPER7_ASSERTS_UPCGGridLinkageSettings;
+DUMPER7_ASSERTS_UPCGGridLinkageSettings;
 
 // Class PCG.PCGLandscapeCache
 // 0x00B8 (0x00E0 - 0x0028)

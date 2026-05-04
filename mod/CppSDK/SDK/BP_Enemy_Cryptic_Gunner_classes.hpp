@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "BP_Enemy_classes.hpp"
 #include "Engine_structs.hpp"
 #include "CoreUObject_structs.hpp"
-#include "BP_Enemy_classes.hpp"
 
 
 namespace SDK
@@ -25,7 +25,7 @@ class ABP_Enemy_Cryptic_Gunner_C final : public ABP_Enemy_C
 public:
 	uint8                                         Pad_8D1[0x7];                                      // 0x08D1(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
 	struct FPointerToUberGraphFrame               UberGraphFrame_BP_Enemy_Cryptic_Gunner_C;          // 0x08D8(0x0008)(ZeroConstructor, Transient, DuplicateTransient)
-	struct FVector                                shootLoc;                                          // 0x08E0(0x0018)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	struct FVector                                ShootLoc;                                          // 0x08E0(0x0018)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	bool                                          canMove;                                           // 0x08F8(0x0001)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 	uint8                                         Pad_8F9[0x7];                                      // 0x08F9(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
 	double                                        pulserSpeed;                                       // 0x0900(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)

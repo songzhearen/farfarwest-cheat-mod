@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "Engine_structs.hpp"
 #include "UI_Equipment_Progress_classes.hpp"
+#include "Engine_structs.hpp"
 
 
 namespace SDK
@@ -60,6 +60,7 @@ public:
 	void Destruct();
 	void ExecuteUbergraph_UI_Equipment_Spell(int32 EntryPoint);
 	void F_AssignSpellToSlot(int32 Slot_0);
+	void F_GetItemNameForSpell(class FName* ItemName_0);
 	void F_GoBack(bool forced);
 	void F_Refresh();
 	void F_RefreshActiveSpellclass(class UClass* spellcass);

@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
-#include "E_ItemCategory_structs.hpp"
 #include "E_ChallengeCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "UMG_classes.hpp"
+#include "E_ItemCategory_structs.hpp"
 
 
 namespace SDK

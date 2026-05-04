@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
+#include "BP_Enemy_classes.hpp"
 #include "Engine_structs.hpp"
 #include "CoreUObject_structs.hpp"
-#include "BP_Enemy_classes.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK

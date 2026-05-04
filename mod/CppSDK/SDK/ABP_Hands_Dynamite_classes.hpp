@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
+#include "ABP_Hands_Dynamite_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
 #include "AnimGraphRuntime_structs.hpp"
-#include "ABP_Hands_Dynamite_structs.hpp"
 
 
 namespace SDK

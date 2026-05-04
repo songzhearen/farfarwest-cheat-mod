@@ -11,8 +11,8 @@
 #include "Basic.hpp"
 
 #include "Engine_structs.hpp"
-#include "UI_Menu_Root_classes.hpp"
 #include "E_ItemCategory_structs.hpp"
+#include "UI_Menu_Root_classes.hpp"
 
 
 namespace SDK

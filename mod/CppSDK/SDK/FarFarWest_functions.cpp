@@ -209,6 +209,59 @@ class FString UCPP_FunctionLibrary::GetCurrentRHI()
 }
 
 
+// Function FarFarWest.CPP_FunctionLibrary.GetOSDefaultLanguage
+// (Final, Native, Static, Public, BlueprintCallable, BlueprintPure)
+// Parameters:
+// class FString                           ReturnValue                                            (Parm, OutParm, ZeroConstructor, ReturnParm, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+
+class FString UCPP_FunctionLibrary::GetOSDefaultLanguage()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = StaticClass()->GetFunction("CPP_FunctionLibrary", "GetOSDefaultLanguage");
+
+	Params::CPP_FunctionLibrary_GetOSDefaultLanguage Parms{};
+
+	auto Flgs = Func->FunctionFlags;
+	Func->FunctionFlags |= 0x400;
+
+	GetDefaultObj()->ProcessEvent(Func, &Parms);
+
+	Func->FunctionFlags = Flgs;
+
+	return Parms.ReturnValue;
+}
+
+
+// Function FarFarWest.CPP_FunctionLibrary.GetSafeMicrophoneList
+// (Final, Native, Static, Public, BlueprintCallable)
+// Parameters:
+// class UObject*                          WorldContextObject                                     (Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+// TArray<class FString>                   ReturnValue                                            (Parm, OutParm, ZeroConstructor, ReturnParm, NativeAccessSpecifierPublic)
+
+TArray<class FString> UCPP_FunctionLibrary::GetSafeMicrophoneList(class UObject* WorldContextObject)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = StaticClass()->GetFunction("CPP_FunctionLibrary", "GetSafeMicrophoneList");
+
+	Params::CPP_FunctionLibrary_GetSafeMicrophoneList Parms{};
+
+	Parms.WorldContextObject = WorldContextObject;
+
+	auto Flgs = Func->FunctionFlags;
+	Func->FunctionFlags |= 0x400;
+
+	GetDefaultObj()->ProcessEvent(Func, &Parms);
+
+	Func->FunctionFlags = Flgs;
+
+	return Parms.ReturnValue;
+}
+
+
 // Function FarFarWest.CPP_FunctionLibrary.HasFocusOnWindow
 // (Final, Native, Static, Public, BlueprintCallable)
 // Parameters:
@@ -321,9 +374,10 @@ bool UCPP_FunctionLibrary::SafeDoesSaveGameExist(const class FString& SlotName)
 // const class FString&                    SlotName                                               (Parm, ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 // int32                                   UserIndex                                              (Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 // const class FString&                    EncryptionKey                                          (Parm, ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+// bool                                    bUseSavExtension                                       (Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 // class USaveGame*                        ReturnValue                                            (Parm, OutParm, ZeroConstructor, ReturnParm, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 
-class USaveGame* UCPP_FunctionLibrary::SafeLoadGameFromSlot(const class FString& SlotName, int32 UserIndex, const class FString& EncryptionKey)
+class USaveGame* UCPP_FunctionLibrary::SafeLoadGameFromSlot(const class FString& SlotName, int32 UserIndex, const class FString& EncryptionKey, bool bUseSavExtension)
 {
 	static class UFunction* Func = nullptr;
 
@@ -335,6 +389,7 @@ class USaveGame* UCPP_FunctionLibrary::SafeLoadGameFromSlot(const class FString&
 	Parms.SlotName = std::move(SlotName);
 	Parms.UserIndex = UserIndex;
 	Parms.EncryptionKey = std::move(EncryptionKey);
+	Parms.bUseSavExtension = bUseSavExtension;
 
 	auto Flgs = Func->FunctionFlags;
 	Func->FunctionFlags |= 0x400;
@@ -354,9 +409,10 @@ class USaveGame* UCPP_FunctionLibrary::SafeLoadGameFromSlot(const class FString&
 // const class FString&                    SlotName                                               (Parm, ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 // int32                                   UserIndex                                              (Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 // const class FString&                    EncryptionKey                                          (Parm, ZeroConstructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
+// bool                                    bUseSavExtension                                       (Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 // bool                                    ReturnValue                                            (Parm, OutParm, ZeroConstructor, ReturnParm, IsPlainOldData, NoDestructor, HasGetValueTypeHash, NativeAccessSpecifierPublic)
 
-bool UCPP_FunctionLibrary::SafeSaveGameToSlot(class USaveGame* SaveGameObject, const class FString& SlotName, int32 UserIndex, const class FString& EncryptionKey)
+bool UCPP_FunctionLibrary::SafeSaveGameToSlot(class USaveGame* SaveGameObject, const class FString& SlotName, int32 UserIndex, const class FString& EncryptionKey, bool bUseSavExtension)
 {
 	static class UFunction* Func = nullptr;
 
@@ -369,6 +425,7 @@ bool UCPP_FunctionLibrary::SafeSaveGameToSlot(class USaveGame* SaveGameObject, c
 	Parms.SlotName = std::move(SlotName);
 	Parms.UserIndex = UserIndex;
 	Parms.EncryptionKey = std::move(EncryptionKey);
+	Parms.bUseSavExtension = bUseSavExtension;
 
 	auto Flgs = Func->FunctionFlags;
 	Func->FunctionFlags |= 0x400;

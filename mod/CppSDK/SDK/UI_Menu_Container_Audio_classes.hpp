@@ -41,9 +41,7 @@ public:
 	void Destruct();
 	void ExecuteUbergraph_UI_Menu_Container_Audio(int32 EntryPoint);
 	void F_ApplyAndSave();
-	void F_ReceiveAudioDevices(const TArray<struct FAudioInputDeviceInfo2>& AvailableDevices);
 	void F_Save();
-	void Tick(const struct FGeometry& MyGeometry, float InDeltaTime);
 
 public:
 	static class UClass* StaticClass()

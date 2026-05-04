@@ -12,8 +12,8 @@
 
 #include "Engine_structs.hpp"
 #include "E_DamageCategory_structs.hpp"
-#include "BP_Animal_Pig_classes.hpp"
 #include "AIModule_structs.hpp"
+#include "BP_Animal_Pig_classes.hpp"
 
 
 namespace SDK

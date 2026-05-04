@@ -99,6 +99,27 @@ void UUI_Equipment_Spell_C::F_AssignSpellToSlot(int32 Slot_0)
 }
 
 
+// Function UI_Equipment_Spell.UI_Equipment_Spell_C.F_GetItemNameForSpell
+// (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent, BlueprintPure)
+// Parameters:
+// class FName*                            ItemName_0                                             (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+
+void UUI_Equipment_Spell_C::F_GetItemNameForSpell(class FName* ItemName_0)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("UI_Equipment_Spell_C", "F_GetItemNameForSpell");
+
+	Params::UI_Equipment_Spell_C_F_GetItemNameForSpell Parms{};
+
+	UObject::ProcessEvent(Func, &Parms);
+
+	if (ItemName_0 != nullptr)
+		*ItemName_0 = Parms.ItemName_0;
+}
+
+
 // Function UI_Equipment_Spell.UI_Equipment_Spell_C.F_GoBack
 // (BlueprintCallable, BlueprintEvent)
 // Parameters:

@@ -17,6 +17,20 @@
 namespace SDK
 {
 
+// Function BP_PhysicObject.BP_PhysicObject_C.ReceiveBeginPlay
+// (Event, Protected, BlueprintEvent)
+
+void ABP_PhysicObject_C::ReceiveBeginPlay()
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_PhysicObject_C", "ReceiveBeginPlay");
+
+	UObject::ProcessEvent(Func, nullptr);
+}
+
+
 // Function BP_PhysicObject.BP_PhysicObject_C.F_GetShootAtLoc
 // (Public, HasOutParams, BlueprintCallable, BlueprintEvent)
 // Parameters:
@@ -807,20 +821,6 @@ void ABP_PhysicObject_C::F_StartPhysic(class UPrimitiveComponent* Component, con
 	Parms.DamageCategory = DamageCategory;
 
 	UObject::ProcessEvent(Func, &Parms);
-}
-
-
-// Function BP_PhysicObject.BP_PhysicObject_C.ReceiveBeginPlay
-// (Event, Protected, BlueprintEvent)
-
-void ABP_PhysicObject_C::ReceiveBeginPlay()
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_PhysicObject_C", "ReceiveBeginPlay");
-
-	UObject::ProcessEvent(Func, nullptr);
 }
 
 

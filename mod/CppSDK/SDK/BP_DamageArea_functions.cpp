@@ -17,30 +17,6 @@
 namespace SDK
 {
 
-// Function BP_DamageArea.BP_DamageArea_C.F_ReceiveBuff
-// (Public, BlueprintCallable, BlueprintEvent)
-// Parameters:
-// class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-// const struct FVector&                   ReceivedLoc                                            (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-// class UClass*                           BuffObject_0                                           (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-
-void ABP_DamageArea_C::F_ReceiveBuff(class AActor* Owner_0, const struct FVector& ReceivedLoc, class UClass* BuffObject_0)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_DamageArea_C", "F_ReceiveBuff");
-
-	Params::BP_DamageArea_C_F_ReceiveBuff Parms{};
-
-	Parms.Owner_0 = Owner_0;
-	Parms.ReceivedLoc = std::move(ReceivedLoc);
-	Parms.BuffObject_0 = BuffObject_0;
-
-	UObject::ProcessEvent(Func, &Parms);
-}
-
-
 // Function BP_DamageArea.BP_DamageArea_C.ReceiveBeginPlay
 // (Event, Protected, BlueprintEvent)
 
@@ -340,6 +316,30 @@ void ABP_DamageArea_C::F_Activate(int32 Wildcard, double Delay, class AActor* Ow
 	Parms.Wildcard = Wildcard;
 	Parms.Delay = Delay;
 	Parms.Owner_0 = Owner_0;
+
+	UObject::ProcessEvent(Func, &Parms);
+}
+
+
+// Function BP_DamageArea.BP_DamageArea_C.F_ReceiveBuff
+// (Public, BlueprintCallable, BlueprintEvent)
+// Parameters:
+// class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+// const struct FVector&                   ReceivedLoc                                            (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// class UClass*                           BuffObject_0                                           (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+
+void ABP_DamageArea_C::F_ReceiveBuff(class AActor* Owner_0, const struct FVector& ReceivedLoc, class UClass* BuffObject_0)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_DamageArea_C", "F_ReceiveBuff");
+
+	Params::BP_DamageArea_C_F_ReceiveBuff Parms{};
+
+	Parms.Owner_0 = Owner_0;
+	Parms.ReceivedLoc = std::move(ReceivedLoc);
+	Parms.BuffObject_0 = BuffObject_0;
 
 	UObject::ProcessEvent(Func, &Parms);
 }

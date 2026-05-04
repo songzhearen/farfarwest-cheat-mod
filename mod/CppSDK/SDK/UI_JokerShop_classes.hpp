@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "Engine_structs.hpp"
 #include "UI_Equipment_classes.hpp"
 #include "S_PlayerItemJokers_structs.hpp"
-#include "Engine_structs.hpp"
 #include "E_Rarity_structs.hpp"
 
 

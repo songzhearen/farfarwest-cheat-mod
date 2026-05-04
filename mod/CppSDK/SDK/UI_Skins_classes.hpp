@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
+#include "S_PlayerSkins_structs.hpp"
+#include "UI_Equipment_Progress_classes.hpp"
 #include "Engine_structs.hpp"
 #include "E_Rarity_structs.hpp"
-#include "UI_Equipment_Progress_classes.hpp"
-#include "S_PlayerSkins_structs.hpp"
 
 
 namespace SDK

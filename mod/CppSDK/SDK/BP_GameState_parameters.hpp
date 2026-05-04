@@ -10,9 +10,9 @@
 
 #include "Basic.hpp"
 
+#include "E_Army_structs.hpp"
 #include "CoreUObject_structs.hpp"
 #include "Engine_structs.hpp"
-#include "E_Army_structs.hpp"
 #include "UMG_structs.hpp"
 #include "MovieScene_structs.hpp"
 

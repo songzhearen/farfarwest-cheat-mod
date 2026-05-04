@@ -10,19 +10,19 @@
 
 #include "Basic.hpp"
 
-#include "Engine_classes.hpp"
 #include "S_PlayerProgress_structs.hpp"
+#include "Engine_classes.hpp"
 
 
 namespace SDK
 {
 
 // BlueprintGeneratedClass SG_PlayerProgress.SG_PlayerProgress_C
-// 0x0258 (0x0280 - 0x0028)
+// 0x0248 (0x0270 - 0x0028)
 class USG_PlayerProgress_C final : public USaveGame
 {
 public:
-	struct FS_PlayerProgress                      playerProgress;                                    // 0x0028(0x0258)(Edit, BlueprintVisible, DisableEditOnInstance, HasGetValueTypeHash)
+	struct FS_PlayerProgress                      playerProgress;                                    // 0x0028(0x0248)(Edit, BlueprintVisible, DisableEditOnInstance, HasGetValueTypeHash)
 
 public:
 	static class UClass* StaticClass()

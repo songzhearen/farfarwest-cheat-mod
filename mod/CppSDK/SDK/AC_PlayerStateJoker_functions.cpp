@@ -187,6 +187,26 @@ void UAC_PlayerStateJoker_C::F_JokerToolBoxReset()
 }
 
 
+// Function AC_PlayerStateJoker.AC_PlayerStateJoker_C.F_SetPlayerMaxHeal
+// (Net, NetServer, BlueprintCallable, BlueprintEvent)
+// Parameters:
+// double                                  heal                                                   (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+
+void UAC_PlayerStateJoker_C::F_SetPlayerMaxHeal(double heal)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("AC_PlayerStateJoker_C", "F_SetPlayerMaxHeal");
+
+	Params::AC_PlayerStateJoker_C_F_SetPlayerMaxHeal Parms{};
+
+	Parms.heal = heal;
+
+	UObject::ProcessEvent(Func, &Parms);
+}
+
+
 // Function AC_PlayerStateJoker.AC_PlayerStateJoker_C.F_StoreCurrentUsedWeapons
 // (Public, BlueprintCallable, BlueprintEvent)
 

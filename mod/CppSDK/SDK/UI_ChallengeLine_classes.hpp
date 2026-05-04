@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
+#include "E_ChallengeCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "S_PlayerChallenges_structs.hpp"
 #include "UMG_classes.hpp"
-#include "E_ChallengeCategory_structs.hpp"
 
 
 namespace SDK

@@ -10,12 +10,12 @@
 
 #include "Basic.hpp"
 
-#include "E_FoodType_structs.hpp"
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
+#include "E_FoodType_structs.hpp"
 #include "CoreUObject_structs.hpp"
 #include "AIModule_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK

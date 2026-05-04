@@ -569,32 +569,6 @@ void UBPFL_FunctionLibrary_C::F_ShortMessage(const class FText& Text, const stru
 }
 
 
-// Function BPFL_FunctionLibrary.BPFL_FunctionLibrary_C.F_HasAnyoneReward
-// (Static, Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent, BlueprintPure)
-// Parameters:
-// class UClass*                           Reward                                                 (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-// class UObject*                          __WorldContext                                         (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-// bool*                                   UnlockedByAnyone                                       (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-
-void UBPFL_FunctionLibrary_C::F_HasAnyoneReward(class UClass* Reward, class UObject* __WorldContext, bool* UnlockedByAnyone)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = StaticClass()->GetFunction("BPFL_FunctionLibrary_C", "F_HasAnyoneReward");
-
-	Params::BPFL_FunctionLibrary_C_F_HasAnyoneReward Parms{};
-
-	Parms.Reward = Reward;
-	Parms.__WorldContext = __WorldContext;
-
-	GetDefaultObj()->ProcessEvent(Func, &Parms);
-
-	if (UnlockedByAnyone != nullptr)
-		*UnlockedByAnyone = Parms.UnlockedByAnyone;
-}
-
-
 // Function BPFL_FunctionLibrary.BPFL_FunctionLibrary_C.F_AllPlayersCloseEnough
 // (Static, Public, HasOutParams, BlueprintCallable, BlueprintEvent, BlueprintPure)
 // Parameters:
@@ -910,36 +884,6 @@ void UBPFL_FunctionLibrary_C::F_GetLowestPlayerLevel(class UObject* __WorldConte
 
 	if (lowestLevel != nullptr)
 		*lowestLevel = Parms.lowestLevel;
-}
-
-
-// Function BPFL_FunctionLibrary.BPFL_FunctionLibrary_C.F_HasEveryoneReward
-// (Static, Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent, BlueprintPure)
-// Parameters:
-// class UClass*                           Reward                                                 (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-// class UObject*                          __WorldContext                                         (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-// bool*                                   UnlockedByEveryone                                     (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-// TArray<class ABP_PlayerState_C*>*       playersMissingReward                                   (Parm, OutParm)
-
-void UBPFL_FunctionLibrary_C::F_HasEveryoneReward(class UClass* Reward, class UObject* __WorldContext, bool* UnlockedByEveryone, TArray<class ABP_PlayerState_C*>* playersMissingReward)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = StaticClass()->GetFunction("BPFL_FunctionLibrary_C", "F_HasEveryoneReward");
-
-	Params::BPFL_FunctionLibrary_C_F_HasEveryoneReward Parms{};
-
-	Parms.Reward = Reward;
-	Parms.__WorldContext = __WorldContext;
-
-	GetDefaultObj()->ProcessEvent(Func, &Parms);
-
-	if (UnlockedByEveryone != nullptr)
-		*UnlockedByEveryone = Parms.UnlockedByEveryone;
-
-	if (playersMissingReward != nullptr)
-		*playersMissingReward = std::move(Parms.playersMissingReward);
 }
 
 
@@ -1781,11 +1725,11 @@ void UBPFL_FunctionLibrary_C::F_GetDamageElement(const class UDamageType* Object
 // double                                  MaxEstimatedRange                                      (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // float                                   Precision                                              (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // class UObject*                          __WorldContext                                         (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-// struct FVector*                         StartLoc                                               (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// struct FVector*                         startLoc                                               (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // struct FVector*                         HitLocation                                            (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 // double*                                 DistanceToTarget                                       (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void UBPFL_FunctionLibrary_C::F_PredictActorTrajectory(class AActor* Actor, const struct FVector& ProjectileStartLoc, double MaxEstimatedRange, float Precision, class UObject* __WorldContext, struct FVector* StartLoc, struct FVector* HitLocation, double* DistanceToTarget)
+void UBPFL_FunctionLibrary_C::F_PredictActorTrajectory(class AActor* Actor, const struct FVector& ProjectileStartLoc, double MaxEstimatedRange, float Precision, class UObject* __WorldContext, struct FVector* startLoc, struct FVector* HitLocation, double* DistanceToTarget)
 {
 	static class UFunction* Func = nullptr;
 
@@ -1802,8 +1746,8 @@ void UBPFL_FunctionLibrary_C::F_PredictActorTrajectory(class AActor* Actor, cons
 
 	GetDefaultObj()->ProcessEvent(Func, &Parms);
 
-	if (StartLoc != nullptr)
-		*StartLoc = std::move(Parms.StartLoc);
+	if (startLoc != nullptr)
+		*startLoc = std::move(Parms.startLoc);
 
 	if (HitLocation != nullptr)
 		*HitLocation = std::move(Parms.HitLocation);
@@ -1932,6 +1876,32 @@ void UBPFL_FunctionLibrary_C::F_GetElementInfos(E_DamageCategory Element, class 
 
 	if (associatedItem != nullptr)
 		*associatedItem = Parms.associatedItem;
+}
+
+
+// Function BPFL_FunctionLibrary.BPFL_FunctionLibrary_C.F_GetItemNameForSpell
+// (Public, HasOutParams, HasDefaults, BlueprintCallable, BlueprintEvent, BlueprintPure)
+// Parameters:
+// class UClass*                           itemClass                                              (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+// class UObject*                          __WorldContext                                         (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+// class FName*                            ItemName                                               (Parm, OutParm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+
+void UBPFL_FunctionLibrary_C::F_GetItemNameForSpell(class UClass* itemClass, class UObject* __WorldContext, class FName* ItemName)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BPFL_FunctionLibrary_C", "F_GetItemNameForSpell");
+
+	Params::BPFL_FunctionLibrary_C_F_GetItemNameForSpell Parms{};
+
+	Parms.itemClass = itemClass;
+	Parms.__WorldContext = __WorldContext;
+
+	UObject::ProcessEvent(Func, &Parms);
+
+	if (ItemName != nullptr)
+		*ItemName = Parms.ItemName;
 }
 
 

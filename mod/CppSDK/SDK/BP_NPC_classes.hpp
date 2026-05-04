@@ -10,11 +10,11 @@
 
 #include "Basic.hpp"
 
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
 #include "CoreUObject_structs.hpp"
 #include "AIModule_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 
 
 namespace SDK
@@ -52,7 +52,7 @@ public:
 	uint8                                         Pad_6D2[0x6];                                      // 0x06D2(0x0006)(Fixing Size After Last Property [ Dumper-7 ])
 	struct FRotator                               preRotationRotation;                               // 0x06D8(0x0018)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor)
 	struct FRotator                               postRotationRotation;                              // 0x06F0(0x0018)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor)
-	class UClass*                                 Questline;                                         // 0x0708(0x0008)(Edit, BlueprintVisible, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 questline;                                         // 0x0708(0x0008)(Edit, BlueprintVisible, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 	class APawn*                                  lookedAtPlayer;                                    // 0x0710(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnTemplate, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
 	bool                                          shownNameRuntime;                                  // 0x0718(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
 	bool                                          noClipMode;                                        // 0x0719(0x0001)(Edit, BlueprintVisible, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)

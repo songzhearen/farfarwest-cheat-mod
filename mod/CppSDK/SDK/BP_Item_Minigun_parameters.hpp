@@ -10,8 +10,8 @@
 
 #include "Basic.hpp"
 
-#include "S_ItemDatas_structs.hpp"
 #include "CoreUObject_structs.hpp"
+#include "S_ItemDatas_structs.hpp"
 #include "Engine_structs.hpp"
 
 
@@ -197,18 +197,21 @@ public:
 DUMPER7_ASSERTS_BP_Item_Minigun_C_F_GetMinigunFireRate;
 
 // Function BP_Item_Minigun.BP_Item_Minigun_C.F_MinigunAmmo
-// 0x0038 (0x0038 - 0x0000)
+// 0x0040 (0x0040 - 0x0000)
 struct BP_Item_Minigun_C_F_MinigunAmmo final
 {
 public:
 	int32                                         Minus;                                             // 0x0000(0x0004)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	struct FS_ItemDatas                           CallFunc_F_GetItemDatas_ItemDatas;                 // 0x0004(0x0014)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	class ABP_PlayerState_C*                      CallFunc_F_GetPlayerState_AsBP_Player_State;       // 0x0018(0x0008)(ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-	int32                                         CallFunc_Subtract_IntInt_ReturnValue;              // 0x0020(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         CallFunc_Clamp_ReturnValue;                        // 0x0024(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	int32                                         CallFunc_Add_IntInt_ReturnValue;                   // 0x0028(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_2C[0x4];                                       // 0x002C(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
-	class ABP_PlayerState_C*                      CallFunc_F_GetPlayerState_AsBP_Player_State_1;     // 0x0030(0x0008)(ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+	bool                                          triggerMovementSpeedJokers;                        // 0x0004(0x0001)(BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_5[0x3];                                        // 0x0005(0x0003)(Fixing Size After Last Property [ Dumper-7 ])
+	struct FS_ItemDatas                           CallFunc_F_GetItemDatas_ItemDatas;                 // 0x0008(0x0014)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_1C[0x4];                                       // 0x001C(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
+	class ABP_PlayerState_C*                      CallFunc_F_GetPlayerState_AsBP_Player_State;       // 0x0020(0x0008)(ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+	int32                                         CallFunc_Subtract_IntInt_ReturnValue;              // 0x0028(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	int32                                         CallFunc_Clamp_ReturnValue;                        // 0x002C(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	int32                                         CallFunc_Add_IntInt_ReturnValue;                   // 0x0030(0x0004)(ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_34[0x4];                                       // 0x0034(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
+	class ABP_PlayerState_C*                      CallFunc_F_GetPlayerState_AsBP_Player_State_1;     // 0x0038(0x0008)(ZeroConstructor, NoDestructor, HasGetValueTypeHash)
 };
 DUMPER7_ASSERTS_BP_Item_Minigun_C_F_MinigunAmmo;
 

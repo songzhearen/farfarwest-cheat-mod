@@ -10,12 +10,12 @@
 
 #include "Basic.hpp"
 
-#include "S_PlayerChallenges_structs.hpp"
 #include "Engine_structs.hpp"
-#include "UMG_structs.hpp"
+#include "S_PlayerChallenges_structs.hpp"
 #include "E_Rarity_structs.hpp"
-#include "S_PlayerEmoteSkeletalMesh_structs.hpp"
 #include "S_PlayerEmote_structs.hpp"
+#include "UMG_structs.hpp"
+#include "S_PlayerEmoteSkeletalMesh_structs.hpp"
 #include "CoreUObject_structs.hpp"
 
 

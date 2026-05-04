@@ -10,10 +10,10 @@
 
 #include "Basic.hpp"
 
-#include "UI_Equipment_classes.hpp"
 #include "Engine_structs.hpp"
-#include "S_PlayerItems_structs.hpp"
 #include "UMG_structs.hpp"
+#include "S_PlayerItems_structs.hpp"
+#include "UI_Equipment_classes.hpp"
 #include "E_ItemCategory_structs.hpp"
 
 

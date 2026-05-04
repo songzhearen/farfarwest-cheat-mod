@@ -11,13 +11,13 @@
 #include "Basic.hpp"
 
 #include "S_PlayerProgress_structs.hpp"
+#include "S_PlayerCurrentItem_structs.hpp"
+#include "E_DamageCategory_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
-#include "S_PlayerSelectedItems_structs.hpp"
-#include "S_PlayerCurrentItem_structs.hpp"
-#include "S_PlayerRuntimeStats_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 #include "S_PlayerRuntimeLeaderboard_structs.hpp"
+#include "S_PlayerSelectedItems_structs.hpp"
+#include "S_PlayerRuntimeStats_structs.hpp"
 
 
 namespace SDK
@@ -33,45 +33,46 @@ public:
 	class USceneComponent*                        DefaultSceneRoot;                                  // 0x0378(0x0008)(BlueprintVisible, ZeroConstructor, InstancedReference, NonTransactional, NoDestructor, HasGetValueTypeHash)
 	struct FS_PlayerSelectedItems                 selectedPlayerItemsServer;                         // 0x0380(0x0038)(Edit, BlueprintVisible, Net, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
 	struct FS_PlayerRuntimeStats                  playerRuntimeStats;                                // 0x03B8(0x0048)(Edit, BlueprintVisible, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	struct FS_PlayerProgress                      playerProgressReplicated;                          // 0x0400(0x0258)(Edit, BlueprintVisible, Net, DisableEditOnInstance, HasGetValueTypeHash)
-	double                                        playerHeal;                                        // 0x0658(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
-	double                                        playerMaxHeal;                                     // 0x0660(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	double                                        playerSize;                                        // 0x0668(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
-	class UClass*                                 CurrentItem;                                       // 0x0670(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	class ABP_Mount_C*                            assignedMount;                                     // 0x0678(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnTemplate, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	struct FS_PlayerRuntimeLeaderboard            playerRuntimeLeaderboardLocal;                     // 0x0680(0x0110)(Edit, BlueprintVisible, DisableEditOnInstance, HasGetValueTypeHash)
-	struct FS_PlayerRuntimeLeaderboard            playerRuntimeLeaderboardReplicated;                // 0x0790(0x0110)(Edit, BlueprintVisible, Net, DisableEditOnInstance, HasGetValueTypeHash)
-	class UBP_CanyonGameInstance_C*               GameInstance;                                      // 0x08A0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	double                                        tweakCooldownReduction;                            // 0x08A8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	class UClass*                                 equipedTool;                                       // 0x08B0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	class UClass*                                 lastUsedMainWeapon;                                // 0x08B8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	int32                                         enemyKillCombo;                                    // 0x08C0(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_8C4[0x4];                                      // 0x08C4(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
-	class APawn*                                  preFreecamPlayerPawn;                              // 0x08C8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnTemplate, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	class ABP_Freecam_C*                          freecamPawn;                                       // 0x08D0(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnTemplate, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	class UClass*                                 persiOldItem;                                      // 0x08D8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	bool                                          invincible;                                        // 0x08E0(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
-	bool                                          playerOwnsMissionMap;                              // 0x08E1(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	bool                                          playerProgressReplicatedDirty;                     // 0x08E2(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_8E3[0x5];                                      // 0x08E3(0x0005)(Fixing Size After Last Property [ Dumper-7 ])
-	class UClass*                                 spellARuntime;                                     // 0x08E8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	class UClass*                                 spellBRuntime;                                     // 0x08F0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	class UClass*                                 spellCRuntime;                                     // 0x08F8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
-	TArray<class UClass*>                         persistentItems;                                   // 0x0900(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
-	bool                                          isHost;                                            // 0x0910(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_911[0x7];                                      // 0x0911(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
-	TMulticastInlineDelegate<void(class APawn* NewPawn)> disp_Unmount;                               // 0x0918(0x0010)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, BlueprintAssignable, BlueprintCallable)
-	bool                                          mountDisabled;                                     // 0x0928(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_929[0x7];                                      // 0x0929(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
-	TMap<class FName, int32>                      spellBuffer;                                       // 0x0930(0x0050)(Edit, BlueprintVisible, DisableEditOnInstance)
-	int32                                         connectedId;                                       // 0x0980(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	bool                                          canGoUnderLandscape;                               // 0x0984(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	bool                                          isSuspicious;                                      // 0x0985(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_986[0x2];                                      // 0x0986(0x0002)(Fixing Size After Last Property [ Dumper-7 ])
-	TArray<struct FS_PlayerCurrentItem>           persistentItemWildcards;                           // 0x0988(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
-	int32                                         playerColor;                                       // 0x0998(0x0004)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-	uint8                                         Pad_99C[0x4];                                      // 0x099C(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
-	TMulticastInlineDelegate<void(class APawn* NewMount)> disp_Mount;                                // 0x09A0(0x0010)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, BlueprintAssignable, BlueprintCallable)
+	struct FS_PlayerProgress                      playerProgressReplicated;                          // 0x0400(0x0248)(Edit, BlueprintVisible, Net, DisableEditOnInstance, HasGetValueTypeHash)
+	double                                        playerHeal;                                        // 0x0648(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
+	double                                        playerMaxHeal;                                     // 0x0650(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	double                                        playerSize;                                        // 0x0658(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 currentItem;                                       // 0x0660(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class ABP_Mount_C*                            assignedMount;                                     // 0x0668(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnTemplate, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	struct FS_PlayerRuntimeLeaderboard            playerRuntimeLeaderboardLocal;                     // 0x0670(0x0110)(Edit, BlueprintVisible, DisableEditOnInstance, HasGetValueTypeHash)
+	struct FS_PlayerRuntimeLeaderboard            playerRuntimeLeaderboardReplicated;                // 0x0780(0x0110)(Edit, BlueprintVisible, Net, DisableEditOnInstance, HasGetValueTypeHash)
+	class UBP_CanyonGameInstance_C*               GameInstance;                                      // 0x0890(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	double                                        tweakCooldownReduction;                            // 0x0898(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 equipedTool;                                       // 0x08A0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 lastUsedMainWeapon;                                // 0x08A8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	int32                                         enemyKillCombo;                                    // 0x08B0(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_8B4[0x4];                                      // 0x08B4(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
+	class APawn*                                  preFreecamPlayerPawn;                              // 0x08B8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnTemplate, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class ABP_Freecam_C*                          freecamPawn;                                       // 0x08C0(0x0008)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnTemplate, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 persiOldItem;                                      // 0x08C8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	bool                                          invincible;                                        // 0x08D0(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
+	bool                                          playerOwnsMissionMap;                              // 0x08D1(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          playerProgressReplicatedDirty;                     // 0x08D2(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, RepNotify, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_8D3[0x5];                                      // 0x08D3(0x0005)(Fixing Size After Last Property [ Dumper-7 ])
+	class UClass*                                 spellARuntime;                                     // 0x08D8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 spellBRuntime;                                     // 0x08E0(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	class UClass*                                 spellCRuntime;                                     // 0x08E8(0x0008)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, NoDestructor, HasGetValueTypeHash)
+	TArray<class UClass*>                         persistentItems;                                   // 0x08F0(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
+	bool                                          isHost;                                            // 0x0900(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_901[0x7];                                      // 0x0901(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
+	TMulticastInlineDelegate<void(class APawn* NewPawn)> disp_Unmount;                               // 0x0908(0x0010)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, BlueprintAssignable, BlueprintCallable)
+	bool                                          mountDisabled;                                     // 0x0918(0x0001)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_919[0x7];                                      // 0x0919(0x0007)(Fixing Size After Last Property [ Dumper-7 ])
+	TMap<class FName, int32>                      spellBuffer;                                       // 0x0920(0x0050)(Edit, BlueprintVisible, DisableEditOnInstance)
+	int32                                         connectedId;                                       // 0x0970(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          canGoUnderLandscape;                               // 0x0974(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	bool                                          isSuspicious;                                      // 0x0975(0x0001)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_976[0x2];                                      // 0x0976(0x0002)(Fixing Size After Last Property [ Dumper-7 ])
+	TArray<struct FS_PlayerCurrentItem>           persistentItemWildcards;                           // 0x0978(0x0010)(Edit, BlueprintVisible, DisableEditOnInstance)
+	int32                                         playerColor;                                       // 0x0988(0x0004)(Edit, BlueprintVisible, Net, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+	uint8                                         Pad_98C[0x4];                                      // 0x098C(0x0004)(Fixing Size After Last Property [ Dumper-7 ])
+	TMulticastInlineDelegate<void(class APawn* NewMount)> disp_Mount;                                // 0x0990(0x0010)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, BlueprintAssignable, BlueprintCallable)
+	TArray<class FName>                           itemHeroJokers;                                    // 0x09A0(0x0010)(Edit, BlueprintVisible, Net, DisableEditOnInstance)
 
 public:
 	void ExecuteUbergraph_BP_PlayerState(int32 EntryPoint);
@@ -87,9 +88,10 @@ public:
 	void F_AddImpulse_Server(class UObject* Target, const struct FVector& HitNormal, const struct FVector& Location);
 	void F_AddJokerRuntime_Server(class FName Joker, bool ShowUI);
 	void F_AddKwartToGameState(int32 pickedUpKwarts);
-	void F_AddPersistentItem(const class UClass*& Item, const struct FS_PlayerCurrentItem& CurrentItem_0);
+	void F_AddPersistentItem(const class UClass*& Item, const struct FS_PlayerCurrentItem& currentItem_0);
 	void F_AddSouls_Server(int32 Amount);
 	void F_AssignPlayerColors();
+	void F_AutoKickIsMoreThan4Players();
 	void F_CdTimer();
 	void F_Channel_Server(class AActor* TargetActor, class AActor* ChannelingOwner, int32 Wildcard);
 	void F_CheckIfPlayerIsLegit();
@@ -108,8 +110,9 @@ public:
 	void F_FinishQuest_Server(class FName questName);
 	void F_GetBuffs(TMap<class UClass*, class UObject*>* Buff);
 	void F_GetInteractableDatas(struct FS_InteractableDatas* InteractableDatas);
-	void F_GetPersitentItem(bool* Found, class UClass** Item, struct FS_PlayerCurrentItem* CurrentItem_0);
+	void F_GetPersitentItem(bool* Found, class UClass** Item, struct FS_PlayerCurrentItem* currentItem_0);
 	void F_GoToLobby_Server();
+	void F_HasHeroJoker(class FName Joker, bool* hasJoker);
 	void F_HealEffect();
 	void F_HealPlayer_Server(class ABP_PlayerState_C* PlayerToHeal, double Amount);
 	void F_HealSelf_Server(double Amount, bool cancelHealEffect);
@@ -136,7 +139,7 @@ public:
 	void F_SendFinishedGamesInfoToServer();
 	void F_SendLocalLeaderboardToServer(const struct FS_PlayerRuntimeLeaderboard& playerRuntimeLeaderboard);
 	void F_SendLocalLeaderboardToServer_Client();
-	void F_SendLocalProgressToServer(const struct FS_PlayerProgress& playerProgress);
+	void F_SendLocalProgressToServer(const struct FS_PlayerProgress& playerProgress, const TArray<class FName>& heroJokers);
 	void F_SetActorLocRot_Server(class AActor* Target, const struct FVector& NewLocation, const struct FRotator& NewRotation);
 	void F_SetActorRot_Server(class AActor* Target, const struct FRotator& NewRotation);
 	void F_SetActorTransform_Server(class AActor* Actor, const struct FTransform& NewTransform, bool SnapToNavmesh, double HeightCapsuleOffset);

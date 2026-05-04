@@ -166,8 +166,9 @@ double ABP_Item_Minigun_C::F_GetMinigunFireRate()
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
 // int32                                   Minus                                                  (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// bool                                    triggerMovementSpeedJokers                             (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void ABP_Item_Minigun_C::F_MinigunAmmo(int32 Minus)
+void ABP_Item_Minigun_C::F_MinigunAmmo(int32 Minus, bool triggerMovementSpeedJokers)
 {
 	static class UFunction* Func = nullptr;
 
@@ -177,6 +178,7 @@ void ABP_Item_Minigun_C::F_MinigunAmmo(int32 Minus)
 	Params::BP_Item_Minigun_C_F_MinigunAmmo Parms{};
 
 	Parms.Minus = Minus;
+	Parms.triggerMovementSpeedJokers = triggerMovementSpeedJokers;
 
 	UObject::ProcessEvent(Func, &Parms);
 }

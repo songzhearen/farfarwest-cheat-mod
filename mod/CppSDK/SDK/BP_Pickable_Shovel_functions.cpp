@@ -220,30 +220,6 @@ void ABP_Pickable_Shovel_C::F_HoverInteract()
 }
 
 
-// Function BP_Pickable_Shovel.BP_Pickable_Shovel_C.F_Activate
-// (Public, BlueprintCallable, BlueprintEvent)
-// Parameters:
-// int32                                   Wildcard                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-// double                                  Delay                                                  (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
-// class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
-
-void ABP_Pickable_Shovel_C::F_Activate(int32 Wildcard, double Delay, class AActor* Owner_0)
-{
-	static class UFunction* Func = nullptr;
-
-	if (Func == nullptr)
-		Func = Class->GetFunction("BP_Pickable_Shovel_C", "F_Activate");
-
-	Params::BP_Pickable_Shovel_C_F_Activate Parms{};
-
-	Parms.Wildcard = Wildcard;
-	Parms.Delay = Delay;
-	Parms.Owner_0 = Owner_0;
-
-	UObject::ProcessEvent(Func, &Parms);
-}
-
-
 // Function BP_Pickable_Shovel.BP_Pickable_Shovel_C.F_ReceiveBuff
 // (Public, BlueprintCallable, BlueprintEvent)
 // Parameters:
@@ -765,6 +741,30 @@ void ABP_Pickable_Shovel_C::F_Interact(class AActor* Owner_0, int32 Wildcard)
 
 	Parms.Owner_0 = Owner_0;
 	Parms.Wildcard = Wildcard;
+
+	UObject::ProcessEvent(Func, &Parms);
+}
+
+
+// Function BP_Pickable_Shovel.BP_Pickable_Shovel_C.F_Activate
+// (Public, BlueprintCallable, BlueprintEvent)
+// Parameters:
+// int32                                   Wildcard                                               (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// double                                  Delay                                                  (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
+// class AActor*                           Owner_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+
+void ABP_Pickable_Shovel_C::F_Activate(int32 Wildcard, double Delay, class AActor* Owner_0)
+{
+	static class UFunction* Func = nullptr;
+
+	if (Func == nullptr)
+		Func = Class->GetFunction("BP_Pickable_Shovel_C", "F_Activate");
+
+	Params::BP_Pickable_Shovel_C_F_Activate Parms{};
+
+	Parms.Wildcard = Wildcard;
+	Parms.Delay = Delay;
+	Parms.Owner_0 = Owner_0;
 
 	UObject::ProcessEvent(Func, &Parms);
 }

@@ -45,12 +45,12 @@ public:
 	int32                                         modifierCount;                                     // 0x03E4(0x0004)(Edit, BlueprintVisible, ZeroConstructor, DisableEditOnInstance, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
 public:
-	void F_UpdateModifiers();
+	void ExecuteUbergraph_UI_Contract(int32 EntryPoint);
+	void F_ClickButton(class UButton* ClickedButton);
 	void F_Refresh(const struct FS_Mission& mission_0);
 	void F_ReleaseButton();
-	void F_ClickButton(class UButton* ClickedButton);
 	void F_SelectItem(class UClass* Item, E_ItemCategory Category, int32 SpellSlot);
-	void ExecuteUbergraph_UI_Contract(int32 EntryPoint);
+	void F_UpdateModifiers();
 
 public:
 	static class UClass* StaticClass()

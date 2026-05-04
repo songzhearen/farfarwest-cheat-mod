@@ -10,11 +10,11 @@
 
 #include "Basic.hpp"
 
+#include "S_PlayerSkins_structs.hpp"
 #include "Engine_structs.hpp"
 #include "Engine_classes.hpp"
-#include "S_PlayerSkins_structs.hpp"
-#include "S_PlayerEmote_structs.hpp"
 #include "S_MountSkins_structs.hpp"
+#include "S_PlayerEmote_structs.hpp"
 
 
 namespace SDK

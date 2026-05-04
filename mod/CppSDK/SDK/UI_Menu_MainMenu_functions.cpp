@@ -111,8 +111,9 @@ void UUI_Menu_MainMenu_C::F_Open()
 // (BlueprintCallable, BlueprintEvent)
 // Parameters:
 // class UClass*                           Class_0                                                (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, NoDestructor, HasGetValueTypeHash)
+// bool                                    Force                                                  (BlueprintVisible, BlueprintReadOnly, Parm, ZeroConstructor, IsPlainOldData, NoDestructor, HasGetValueTypeHash)
 
-void UUI_Menu_MainMenu_C::F_OpenTab(class UClass* Class_0)
+void UUI_Menu_MainMenu_C::F_OpenTab(class UClass* Class_0, bool Force)
 {
 	static class UFunction* Func = nullptr;
 
@@ -122,6 +123,7 @@ void UUI_Menu_MainMenu_C::F_OpenTab(class UClass* Class_0)
 	Params::UI_Menu_MainMenu_C_F_OpenTab Parms{};
 
 	Parms.Class_0 = Class_0;
+	Parms.Force = Force;
 
 	UObject::ProcessEvent(Func, &Parms);
 }

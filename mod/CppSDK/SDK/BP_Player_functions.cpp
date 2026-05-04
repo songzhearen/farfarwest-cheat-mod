@@ -783,7 +783,7 @@ struct FVector ABP_Player_C::F_GetDesiredMovementDirection()
 
 
 // Function BP_Player.BP_Player_C.F_CalculateCrosshairRecoil
-// (Public, HasDefaults, BlueprintCallable, BlueprintEvent)
+// (Public, BlueprintCallable, BlueprintEvent)
 
 void ABP_Player_C::F_CalculateCrosshairRecoil()
 {

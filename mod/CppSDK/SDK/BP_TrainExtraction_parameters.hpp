@@ -10,12 +10,12 @@
 
 #include "Basic.hpp"
 
-#include "CoreUObject_structs.hpp"
-#include "S_InteractableDatas_structs.hpp"
-#include "S_ChatMessage_structs.hpp"
-#include "Engine_structs.hpp"
-#include "E_DamageCategory_structs.hpp"
 #include "S_Activable_structs.hpp"
+#include "S_InteractableDatas_structs.hpp"
+#include "CoreUObject_structs.hpp"
+#include "E_DamageCategory_structs.hpp"
+#include "Engine_structs.hpp"
+#include "S_ChatMessage_structs.hpp"
 
 
 namespace SDK::Params
