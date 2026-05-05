@@ -22,5 +22,5 @@ Release/
 *.iobj
 *.ipdb
 
-# Other
-$null
+CppSDK/
+

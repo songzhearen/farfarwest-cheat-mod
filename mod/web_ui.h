@@ -48,6 +48,12 @@ h1{text-align:center;color:#00d4ff;margin-bottom:4px;font-size:1.5em}
 .dot-red{background:#f00}
 .no-data{text-align:center;color:#666;padding:20px;font-size:.9em}
 .footer{text-align:center;color:#444;font-size:.75em;margin-top:20px;padding-top:12px;border-top:1px solid #0f3460}
+.footer a{color:#00d4ff;text-decoration:none}
+.footer a:hover{text-decoration:underline}
+.update-bar{text-align:center;margin-top:8px;padding:6px 12px;border-radius:6px;font-size:.8em;display:none}
+.update-available{display:block;background:#0f3460;color:#00d4ff;border:1px solid #00d4ff}
+.update-available a{color:#00d4ff;font-weight:600}
+.version-tag{color:#555;font-size:.7em}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:#1a1a2e}
 ::-webkit-scrollbar-thumb{background:#0f3460;border-radius:3px}
@@ -111,7 +117,12 @@ h1{text-align:center;color:#00d4ff;margin-bottom:4px;font-size:1.5em}
   </div>
 </div>
 
-<div class="footer">无限火力 Mod by songzhearen</div>
+<div class="update-bar" id="updateBar"></div>
+<div class="footer">
+  <a href="https://github.com/songzhearen/farfarwest-cheat-mod" target="_blank">GitHub</a>
+  &nbsp;|&nbsp; 无限火力 Mod by songzhearen
+  <span class="version-tag" id="versionTag"></span>
+</div>
 
 <script>
 const API='';
@@ -214,6 +225,8 @@ async function refresh(){
     if(d.realSpeed!==undefined)
       document.getElementById('realSpeed').textContent='当前: '+d.realSpeed.toFixed(1);
 
+    if(d.version) document.getElementById('versionTag').textContent='v'+d.version;
+
     renderPlayers(d.players);
     renderPoints(d.points);
   }catch(e){
@@ -225,6 +238,26 @@ async function refresh(){
 
 refresh();
 setInterval(refresh,1000);
+
+async function checkUpdate(){
+  try{
+    const r=await fetch(API+'/api/update');
+    if(!r.ok)return;
+    const d=await r.json();
+    if(d.current){
+      document.getElementById('versionTag').textContent='v'+d.current;
+    }
+    if(d.hasUpdate){
+      const bar=document.getElementById('updateBar');
+      bar.className='update-bar update-available';
+      let msg='发现新版本: '+d.latest;
+      if(d.url) msg+=' <a href="'+d.url+'" target="_blank">前往下载</a>';
+      bar.innerHTML=msg;
+    }
+  }catch(e){}
+}
+setTimeout(checkUpdate,2000);
+setInterval(checkUpdate,600000);
 </script>
 </body>
 </html>)rawliteral";

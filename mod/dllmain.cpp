@@ -1,9 +1,13 @@
-// dllmain.cpp : 无限火力 Mod v3 - Web UI 控制界面
+// dllmain.cpp : 无限火力 Mod v0.3.0 - Web UI 控制界面
 // 功能: 无CD / 无限跳跃 / 无限子弹 / 移速修改 / 传送到玩家 / 传送点
 // 控制: localhost:1145 网页界面 + 热键
 // by songzhearen
 
 #include "pch.h"
+
+#define MOD_VERSION "0.3.0"
+#define GITHUB_REPO "songzhearen/farfarwest-cheat-mod"
+
 #include "SDK.hpp"
 #include "SDK/Engine_parameters.hpp"
 #include <cstdio>
@@ -14,10 +18,114 @@
 #include <cmath>
 #include <mutex>
 
+#include <winhttp.h>
 #pragma comment(lib, "ws2_32.lib")
 
 #include "httplib.h"
 #include "web_ui.h"
+
+// ============================================================================
+// GitHub 更新检查 (使用 WinHTTP，无需额外依赖)
+// ============================================================================
+static std::string CheckGitHubUpdate()
+{
+    static std::string cachedResult;
+    static DWORD lastCheck = 0;
+    DWORD now = GetTickCount();
+    if (now - lastCheck < 300000 && !cachedResult.empty())
+        return cachedResult;
+    lastCheck = now;
+
+    HMODULE hWinHttp = LoadLibraryW(L"winhttp.dll");
+    if (!hWinHttp) { cachedResult = "{\"error\":\"no winhttp\"}"; return cachedResult; }
+
+    auto pOpen = (decltype(&WinHttpOpen))GetProcAddress(hWinHttp, "WinHttpOpen");
+    auto pConnect = (decltype(&WinHttpConnect))GetProcAddress(hWinHttp, "WinHttpConnect");
+    auto pOpenReq = (decltype(&WinHttpOpenRequest))GetProcAddress(hWinHttp, "WinHttpOpenRequest");
+    auto pSendReq = (decltype(&WinHttpSendRequest))GetProcAddress(hWinHttp, "WinHttpSendRequest");
+    auto pRecvResp = (decltype(&WinHttpReceiveResponse))GetProcAddress(hWinHttp, "WinHttpReceiveResponse");
+    auto pReadData = (decltype(&WinHttpReadData))GetProcAddress(hWinHttp, "WinHttpReadData");
+    auto pCloseH = (decltype(&WinHttpCloseHandle))GetProcAddress(hWinHttp, "WinHttpCloseHandle");
+    auto pSetOpt = (decltype(&WinHttpSetOption))GetProcAddress(hWinHttp, "WinHttpSetOption");
+
+    if (!pOpen || !pConnect || !pOpenReq || !pSendReq || !pRecvResp || !pReadData || !pCloseH || !pSetOpt)
+    {
+        FreeLibrary(hWinHttp);
+        cachedResult = "{\"error\":\"winhttp api\"}";
+        return cachedResult;
+    }
+
+    std::string result;
+    HINTERNET hSession = pOpen(L"FarFarWestMod/1.0", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, nullptr, nullptr, 0);
+    if (!hSession) { FreeLibrary(hWinHttp); cachedResult = "{\"error\":\"session\"}"; return cachedResult; }
+
+    HINTERNET hConnect = pConnect(hSession, L"api.github.com", INTERNET_DEFAULT_HTTPS_PORT, 0);
+    if (!hConnect) { pCloseH(hSession); FreeLibrary(hWinHttp); cachedResult = "{\"error\":\"connect\"}"; return cachedResult; }
+
+    HINTERNET hRequest = pOpenReq(hConnect, L"GET",
+        L"/repos/songzhearen/farfarwest-cheat-mod/releases/latest",
+        nullptr, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_SECURE);
+    if (!hRequest) { pCloseH(hConnect); pCloseH(hSession); FreeLibrary(hWinHttp); cachedResult = "{\"error\":\"request\"}"; return cachedResult; }
+
+    DWORD secFlags = SECURITY_FLAG_IGNORE_UNKNOWN_CA | SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |
+                     SECURITY_FLAG_IGNORE_CERT_CN_INVALID | SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE;
+    pSetOpt(hRequest, WINHTTP_OPTION_SECURITY_FLAGS, &secFlags, sizeof(secFlags));
+
+    BOOL ok = pSendReq(hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
+    if (ok) ok = pRecvResp(hRequest, nullptr);
+
+    if (ok)
+    {
+        std::string body;
+        DWORD bytesRead = 0;
+        char buf[4096];
+        while (pReadData(hRequest, buf, sizeof(buf) - 1, &bytesRead) && bytesRead > 0)
+        {
+            buf[bytesRead] = '\0';
+            body.append(buf, bytesRead);
+            bytesRead = 0;
+        }
+
+        size_t tagPos = body.find("\"tag_name\":\"");
+        size_t urlPos = body.find("\"html_url\":\"");
+        if (tagPos != std::string::npos)
+        {
+            tagPos += 12;
+            size_t tagEnd = body.find('"', tagPos);
+            std::string tag = body.substr(tagPos, tagEnd - tagPos);
+
+            std::string url;
+            if (urlPos != std::string::npos)
+            {
+                urlPos += 12;
+                size_t urlEnd = body.find('"', urlPos);
+                url = body.substr(urlPos, urlEnd - urlPos);
+            }
+
+            bool hasUpdate = (tag != MOD_VERSION);
+            result = "{\"hasUpdate\":" + std::string(hasUpdate ? "true" : "false") +
+                     ",\"latest\":\"" + tag + "\",\"current\":\"" MOD_VERSION "\"";
+            if (!url.empty()) result += ",\"url\":\"" + url + "\"";
+            result += "}";
+        }
+        else
+        {
+            result = "{\"hasUpdate\":false,\"current\":\"" MOD_VERSION "\",\"note\":\"no releases\"}";
+        }
+    }
+    else
+    {
+        result = "{\"hasUpdate\":false,\"current\":\"" MOD_VERSION "\",\"note\":\"request failed\"}";
+    }
+
+    pCloseH(hRequest);
+    pCloseH(hConnect);
+    pCloseH(hSession);
+    FreeLibrary(hWinHttp);
+
+    cachedResult = result;
+    return result;
+}
 
 // ============================================================================
 // 偏移常量
@@ -657,7 +765,8 @@ static void ProcessTeleportRequest()
 static std::string BuildStatusJson()
 {
     std::string json = "{";
-    json += "\"nocd\":" + std::string(g_ModState.bNoCooldown.load() ? "true" : "false");
+    json += "\"version\":\"" MOD_VERSION "\"";
+    json += ",\"nocd\":" + std::string(g_ModState.bNoCooldown.load() ? "true" : "false");
     json += ",\"jump\":" + std::string(g_ModState.bInfiniteJump.load() ? "true" : "false");
     json += ",\"ammo\":" + std::string(g_ModState.bInfiniteAmmo.load() ? "true" : "false");
     json += ",\"speed\":" + std::string(g_ModState.bSpeedHack.load() ? "true" : "false");
@@ -791,6 +900,10 @@ static void WebServerThread(LPVOID)
         if (idx < 0 || idx >= 5) { res.set_content("{\"error\":\"invalid index\"}", "application/json"); return; }
         DeleteTeleportPoint(idx);
         res.set_content("{\"ok\":true}", "application/json");
+    });
+
+    svr.Get("/api/update", [](const httplib::Request&, httplib::Response& res) {
+        res.set_content(CheckGitHubUpdate(), "application/json");
     });
 
     svr.listen("0.0.0.0", 1145);
