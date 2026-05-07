@@ -23,4 +23,5 @@ Release/
 *.ipdb
 
 CppSDK/
+mod/CppSDK/
 
