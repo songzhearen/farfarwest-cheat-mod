@@ -183,6 +183,7 @@ struct FModState
     std::atomic<bool> bNoCooldown{false};
     std::atomic<bool> bInfiniteJump{false};
     std::atomic<bool> bInfiniteAmmo{false};
+    std::atomic<bool> bInfiniteReserveAmmo{false};
     std::atomic<bool> bSpeedHack{false};
     std::atomic<bool> bRunning{true};
 };
@@ -648,23 +649,35 @@ static void ApplyInfiniteAmmo()
     int32_t custom = g_CustomAmmo.load();
     uintptr_t runtimeStats = g_Cache.PlayerState + Offsets::PlayerRuntimeStats;
     uintptr_t wepA = runtimeStats + Offsets::DatasWepA;
-    int32_t maxMagA = 0, maxTotalA = 0;
+    int32_t maxMagA = 0;
     if (SafeRead(wepA + Offsets::MaxMagazineAmmos, maxMagA) && maxMagA > 0)
         SafeWriteIfDifferent(wepA + Offsets::CurrentMagazineAmmos, custom > 0 ? custom : maxMagA);
-    if (SafeRead(wepA + Offsets::MaxTotalAmmos, maxTotalA) && maxTotalA > 0)
-        SafeWriteIfDifferent(wepA + Offsets::CurrentTotalAmmos, custom > 0 ? custom : maxTotalA);
 
     uintptr_t wepB = runtimeStats + Offsets::DatasWepB;
-    int32_t maxMagB = 0, maxTotalB = 0;
+    int32_t maxMagB = 0;
     if (SafeRead(wepB + Offsets::MaxMagazineAmmos, maxMagB) && maxMagB > 0)
         SafeWriteIfDifferent(wepB + Offsets::CurrentMagazineAmmos, custom > 0 ? custom : maxMagB);
-    if (SafeRead(wepB + Offsets::MaxTotalAmmos, maxTotalB) && maxTotalB > 0)
-        SafeWriteIfDifferent(wepB + Offsets::CurrentTotalAmmos, custom > 0 ? custom : maxTotalB);
 
     int32_t grenades = 0;
     SafeRead(runtimeStats + Offsets::AmountGrenades, grenades);
     if (grenades < 5)
         SafeWriteIfDifferent(runtimeStats + Offsets::AmountGrenades, custom > 0 ? custom : 5);
+}
+
+static void ApplyInfiniteReserveAmmo()
+{
+    if (!g_Cache.PlayerState) return;
+    int32_t custom = g_CustomAmmo.load();
+    uintptr_t runtimeStats = g_Cache.PlayerState + Offsets::PlayerRuntimeStats;
+    uintptr_t wepA = runtimeStats + Offsets::DatasWepA;
+    int32_t maxTotalA = 0;
+    if (SafeRead(wepA + Offsets::MaxTotalAmmos, maxTotalA) && maxTotalA > 0)
+        SafeWriteIfDifferent(wepA + Offsets::CurrentTotalAmmos, custom > 0 ? custom : maxTotalA);
+
+    uintptr_t wepB = runtimeStats + Offsets::DatasWepB;
+    int32_t maxTotalB = 0;
+    if (SafeRead(wepB + Offsets::MaxTotalAmmos, maxTotalB) && maxTotalB > 0)
+        SafeWriteIfDifferent(wepB + Offsets::CurrentTotalAmmos, custom > 0 ? custom : maxTotalB);
 }
 
 // 读取真实值
@@ -771,6 +784,7 @@ static std::string BuildStatusJson()
     json += ",\"nocd\":" + std::string(g_ModState.bNoCooldown.load() ? "true" : "false");
     json += ",\"jump\":" + std::string(g_ModState.bInfiniteJump.load() ? "true" : "false");
     json += ",\"ammo\":" + std::string(g_ModState.bInfiniteAmmo.load() ? "true" : "false");
+    json += ",\"reserveAmmo\":" + std::string(g_ModState.bInfiniteReserveAmmo.load() ? "true" : "false");
     json += ",\"speed\":" + std::string(g_ModState.bSpeedHack.load() ? "true" : "false");
     json += ",\"targetSpeed\":" + std::to_string(g_TargetSpeed.load());
     json += ",\"customAmmo\":" + std::to_string(g_CustomAmmo.load());
@@ -861,6 +875,7 @@ static void WebServerThread(LPVOID)
         if (f == "nocd") { g_ModState.bNoCooldown = !g_ModState.bNoCooldown.load(); newState = g_ModState.bNoCooldown; }
         else if (f == "jump") { g_ModState.bInfiniteJump = !g_ModState.bInfiniteJump.load(); newState = g_ModState.bInfiniteJump; }
         else if (f == "ammo") { g_ModState.bInfiniteAmmo = !g_ModState.bInfiniteAmmo.load(); newState = g_ModState.bInfiniteAmmo; }
+        else if (f == "reserveAmmo") { g_ModState.bInfiniteReserveAmmo = !g_ModState.bInfiniteReserveAmmo.load(); newState = g_ModState.bInfiniteReserveAmmo; }
         else if (f == "speed") { g_ModState.bSpeedHack = !g_ModState.bSpeedHack.load(); newState = g_ModState.bSpeedHack; }
         else { res.set_content("{\"error\":\"unknown\"}", "application/json"); return; }
         res.set_content("{\"ok\":true,\"state\":" + std::string(newState ? "true" : "false") + "}", "application/json");
@@ -927,6 +942,7 @@ static bool g_PrevF1 = false;
 static bool g_PrevF2 = false;
 static bool g_PrevF3 = false;
 static bool g_PrevF4 = false;
+static bool g_PrevF5 = false;
 static bool g_PrevEnd = false;
 
 static void HandleHotkeys()
@@ -950,6 +966,11 @@ static void HandleHotkeys()
         bool cur = (GetAsyncKeyState(VK_F4) & 0x8000) != 0;
         if (cur && !g_PrevF4) g_ModState.bSpeedHack = !g_ModState.bSpeedHack.load();
         g_PrevF4 = cur;
+    }
+    {
+        bool cur = (GetAsyncKeyState(VK_F5) & 0x8000) != 0;
+        if (cur && !g_PrevF5) g_ModState.bInfiniteReserveAmmo = !g_ModState.bInfiniteReserveAmmo.load();
+        g_PrevF5 = cur;
     }
     {
         bool cur = (GetAsyncKeyState(VK_END) & 0x8000) != 0;
@@ -1000,7 +1021,8 @@ static DWORD WINAPI MainThread(LPVOID lpParam)
 
         if (g_ModState.bNoCooldown)    ApplyNoCooldown();
         if (g_ModState.bInfiniteJump)  ApplyInfiniteJump();
-        if (g_ModState.bInfiniteAmmo)  ApplyInfiniteAmmo();
+        if (g_ModState.bInfiniteAmmo)         ApplyInfiniteAmmo();
+        if (g_ModState.bInfiniteReserveAmmo) ApplyInfiniteReserveAmmo();
         if (g_ModState.bSpeedHack)     ApplySpeedHack();
 
         ProcessTeleportRequest();

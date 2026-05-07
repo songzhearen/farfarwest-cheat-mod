@@ -94,6 +94,10 @@ h1{text-align:center;color:#00d4ff;margin-bottom:4px;font-size:1.5em}
     <div class="hint">设为0恢复最大弹药，设为自定义数值锁定弹药数量</div>
   </div>
   <div class="row">
+    <span class="label">无限备弹</span>
+    <label class="toggle"><input type="checkbox" id="reserveAmmo" onchange="toggle('reserveAmmo')"><span class="slider"></span></label>
+  </div>
+  <div class="row">
     <span class="label">移速修改</span>
     <label class="toggle"><input type="checkbox" id="speed" onchange="toggle('speed')"><span class="slider"></span></label>
   </div>
@@ -230,7 +234,7 @@ async function refresh(){
       document.getElementById('connStatus').textContent='已连接';
     }
 
-    ['nocd','jump','ammo','speed'].forEach(id=>{
+    ['nocd','jump','ammo','reserveAmmo','speed'].forEach(id=>{
       const el=document.getElementById(id);
       if(el&&d[id]!==undefined&&el!==document.activeElement)el.checked=d[id];
     });
