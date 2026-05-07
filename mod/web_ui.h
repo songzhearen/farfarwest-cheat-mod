@@ -82,6 +82,17 @@ h1{text-align:center;color:#00d4ff;margin-bottom:4px;font-size:1.5em}
     <span class="label">无限弹药</span>
     <label class="toggle"><input type="checkbox" id="ammo" onchange="toggle('ammo')"><span class="slider"></span></label>
   </div>
+  <div class="input-group">
+    <div class="input-label">
+      <span class="label">自定义弹药数量</span>
+      <span class="real-val" id="realAmmo">当前: 最大值</span>
+    </div>
+    <div class="input-row">
+      <input type="number" id="ammoVal" value="0" min="0" max="99999" step="100" placeholder="0=使用最大值">
+      <button class="btn btn-primary btn-sm" onclick="setAmmo()">设置</button>
+    </div>
+    <div class="hint">设为0恢复最大弹药，设为自定义数值锁定弹药数量</div>
+  </div>
   <div class="row">
     <span class="label">移速修改</span>
     <label class="toggle"><input type="checkbox" id="speed" onchange="toggle('speed')"><span class="slider"></span></label>
@@ -135,6 +146,12 @@ function setSpeed(){
   const v=parseFloat(document.getElementById('speedVal').value);
   if(isNaN(v)||v<0)return;
   fetch(API+'/api/speed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({speed:v})}).catch(()=>{});
+}
+
+function setAmmo(){
+  const v=parseInt(document.getElementById('ammoVal').value);
+  if(isNaN(v)||v<0)return;
+  fetch(API+'/api/ammo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ammo:v})}).catch(()=>{});
 }
 
 function teleport(idx){
@@ -221,6 +238,11 @@ async function refresh(){
     const speedInput=document.getElementById('speedVal');
     if(speedInput!==document.activeElement&&d.targetSpeed!==undefined&&d.targetSpeed>0)
       speedInput.value=d.targetSpeed;
+
+    const ammoInput=document.getElementById('ammoVal');
+    if(ammoInput!==document.activeElement&&d.customAmmo!==undefined)
+      ammoInput.value=d.customAmmo;
+    document.getElementById('realAmmo').textContent=d.customAmmo>0?'当前: '+d.customAmmo:'当前: 最大值';
 
     if(d.realSpeed!==undefined)
       document.getElementById('realSpeed').textContent='当前: '+d.realSpeed.toFixed(1);

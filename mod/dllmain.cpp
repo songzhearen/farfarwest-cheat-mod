@@ -191,6 +191,7 @@ static FModState g_ModState;
 
 static std::atomic<float> g_TargetSpeed{0.0f};
 static std::atomic<float> g_RealSpeed{0.0f};
+static std::atomic<int32_t> g_CustomAmmo{0};  // 0=使用最大值(原行为), >0=自定义数量
 
 // ============================================================================
 // 指针缓存
@@ -644,25 +645,26 @@ static void ApplyInfiniteJump()
 static void ApplyInfiniteAmmo()
 {
     if (!g_Cache.PlayerState) return;
+    int32_t custom = g_CustomAmmo.load();
     uintptr_t runtimeStats = g_Cache.PlayerState + Offsets::PlayerRuntimeStats;
     uintptr_t wepA = runtimeStats + Offsets::DatasWepA;
     int32_t maxMagA = 0, maxTotalA = 0;
     if (SafeRead(wepA + Offsets::MaxMagazineAmmos, maxMagA) && maxMagA > 0)
-        SafeWriteIfDifferent(wepA + Offsets::CurrentMagazineAmmos, maxMagA);
+        SafeWriteIfDifferent(wepA + Offsets::CurrentMagazineAmmos, custom > 0 ? custom : maxMagA);
     if (SafeRead(wepA + Offsets::MaxTotalAmmos, maxTotalA) && maxTotalA > 0)
-        SafeWriteIfDifferent(wepA + Offsets::CurrentTotalAmmos, maxTotalA);
+        SafeWriteIfDifferent(wepA + Offsets::CurrentTotalAmmos, custom > 0 ? custom : maxTotalA);
 
     uintptr_t wepB = runtimeStats + Offsets::DatasWepB;
     int32_t maxMagB = 0, maxTotalB = 0;
     if (SafeRead(wepB + Offsets::MaxMagazineAmmos, maxMagB) && maxMagB > 0)
-        SafeWriteIfDifferent(wepB + Offsets::CurrentMagazineAmmos, maxMagB);
+        SafeWriteIfDifferent(wepB + Offsets::CurrentMagazineAmmos, custom > 0 ? custom : maxMagB);
     if (SafeRead(wepB + Offsets::MaxTotalAmmos, maxTotalB) && maxTotalB > 0)
-        SafeWriteIfDifferent(wepB + Offsets::CurrentTotalAmmos, maxTotalB);
+        SafeWriteIfDifferent(wepB + Offsets::CurrentTotalAmmos, custom > 0 ? custom : maxTotalB);
 
     int32_t grenades = 0;
     SafeRead(runtimeStats + Offsets::AmountGrenades, grenades);
     if (grenades < 5)
-        SafeWriteIfDifferent(runtimeStats + Offsets::AmountGrenades, 5);
+        SafeWriteIfDifferent(runtimeStats + Offsets::AmountGrenades, custom > 0 ? custom : 5);
 }
 
 // 读取真实值
@@ -771,6 +773,7 @@ static std::string BuildStatusJson()
     json += ",\"ammo\":" + std::string(g_ModState.bInfiniteAmmo.load() ? "true" : "false");
     json += ",\"speed\":" + std::string(g_ModState.bSpeedHack.load() ? "true" : "false");
     json += ",\"targetSpeed\":" + std::to_string(g_TargetSpeed.load());
+    json += ",\"customAmmo\":" + std::to_string(g_CustomAmmo.load());
     json += ",\"realSpeed\":" + std::to_string(g_RealSpeed.load());
 
     json += ",\"points\":[";
@@ -868,6 +871,14 @@ static void WebServerThread(LPVOID)
         if (val < 0) val = 0;
         if (val > 5000) val = 5000;
         g_TargetSpeed = val;
+        res.set_content("{\"ok\":true}", "application/json");
+    });
+
+    svr.Post("/api/ammo", [](const httplib::Request& req, httplib::Response& res) {
+        int val = ParseJsonInt(req.body, "ammo");
+        if (val < 0) val = 0;
+        if (val > 99999) val = 99999;
+        g_CustomAmmo = val;
         res.set_content("{\"ok\":true}", "application/json");
     });
 
